@@ -1,13 +1,36 @@
-# Frontend
+## Getting started
 
-PaceBuddies frontend in react
+`Next.js` requires [`Node.js`](https://nodejs.org).
 
-# Development installation instructions
+If you don't already have `npm` and `yarn` available, make sure you set them up.
 
-Install node 18.12.1 LTS
+```bash
+npm i -g npm yarn
+```
 
-npm install next react react-dom
+Install the dependencies:
 
-npm install -D tailwindcss
+```bash
+yarn install
+```
 
-npm install postcss autoprefixer
+If yarn is not working in PowerShel type this command in PowerShel with administrator privileges
+
+```bash
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+```
+
+Tools installed to package
+
+- [x] [`flowbite`](https://flowbite.com)
+- [x] [`flowbite-react`](https://flowbite-react.com)
+- [x] [`react-icons`](https://react-icons.github.io/react-icons)
+- [x] [`heroicons`](https://heroicons.com/)
+- [x] [`recharts`](https://recharts.org/en-US)
+- [x] [`formik`](https://formik.org/)
+- [x] [`tailwindcss`](https://tailwindcss.com)
+- [x] Quality of life tools, like
+  - [x] [`eslint`](https://eslint.org) with some plugins
+  - [x] [`prettier`](https://prettier.io)
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
