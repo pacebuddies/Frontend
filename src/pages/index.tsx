@@ -1,9 +1,15 @@
-import type { NextPage } from "next";
-
+import type { NextPage } from 'next';
+const { REACT_APP_CLIENT_ID } = process.env;
+const redirectUrl = 'http://localhost:3000/redirect';
+const scope = 'read';
 const Home: NextPage = () => {
+  function handleLogin() {}
+
   return (
     <>
-      <h1>Hello strava :)</h1>
+      <div>
+        <h1>Home</h1> <button onClick={handleLogin}>Connect with Strava</button>
+      </div>
     </>
   );
 };
