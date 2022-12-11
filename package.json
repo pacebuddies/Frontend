@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.13",
+    "axios": "^1.2.1",
     "flowbite": "^1.5.4",
     "flowbite-react": "^0.3.5",
     "formik": "^2.2.9",
