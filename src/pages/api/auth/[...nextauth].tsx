@@ -8,4 +8,12 @@ export default NextAuth({
       clientSecret: 'b311304ac9e469ccc742d359d6c9ddbeede1dd01',
     }),
   ],
+  pages: {
+    signIn: '/signin',
+  },
+  callbacks: {
+    async redirect({ baseUrl }) {
+      return baseUrl;
+    },
+  },
 });
