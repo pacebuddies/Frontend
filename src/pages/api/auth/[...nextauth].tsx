@@ -4,12 +4,11 @@ import StravaProvider from 'next-auth/providers/strava';
 export default NextAuth({
   providers: [
     StravaProvider({
-      clientId: '97926',
-      clientSecret: 'b311304ac9e469ccc742d359d6c9ddbeede1dd01',
+      clientId: process.env['STRAVA_CLIENT_ID']!,
+      clientSecret: process.env['STRAVA_CLIENT_SECRET']!,
       authorization: {
         params: {
-          scope:
-            'read,read_all,profile:read_all,activity:read,activity:read_all',
+          scope: process.env['STRAVA_CLIENT_SCOPE'],
         },
       },
     }),
@@ -22,5 +21,15 @@ export default NextAuth({
     async redirect({ baseUrl }) {
       return baseUrl;
     },
+    async jwt({ token }) {
+      return token;
+    },
+    // async session({ session, token, user }) {
+    //   // Send properties to the client, like an access_token and user id from a provider.
+    //   session.accessToken = token.accessToken
+    //   session.user.id = token.id
+    //
+    //   return session
+    // }
   },
 });
