@@ -14,7 +14,7 @@ Install the dependencies:
 yarn install
 ```
 
-If yarn is not working in PowerShel type this command in PowerShel with administrator privileges
+If yarn is not working in PowerShell type this command in PowerShell with administrator privileges
 
 ```bash
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
