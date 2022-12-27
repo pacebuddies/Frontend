@@ -1,64 +1,49 @@
-import axios from 'axios';
 import { Button } from 'flowbite-react';
 import type { NextPage } from 'next';
-import { getCsrfToken, signIn, signOut, useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import stravaApi from '../instances/axiosConfigured';
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
-  let csrfToken: string | undefined;
+  const [athlete, setAthlete] = useState('');
+  const [pullData, setPullData] = useState(false);
+
+  async function getData() {
+    const data = await stravaApi
+      .get('synchronize')
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // console.log(synch);
+    //
+    // const data = await stravaApi
+    //   .get('athlete')
+    //   .then((res) => {
+    //     return res;
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    // console.log(data);
+    return JSON.stringify(data);
+  }
 
   useEffect(() => {
-    console.log(session);
-
-  });
-
-  async function showData() {
-    // csrfToken = await getCsrfToken();
-    csrfToken = 'f6134e9907c0c74b07dfb8b7673697be09339085';
-    console.log(csrfToken)
-    const synch = await axios
-      .get('http://localhost:8080/api/v1/synchronize', {
-        headers: {
-          'Authorization': `Bearer ${csrfToken}`,
-          'Accept-Encoding': 'identity',
-        },
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
+    getData().then((items) => {
+      if (pullData) setAthlete(items);
+    });
+    if (pullData) {
+      getData().then((items) => {
+        setAthlete(items);
       });
-    console.log(synch);
-
-    const data = await axios
-      .get('http://localhost:8080/api/v1/athlete', {
-        headers: {
-          Authorization: `Bearer ${csrfToken}`,
-        },
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    const datastrava = await axios
-      .get('https://www.strava.com/api/v3/athlete', {
-        headers: {
-          Authorization: `Bearer ${csrfToken}`,
-        },
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log(datastrava);
-  }
+      console.log(athlete);
+    }
+    // return () => setPullData(false);
+  }, [pullData]);
 
   return (
     <>
@@ -71,10 +56,19 @@ const Home: NextPage = () => {
           <Button onClick={() => signOut()}>Disconnect from Strava</Button>
         )}
         {session && (
-          <Button color={'purple'} onClick={() => showData()}>
+          <Button
+            color={'purple'}
+            onClick={() => {
+              setPullData(true);
+            }}
+          >
             show data
           </Button>
         )}
+        <div>
+          <h2 className="text-red-800">Chwilowo synchronizacja ponieważ z atletą jest bug</h2>
+          {athlete}
+        </div>
       </div>
     </>
   );

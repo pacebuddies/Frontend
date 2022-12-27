@@ -20,6 +20,11 @@ If yarn is not working in PowerShel type this command in PowerShel with administ
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 ```
 
+To start dev server run this command
+```bash
+npm run dev
+```
+
 Tools installed to package
 
 - [x] [`flowbite`](https://flowbite.com)
