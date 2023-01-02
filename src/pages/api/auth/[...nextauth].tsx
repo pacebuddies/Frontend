@@ -1,8 +1,7 @@
+import type { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import StravaProvider from 'next-auth/providers/strava';
-import stravaApi from '../../../instances/axiosConfigured';
-import type { NextAuthOptions } from 'next-auth'
 // const GOOGLE_AUTHORIZATION_URL =
 //   'https://accounts.google.com/o/oauth2/v2/auth?' +
 //   new URLSearchParams({
@@ -68,11 +67,13 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/signin',
+    signIn: '/',
   },
+  secret: process.env['NEXTAUTH_SECRET'],
   callbacks: {
+    // Redirects user on sigIn to his home page
     async redirect({ baseUrl }) {
-      return baseUrl;
+      return baseUrl + '/home';
     },
     async jwt({ token, user, account }): Promise<JWT> {
       if (user) {
