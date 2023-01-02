@@ -9,5 +9,12 @@ module.exports = {
     "./src/**/*.{ts,tsx}",
   ],
   plugins: [require("flowbite/plugin")],
-  theme: {},
+  theme: {
+    extend:{
+      colors:{
+        'pb-gray': '#D9D9D9',
+        'pb-green': '#4CBD17',
+      }
+    }
+  },
 };
