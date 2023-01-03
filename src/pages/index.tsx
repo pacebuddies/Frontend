@@ -1,77 +1,34 @@
-import { Button } from 'flowbite-react';
 import type { NextPage } from 'next';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import stravaApi from '../instances/axiosConfigured';
+import StravaLoginButton from '../components/StravaLoginButton';
 
-const Home: NextPage = () => {
-  const { data: session } = useSession();
-  const [athlete, setAthlete] = useState('');
-  const [pullData, setPullData] = useState(false);
-
-  async function getData() {
-    const data = await stravaApi
-      .get('synchronize')
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // console.log(synch);
-    //
-    // const data = await stravaApi
-    //   .get('athlete')
-    //   .then((res) => {
-    //     return res;
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    // console.log(data);
-    return JSON.stringify(data);
-  }
-
-  useEffect(() => {
-    getData().then((items) => {
-      if (pullData) setAthlete(items);
-    });
-    if (pullData) {
-      getData().then((items) => {
-        setAthlete(items);
-      });
-      console.log(athlete);
-    }
-    // return () => setPullData(false);
-  }, [pullData]);
-
+const Login: NextPage = () => {
   return (
     <>
-      <div className="">
-        <h1>Home</h1>
-        {!session && (
-          <Button onClick={() => signIn()}>Connect with Strava</Button>
-        )}
-        {session && (
-          <Button onClick={() => signOut()}>Disconnect from Strava</Button>
-        )}
-        {session && (
-          <Button
-            color={'purple'}
-            onClick={() => {
-              setPullData(true);
-            }}
-          >
-            show data
-          </Button>
-        )}
-        <div>
-          <h2 className="text-red-800">Chwilowo synchronizacja ponieważ z atletą jest bug</h2>
-          {athlete}
+      <div className="flex h-screen shrink-0 flex-nowrap items-center justify-center bg-[url('../img/background_on_login.png')]">
+        {/*<Image*/}
+        {/*  src={bg_image}*/}
+        {/*  alt="people doing sport together"*/}
+        {/*  fill={true}*/}
+        {/*  placeholder="blur"*/}
+        {/*></Image>*/}
+        <div className="flex h-screen flex-none basis-1/4"></div>
+        {/*Center div with login panel*/}
+        <div className="flex h-screen shrink-0 basis-1/2 flex-col flex-nowrap items-center justify-center">
+          <p className="w-full text-center text-2xl text-pb-green">Logo</p>
+          {/*Login panel*/}
+          <div className="flex h-screen w-full items-center justify-center">
+            <div className="flex h-72 min-w-max flex-auto flex-col justify-between bg-pb-gray">
+              <h1 className="w-full text-center">Connect with your buddies!</h1>
+              <div className="flex items-center justify-center">
+                <StravaLoginButton />
+              </div>
+            </div>
+          </div>
         </div>
+        <div className="flex h-screen flex-none basis-1/4"></div>
       </div>
     </>
   );
 };
 
-export default Home;
+export default Login;
