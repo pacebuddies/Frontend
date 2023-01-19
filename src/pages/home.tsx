@@ -4,7 +4,7 @@ import { signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 import stravaApi from '../instances/axiosConfigured';
-import { IAthlete, IAthleteActivityStats } from '../interfaces';
+import { IAthlete } from '../interfaces';
 
 import {
   BarElement,
@@ -15,7 +15,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import SummaryBarChart from '../components/SummaryBarChart';
 
 ChartJS.register(
   CategoryScale,
@@ -74,12 +74,8 @@ export const data = {
   ],
 };
 
-
-
 const Home: NextPage = () => {
-  const [athlete, setAthlete] = useState<IAthlete | null>(
-    null,
-  );
+  const [athlete, setAthlete] = useState<IAthlete | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   async function SynchronizeData() {
     await stravaApi
@@ -90,14 +86,15 @@ const Home: NextPage = () => {
       });
   }
 
-  function fetchAthleteHandler(){
+  function fetchAthleteHandler() {
+    setIsLoaded(false);
     stravaApi
       .get('athlete')
       .then((res) => {
         // console.log(res);
         setAthlete(res.data);
         console.log(athlete?.firstname);
-        setIsLoaded(true)
+        setIsLoaded(true);
       })
       .catch((err) => {
         // console.log(err);
@@ -140,54 +137,25 @@ const Home: NextPage = () => {
     fetchAthleteHandler();
   }, []);
 
-
-  let barChartData = {
-    labels: ["All"],
-    datasets:[
-      {
-        label: 'swiming',
-        data: athlete?.activity_stats.totals.find((e) => e.total_type == "SWIM" && e.total_time_range == "ALL")?.distance,
-        backgroundColor: 'rgb(255, 99, 132)',
-      },
-      {
-        label: 'riding',
-        data: athlete?.activity_stats.totals.find((e) => e.total_type == "RIDE" && e.total_time_range == "ALL")?.distance,
-        backgroundColor: 'rgb(75, 192, 192)',
-      },
-      {
-        label: 'running',
-        data: athlete?.activity_stats.totals.find((e) => e.total_type == "RUN" && e.total_time_range == "ALL")?.distance,
-        backgroundColor: 'rgb(53, 162, 235)',
-      },
-    ]
-  }
-
-  let barChartOptions = {
-    plugins: {
-      title: {
-        display: true,
-        text: 'Chart.js Bar Chart - Stacked',
-      },
-    },
-    responsive: true,
-    interaction: {
-      mode: 'index' as const,
-      intersect: false,
-    },
-  }
   return (
     <>
       <div className="flex h-screen shrink-0 flex-col flex-nowrap items-center justify-center">
         Home page
         <Button onClick={() => signOut()}>LogOut</Button>
-        <Button onClick={() => {SynchronizeData(); console.log(athlete?.activity_stats.totals.find((e) => e.total_type == "RIDE" && e.total_time_range == "ALL")?.distance)}}>
+        <Button
+          onClick={() => {
+            SynchronizeData();
+            console.log(
+              athlete?.activity_stats.totals.find(
+                (e) => e.total_type == 'RIDE' && e.total_time_range == 'ALL',
+              )?.distance,
+            );
+          }}
+        >
           Synchronize Data with strava
         </Button>
-
         {/*<h1 className={`text-[${color}]`}>Hello World!</h1>*/}
-        <div>
-          {isLoaded && <Bar options={barChartOptions} data={barChartData} height={400} width={400} />}
-        </div>
+        <div>{isLoaded && <SummaryBarChart athlete={athlete!} />}</div>
       </div>
     </>
   );
