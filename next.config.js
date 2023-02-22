@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["flowbite.com"],
+    domains: ["flowbite.com"]
   },
   reactStrictMode: true,
-  swcMinify: true,
+  swcMinify: true
 };
 
 module.exports = nextConfig;
