@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+// import { Image } from 'next/image';
 import StravaLoginButton from '../components/StravaLoginButton';
 
 const Login: NextPage = () => {
