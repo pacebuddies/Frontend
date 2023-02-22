@@ -19,6 +19,14 @@ If yarn is not working in PowerShell type this command in PowerShell with admini
 ```bash
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 ```
+You need to create ```.env.local``` based on ```.env.local.example```, in ```{}``` are values you need to change
+```
+STRAVA_CLIENT_ID={client id from strava}
+STRAVA_CLIENT_SECRET={client secret from strava}
+STRAVA_CLIENT_SCOPE=read,read_all,profile:read_all,activity:read,activity:read_all
+STRAVA_CALLBACK_URL=http://localhost:3000
+NEXTAUTH_SECRET=very_secret
+```
 
 To start dev server run this command
 ```bash
@@ -31,8 +39,9 @@ Tools installed to package
 - [x] [`flowbite-react`](https://flowbite-react.com)
 - [x] [`react-icons`](https://react-icons.github.io/react-icons)
 - [x] [`heroicons`](https://heroicons.com/)
-- [x] [`recharts`](https://recharts.org/en-US)
-- [x] [`formik`](https://formik.org/)
+- [x] [`react-chartjs-2`](https://react-chartjs-2.js.org/)
+- [`chart.js`](https://react-chartjs-2.js.org/)
+- [x] [`react-toastify`](https://fkhadra.github.io/react-toastify/introduction)
 - [x] [`tailwindcss`](https://tailwindcss.com)
 - [x] Quality of life tools, like
   - [x] [`eslint`](https://eslint.org) with some plugins
