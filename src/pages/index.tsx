@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 // import { Image } from 'next/image';
 import StravaLoginButton from '../components/StravaLoginButton';
+import StravaWatermark from '../components/StravaWatermark';
 
 const Login: NextPage = () => {
   return (
@@ -28,6 +29,7 @@ const Login: NextPage = () => {
         </div>
         <div className="flex h-screen flex-none basis-1/4"></div>
       </div>
+      <StravaWatermark />
     </>
   );
 };

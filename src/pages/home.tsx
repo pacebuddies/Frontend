@@ -17,6 +17,7 @@ import {
 } from 'chart.js';
 import { toast } from 'react-toastify';
 import SummaryBarChart from '../components/Charts/SummaryBarChart';
+import StravaWatermark from '../components/StravaWatermark';
 
 ChartJS.register(
   CategoryScale,
@@ -45,9 +46,11 @@ const Home: NextPage = () => {
     stravaApi
       .get('athlete')
       .then((res) => {
-        setAthlete(res.data);
-        console.log(athlete?.firstname);
-        setIsLoaded(true);
+        if (res.status == 200) {
+          setAthlete(res.data);
+          console.log(athlete?.firstname);
+          setIsLoaded(true);
+        }
       })
       .catch((err) => {
         toast.error(err.response.data.error);
@@ -83,6 +86,7 @@ const Home: NextPage = () => {
           {isLoaded && <SummaryBarChart athlete={athlete!.activity_stats} />}
         </div>
       </div>
+      <StravaWatermark />
     </>
   );
 };
