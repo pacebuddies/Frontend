@@ -1,7 +1,22 @@
+import { Button } from 'flowbite-react';
 import type { NextPage } from 'next';
 // import { Image } from 'next/image';
+import axios from 'axios';
 import StravaLoginButton from '../components/StravaLoginButton';
 import StravaWatermark from '../components/StravaWatermark';
+import stravaApi from "../instances/axiosConfigured";
+
+const login = () => {
+  stravaApi
+    .get('http://localhost:8081/connect')
+    .then((res) => {
+      console.log(res)
+      //window.location.href = res
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 const Login: NextPage = () => {
   return (
@@ -23,6 +38,9 @@ const Login: NextPage = () => {
               <h1 className="w-full text-center">Connect with your buddies!</h1>
               <div className="flex items-center justify-center">
                 <StravaLoginButton />
+                <Button outline={true} onClick={() => login()}>
+                  Login to strava
+                </Button>
               </div>
             </div>
           </div>

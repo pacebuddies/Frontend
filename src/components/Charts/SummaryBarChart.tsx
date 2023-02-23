@@ -11,6 +11,7 @@ import { Dropdown } from 'flowbite-react';
 import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { IAthleteActivityStats } from '../../interfaces';
+import { toast } from "react-toastify";
 
 ChartJS.register(
   CategoryScale,
@@ -65,7 +66,12 @@ const SummaryBarChart = ({ athlete }: IProps) => {
 
   return (
     <>
-      <Dropdown outline={true} placement="right" gradientDuoTone="greenToBlue" label={timeRange}>
+      <Dropdown
+        outline={true}
+        placement="right"
+        gradientDuoTone="greenToBlue"
+        label={timeRange}
+      >
         <Dropdown.Item onClick={() => setTimeRange('ALL')}>
           All time
         </Dropdown.Item>
