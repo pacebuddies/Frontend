@@ -57,10 +57,6 @@ const Home: NextPage = () => {
       });
   }
 
-  const logOut = () => {
-    window.location.href = 'http://localhost:8081/logout';
-  }
-
   useEffect(() => {
     fetchAthleteHandler();
   }, []);
@@ -69,13 +65,11 @@ const Home: NextPage = () => {
     <>
       <div className="flex h-screen shrink-0 flex-col flex-nowrap items-center justify-center">
         Home page
-        <Button
-          outline={true}
-          gradientDuoTone="greenToBlue"
-          onClick={() => logOut()}
-        >
-          LogOut
-        </Button>
+        <form action="http://localhost:8081/logout" method="POST">
+          <Button outline={true} gradientDuoTone="greenToBlue" type="submit">
+            LogOut
+          </Button>
+        </form>
         <Button
           outline={true}
           gradientDuoTone="greenToBlue"
