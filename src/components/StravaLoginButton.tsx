@@ -1,8 +1,10 @@
-import { signIn } from 'next-auth/react';
+const login = () => {
+  window.location.href = 'http://localhost:8081/connect';
+};
 
 const StravaLoginButton = () => {
   return (
-    <button onClick={() => signIn('strava')}>
+    <button onClick={() => login()}>
       <svg
         width="193px"
         height="48px"
