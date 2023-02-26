@@ -1,6 +1,5 @@
 import { Button } from 'flowbite-react';
 import { NextPage } from 'next';
-import { signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 import stravaApi from '../instances/axiosConfigured';
@@ -53,9 +52,13 @@ const Home: NextPage = () => {
         }
       })
       .catch((err) => {
-        toast.error(err.response.data.error);
+        toast.error(err);
         console.log(err.response);
       });
+  }
+
+  const logOut = () => {
+    window.location.href = 'http://localhost:8081/logout';
   }
 
   useEffect(() => {
@@ -69,7 +72,7 @@ const Home: NextPage = () => {
         <Button
           outline={true}
           gradientDuoTone="greenToBlue"
-          onClick={() => signOut()}
+          onClick={() => logOut()}
         >
           LogOut
         </Button>
