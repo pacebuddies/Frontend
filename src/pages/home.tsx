@@ -1,4 +1,3 @@
-import { Button } from 'flowbite-react';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 
@@ -17,6 +16,7 @@ import {
 import { toast } from 'react-toastify';
 import SummaryBarChart from '../components/Charts/SummaryBarChart';
 import StravaWatermark from '../components/StravaWatermark';
+import TopNavBar from '../components/TopNavBar';
 
 ChartJS.register(
   CategoryScale,
@@ -31,19 +31,10 @@ const Home: NextPage = () => {
   const [athlete, setAthlete] = useState<IAthlete | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  async function SynchronizeData() {
-    await stravaApi
-      .get('synchronize')
-      .then((res) => {})
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   function fetchAthleteHandler() {
     setIsLoaded(false);
     stravaApi
-      .get('athlete')
+      .get('http://localhost:8081/api/v1/bridge/athlete')
       .then((res) => {
         if (res.status == 200) {
           setAthlete(res.data);
@@ -64,21 +55,8 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="flex h-screen shrink-0 flex-col flex-nowrap items-center justify-center">
+        <TopNavBar />
         Home page
-        <form action="http://localhost:8081/logout" method="POST">
-          <Button outline={true} gradientDuoTone="greenToBlue" type="submit">
-            LogOut
-          </Button>
-        </form>
-        <Button
-          outline={true}
-          gradientDuoTone="greenToBlue"
-          onClick={() => {
-            SynchronizeData();
-          }}
-        >
-          Synchronize Data with strava
-        </Button>
         <div>
           {isLoaded && <SummaryBarChart athlete={athlete!.activity_stats} />}
         </div>
