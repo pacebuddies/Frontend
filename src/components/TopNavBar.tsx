@@ -24,10 +24,10 @@ const TopNavBar: NextPage = () => {
 
   return (
     <>
-      <nav className="fixed top-0 h-[91px] w-full rounded border-gray-200 bg-pb-gray px-2 py-2.5 dark:bg-gray-900 sm:px-4">
-        <div className=" flex flex-wrap items-center justify-between">
+      <nav className="fixed top-0 flex h-[91px] w-full items-center justify-between rounded border-gray-200 bg-pb-gray px-2 py-2.5">
+        <div className="flex w-full flex-wrap items-center justify-between">
           {/*Name & Logo*/}
-          <div className="ml-3">
+          <div className="ml-3 flex flex-wrap items-center justify-between ">
             <span className="self-center whitespace-nowrap font-istok-web text-3xl text-pb-green">
               Pace
             </span>
@@ -36,7 +36,7 @@ const TopNavBar: NextPage = () => {
             </span>
           </div>
           {/*Right side icons*/}
-          <div className="hidden w-full items-center justify-between md:order-1 md:flex md:w-auto">
+          <div className="flex w-auto items-center justify-between">
             {/*Avatar*/}
             <div className="flex items-center">
               <button
@@ -44,7 +44,7 @@ const TopNavBar: NextPage = () => {
                 className="mr-3 flex rounded-full border-2 border-solid border-pb-green "
               >
                 <img
-                  className="h-[69px] w-[69px] rounded-full"
+                  className="h-12 w-12 rounded-full"
                   src={avatar.src}
                   alt="user photo"
                 />
@@ -84,8 +84,7 @@ const TopNavBar: NextPage = () => {
                   viewBox="0 0 24 24"
                   fill="white"
                   className={
-                    'h-8 w-8 rounded-full' +
-                    (isLoading ? ' animate-spin' : '')
+                    'h-8 w-8 rounded-full' + (isLoading ? ' animate-spin' : '')
                   }
                 >
                   <path
