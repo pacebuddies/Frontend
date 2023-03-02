@@ -1,9 +1,9 @@
-import axios, { AxiosInstance} from 'axios';
+import axios, { AxiosInstance } from 'axios';
+
+export const ApiAddress = process.env['NEXT_PUBLIC_API_GATEWAY_ADDRESS'];
+
 const stravaApi: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:8080/api/v1/',
-  headers: {
-    Authorization: 'AUTH TOKEN FROM INSTANCE (interceptor is not working)',
-  },
+  baseURL: `${ApiAddress}/api/v1/bridge`,
   withCredentials: true,
 });
 export default stravaApi;

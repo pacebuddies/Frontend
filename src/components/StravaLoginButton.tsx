@@ -1,5 +1,7 @@
+import { ApiAddress } from '../instances/axiosConfigured';
+
 const login = () => {
-  window.location.href = 'http://localhost:8081/connect';
+  window.location.href = `${ApiAddress}/connect`;
 };
 
 const StravaLoginButton = () => {

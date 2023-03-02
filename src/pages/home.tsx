@@ -1,31 +1,11 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-
-import stravaApi from '../instances/axiosConfigured';
-import { IAthlete } from '../interfaces';
-
-import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  Title,
-  Tooltip,
-} from 'chart.js';
 import { toast } from 'react-toastify';
 import SummaryBarChart from '../components/Charts/SummaryBarChart';
 import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+import stravaApi from '../instances/axiosConfigured';
+import { IAthlete } from '../interfaces';
 
 const Home: NextPage = () => {
   const [athlete, setAthlete] = useState<IAthlete | null>(null);
@@ -34,7 +14,7 @@ const Home: NextPage = () => {
   function fetchAthleteHandler() {
     setIsLoaded(false);
     stravaApi
-      .get('http://localhost:8081/api/v1/bridge/athlete')
+      .get('athlete')
       .then((res) => {
         if (res.status == 200) {
           setAthlete(res.data);

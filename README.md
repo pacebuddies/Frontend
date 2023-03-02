@@ -1,14 +1,17 @@
 ## Getting started
 
-`Next.js` requires [`Node.js`](https://nodejs.org).
+### Install and start app
+#### 1. Install system pre-requisites:
+`Next.js` requires [`Node.js`](https://nodejs.org) installed.
++ [Node.js](https://nodejs.org) (v18.12 LTS or later)
 
-If you don't already have `npm` and `yarn` available, make sure you set them up.
+#### 2. Setup `npm` and `yarn`:
 
 ```bash
 npm i -g npm yarn
 ```
 
-Install the dependencies:
+#### 3. Install the dependencies:
 
 ```bash
 yarn install
@@ -19,21 +22,19 @@ If yarn is not working in PowerShell type this command in PowerShell with admini
 ```bash
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 ```
-You need to create ```.env.local``` based on ```.env.local.example```, in ```{}``` are values you need to change
-```
-STRAVA_CLIENT_ID={client id from strava}
-STRAVA_CLIENT_SECRET={client secret from strava}
-STRAVA_CLIENT_SCOPE=read,read_all,profile:read_all,activity:read,activity:read_all
-STRAVA_CALLBACK_URL=http://localhost:3000
-NEXTAUTH_SECRET=very_secret
-```
+To change the address of the API server go to `.env.local` and change the `API_GATEWAY_ADDRESS` variable
 
+#### 4. Start the dev server:
 To start dev server run this command
 ```bash
 npm run dev
 ```
+or use your IDE to start the dev server
 
-Tools installed to package
+#### 5. Open the app in the browser:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Tools installed in project
 
 - [x] [`flowbite`](https://flowbite.com)
 - [x] [`flowbite-react`](https://flowbite-react.com)
@@ -46,5 +47,3 @@ Tools installed to package
 - [x] Quality of life tools, like
   - [x] [`eslint`](https://eslint.org) with some plugins
   - [x] [`prettier`](https://prettier.io)
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
