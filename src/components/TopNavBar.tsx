@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import stravaApi from '../instances/axiosConfigured';
+import stravaApi, { ApiAddress } from '../instances/axiosConfigured';
 import avatar from '/src/img/avatar-example.jpg';
 
 const TopNavBar: NextPage = () => {
@@ -10,7 +10,7 @@ const TopNavBar: NextPage = () => {
   function SynchronizeData() {
     setIsLoading(true);
     stravaApi
-      .get('http://localhost:8081/api/v1/bridge/synchronize')
+      .get('/synchronize')
       .then((res) => {
         setIsLoading(false);
         toast.success('Synchronized successfully');
@@ -97,7 +97,7 @@ const TopNavBar: NextPage = () => {
             </div>
             {/*Logout*/}
             <div className="flex items-center">
-              <form action="http://localhost:8081/logout" method="POST">
+              <form action={ApiAddress + '/logout'} method="POST">
                 <button
                   type="submit"
                   className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-sm"
