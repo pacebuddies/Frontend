@@ -22,7 +22,7 @@ If yarn is not working in PowerShell type this command in PowerShell with admini
 ```bash
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 ```
-To change the address of the API server go to `.env.local` and change the `API_GATEWAY_ADDRESS` variable
+To change the address of the API server go to `.env.local` and change the `NEXT_PUBLIC_API_GATEWAY_ADDRESS` variable
 
 #### 4. Start the dev server:
 To start dev server run this command
