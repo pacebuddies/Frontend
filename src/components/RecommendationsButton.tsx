@@ -2,7 +2,7 @@ const RecommendationsButton = () => {
   return (
     <>
       {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-      <div className="group/button fixed bottom-16 left-4 inline-flex h-14 w-auto items-center">
+      <div className="group/button fixed bottom-24 left-4 inline-flex h-14 w-auto items-center">
         <span className=" absolute z-20 flex h-full w-14 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-2xl text-white">
           PB
         </span>
