@@ -6,6 +6,8 @@ import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
 import stravaApi from '../instances/axiosConfigured';
 import { IAthlete } from '../interfaces';
+import RecommendationsButton from "../components/RecommendationsButton";
+import MenuButton from "../components/MenuButton";
 
 const Home: NextPage = () => {
   const [athlete, setAthlete] = useState<IAthlete | null>(null);
@@ -41,6 +43,8 @@ const Home: NextPage = () => {
           {isLoaded && <SummaryBarChart athlete={athlete!.activity_stats} />}
         </div>
       </div>
+      <RecommendationsButton />
+      <MenuButton />
       <StravaWatermark />
     </>
   );
