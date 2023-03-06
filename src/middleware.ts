@@ -7,6 +7,7 @@ export const config = {
 };
 
 export function middleware(request: NextRequest) {
+  return NextResponse.next();
   // check if the request has a cookie named 'SESSION'
   if (request.cookies.has('SESSION')) {
     const cookie = request.cookies.get('SESSION')?.value;
