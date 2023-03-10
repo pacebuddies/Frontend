@@ -17,7 +17,7 @@ const RecommendationsButton = () => {
           Find your buddy
         </span>
       </div>
-      <RecommendationsModal opened={recommendationsOpened} />
+      {/*<RecommendationsModal opened={recommendationsOpened} />*/}
     </>
   );
 };
