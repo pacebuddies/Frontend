@@ -8,7 +8,7 @@ import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
 import stravaApi from '../instances/axiosConfigured';
 import { IAthlete } from '../interfaces';
-import RecommendationsModal from "../components/Recommendations/RecommendationsModal";
+import RecommendationsModal from "../components/Recommendations/RecommendationsModal/RecommendationsModal";
 
 const Home: NextPage = () => {
   const [athlete, setAthlete] = useState<IAthlete | null>(null);

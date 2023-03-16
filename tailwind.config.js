@@ -11,6 +11,17 @@ module.exports = {
   plugins: [require("flowbite/plugin")],
   theme: {
     extend:{
+      height:{
+        '128': '32rem',
+        '256': '64rem',
+      },
+      width:{
+        '128': '32rem',
+        '192': '48rem',
+        '256': '64rem',
+        '384': '96rem',
+        '512': '128rem',
+      },
       colors:{
         'pb-gray': '#D9D9D9',
         'pb-green': '#4CBD17',

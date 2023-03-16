@@ -1,12 +1,38 @@
 // import { Modal } from "flowbite-react";
 import { useState } from 'react';
+import RecommendationsModalContent from './RecommendationsModalContent';
 
 interface IProps {
   opened: boolean;
 }
 
+interface RecommendationData {
+  name: string;
+  surname: string;
+  age: number;
+}
+
+const data1: RecommendationData[] = [
+  {
+    name: 'John',
+    surname: 'Doe',
+    age: 30,
+  },
+  {
+    name: 'Jane',
+    surname: 'Doe',
+    age: 38,
+  },
+  {
+    name: 'Jane',
+    surname: 'Marks',
+    age: 29,
+  },
+];
+
 const RecommendationsModal = (props: IProps) => {
   const [showModal, setShowModal] = useState(props.opened);
+  const [recommendationNumber, setRecommendationNumber] = useState(0);
   return (
     <>
       <button
@@ -19,9 +45,9 @@ const RecommendationsModal = (props: IProps) => {
       {showModal ? (
         <>
           <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-            <div className="relative my-6 mx-auto w-auto h-auto max-w-7xl max-h-[80rem]">
+            <div className="relative my-6 mx-auto h-auto max-h-[80rem] w-auto max-w-7xl">
               {/*content*/}
-              <div className="flex w-full flex-col rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
+              <div className="flex w-full flex-row rounded-lg border-0 bg-white shadow-lg outline-none focus:outline-none">
                 {/*header*/}
                 {/*<div className="flex items-start justify-between rounded-t border-b border-solid border-slate-200 p-5">*/}
                 {/*  <h3 className="text-3xl font-semibold">Modal Title</h3>*/}
@@ -35,13 +61,11 @@ const RecommendationsModal = (props: IProps) => {
                 {/*  </button>*/}
                 {/*</div>*/}
                 {/*body*/}
-                <div className="relative flex-auto p-6">
-                  <p className="my-4 text-lg leading-relaxed text-slate-500">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Aenean ut mi vestibulum, ornare arcu aliquet, posuere mauris.
-                    Sed quis justo orci. Quisque id lorem eget sapien pretium suscipit et vel elit.
-                  </p>
+                <button className="rounded-full bg-pb-gray">P</button>
+                <div className="relative h-16 flex-auto bg-blue-500 p-6 md:h-64 md:w-128 lg:h-96 lg:w-192 xl:h-128 xl:w-256">
+                  <RecommendationsModalContent />
                 </div>
+                <button>R</button>
                 {/*footer*/}
                 {/*<div className="flex items-center justify-end rounded-b border-t border-solid border-slate-200 p-6">*/}
                 {/*  <button*/}
