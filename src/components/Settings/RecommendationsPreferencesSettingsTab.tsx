@@ -1,7 +1,12 @@
 import { NextPage } from 'next';
 
 const RecommendationsPreferencesSettingsTab: NextPage = () => {
-  return <div>Recommendations preferences panel</div>;
+
+  return (
+    <div>
+      Recommendations Preferences Settings Tab
+    </div>
+  );
 };
 
 export default RecommendationsPreferencesSettingsTab;
