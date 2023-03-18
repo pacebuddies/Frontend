@@ -10,12 +10,12 @@ const RecommendationsButton = () => {
         <span className=" absolute z-20 flex h-full w-14 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-2xl text-white">
           PB
         </span>
-        <span
+        <button
           onClick={() => setRecommendationsOpened(true)}
           className="relative z-10 ml-0 flex h-full w-0 cursor-pointer items-center overflow-hidden whitespace-nowrap rounded-full bg-pb-gray pl-14 text-black transition-all duration-300 ease-in-out group-hover/button:ml-2 group-hover/button:w-full group-hover:w-full group-hover/button:pr-4"
         >
           Find your buddy
-        </span>
+        </button>
       </div>
       {/*<RecommendationsModal opened={recommendationsOpened} />*/}
     </>

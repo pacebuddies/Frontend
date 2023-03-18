@@ -46,7 +46,7 @@ const TopNavBar: NextPage = () => {
                 <img
                   className="h-12 w-12 rounded-full"
                   src={avatar.src}
-                  alt="user photo"
+                  alt="user avatar"
                 />
               </button>
             </div>
