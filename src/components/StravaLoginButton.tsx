@@ -1,12 +1,8 @@
-import { ApiAddress } from '../instances/axiosConfigured';
-
-const login = () => {
-  window.location.href = `${ApiAddress}/connect`;
-};
+import { signIn } from 'next-auth/react';
 
 const StravaLoginButton = () => {
   return (
-    <button onClick={() => login()}>
+    <button onClick={() => signIn('strava')}>
       <svg
         width="193px"
         height="48px"

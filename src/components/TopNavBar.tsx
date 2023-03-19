@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import stravaApi, { ApiAddress } from '../instances/axiosConfigured';
+import { getSession, signOut } from 'next-auth/react';
+import pacebuddiesApi, { stravaOauthApi } from '../instances/axiosConfigured';
 import avatar from '/src/img/avatar-example.jpg';
 
 const TopNavBar: NextPage = () => {
@@ -9,8 +10,8 @@ const TopNavBar: NextPage = () => {
 
   function SynchronizeData() {
     setIsLoading(true);
-    stravaApi
-      .get('/synchronize')
+    pacebuddiesApi
+      .get('bridge/synchronize')
       .then((res) => {
         setIsLoading(false);
         toast.success('Synchronized successfully');
@@ -20,6 +21,21 @@ const TopNavBar: NextPage = () => {
         toast.error('Synchronize ' + err.message);
         console.log(err);
       });
+  }
+
+  async function Deauthorize() {
+    const session =  await getSession()
+    stravaOauthApi
+      .post("/deauthorize", {
+        data: {
+          access_token: `${session?.accessToken}`
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message)
+        console.log(err.message)
+      })
+    return await signOut({ callbackUrl: "/"})
   }
 
   return (
@@ -97,10 +113,10 @@ const TopNavBar: NextPage = () => {
             </div>
             {/*Logout*/}
             <div className="flex items-center">
-              <form action={ApiAddress + '/logout'} method="POST">
                 <button
-                  type="submit"
+                  type="button"
                   className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-sm"
+                  onClick={() => Deauthorize()}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +131,6 @@ const TopNavBar: NextPage = () => {
                     />
                   </svg>
                 </button>
-              </form>
             </div>
           </div>
         </div>
