@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import SummaryBarChart from '../components/Charts/SummaryBarChart';
@@ -17,7 +18,7 @@ const Home: NextPage = () => {
   function fetchAthleteHandler() {
     setIsLoaded(false);
     stravaApi
-      .get('athlete')
+      .get('bridge/athlete')
       .then((res) => {
         if (res.status == 200) {
           setAthlete(res.data);
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
         }
       })
       .catch((err) => {
-        toast.error(err);
+        toast.error(err.response.data.error);
         console.log(err.response);
       });
   }
@@ -44,7 +45,7 @@ const Home: NextPage = () => {
           {isLoaded && <SummaryBarChart athlete={athlete!.activity_stats} />}
         </div>
       </div>
-      <RecommendationsModal opened={true} />
+      {/* <RecommendationsModal opened={true} /> */}
       <RecommendationsButton />
       <MenuButton />
       <StravaWatermark />

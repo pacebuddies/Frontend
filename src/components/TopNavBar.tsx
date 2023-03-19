@@ -10,7 +10,7 @@ const TopNavBar: NextPage = () => {
   function SynchronizeData() {
     setIsLoading(true);
     stravaApi
-      .get('/synchronize')
+      .get('bridge/synchronize')
       .then((res) => {
         setIsLoading(false);
         toast.success('Synchronized successfully');
