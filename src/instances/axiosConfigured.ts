@@ -17,12 +17,6 @@ export const stravaOauthApi: AxiosInstance = axios.create({
   },
 })
 
-export async function deauthorize(): Promise<AxiosResponse> {
-  const session = await getSession();
-  return stravaOauthApi.post("/deauthorize", {
-      access_token: session?.accessToken
-  })
-}
 /*
  Setting token for every request
  */

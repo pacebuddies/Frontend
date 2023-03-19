@@ -2,9 +2,8 @@ import { NextPage } from 'next';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { getSession, signOut } from 'next-auth/react';
-import pacebuddiesApi, { ApiAddress, deauthorize } from '../instances/axiosConfigured';
+import pacebuddiesApi, { stravaOauthApi } from '../instances/axiosConfigured';
 import avatar from '/src/img/avatar-example.jpg';
-import { config } from '../middleware';
 
 const TopNavBar: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,13 +23,19 @@ const TopNavBar: NextPage = () => {
       });
   }
 
-  function Deauthorize() {
-    const session = getSession();
-    deauthorize()
+  async function Deauthorize() {
+    const session =  await getSession()
+    stravaOauthApi
+      .post("/deauthorize", {
+        data: {
+          access_token: `${session?.accessToken}`
+        }
+      })
       .catch((err) => {
         toast.error(err.message)
+        console.log(err.message)
       })
-    signOut()
+    return await signOut({ callbackUrl: "/"})
   }
 
   return (
