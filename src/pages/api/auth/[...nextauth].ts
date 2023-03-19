@@ -1,7 +1,6 @@
-import type { NextAuthOptions } from 'next-auth';
+import type { NextAuthOptions, TokenSet } from 'next-auth';
 import NextAuth from 'next-auth';
 import { JWT } from 'next-auth/jwt';
-import { type TokenSet } from 'next-auth/core/types'
 import StravaProvider from 'next-auth/providers/strava';
 import axios from "axios";
 
@@ -78,7 +77,6 @@ export const authOptions: NextAuthOptions = {
           user
         }
       } else if (Date.now() < token.expires_at * 1000){
-          console.log(token)
           return token
       } else {
         return refreshAccessToken(token)

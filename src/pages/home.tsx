@@ -7,7 +7,7 @@ import MenuButton from '../components/MenuButton';
 import RecommendationsButton from '../components/Recommendations/RecommendationsButton';
 import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
-import stravaApi from '../instances/axiosConfigured';
+import pacebuddiesApi from '../instances/axiosConfigured';
 import { IAthlete } from '../interfaces';
 import RecommendationsModal from "../components/Recommendations/RecommendationsModal";
 
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
 
   function fetchAthleteHandler() {
     setIsLoaded(false);
-    stravaApi
+    pacebuddiesApi
       .get('bridge/athlete')
       .then((res) => {
         if (res.status == 200) {
