@@ -35,17 +35,6 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
   }
 }
 
-
-// Don't ask
-declare module "next-auth/jwt" {
-  interface JWT {
-    access_token: string
-    expires_at: number
-    refresh_token: string
-    error?: "RefreshAccessTokenError"
-  }
-}
-
 export const authOptions: NextAuthOptions = {
   providers: [
     StravaProvider({

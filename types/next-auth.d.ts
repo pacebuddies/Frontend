@@ -6,11 +6,11 @@ declare module 'next-auth' {
   }
 }
 
-declare module 'next-auth/jwt' {
-  /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
+declare module "next-auth/jwt" {
   interface JWT {
-    /** OpenID ID Token */
-    idToken?: string;
-    accessToken?: string;
+    access_token: string
+    expires_at: number
+    refresh_token: string
+    error?: "RefreshAccessTokenError"
   }
 }
