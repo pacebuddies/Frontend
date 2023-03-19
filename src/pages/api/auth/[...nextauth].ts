@@ -1,14 +1,12 @@
 import type { NextAuthOptions, TokenSet } from 'next-auth';
 import NextAuth from 'next-auth';
 import { JWT } from 'next-auth/jwt';
+import { stravaOauthApi } from "../../../instances/axiosConfigured"
 import StravaProvider from 'next-auth/providers/strava';
-import axios from "axios";
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
-    const url = 'https://www.strava.com/oauth/token'
-
-    const refreshedTokens: TokenSet = await axios.post(url, {
+    const refreshedTokens: TokenSet = await stravaOauthApi.post("/token", {
         data: {
           client_id: process.env['STRAVA_CLIENT_ID'],
           client_secret: process.env['STRAVA_CLIENT_SECRET'],

@@ -10,7 +10,7 @@ const pacbuddiesApi: AxiosInstance = axios.create({
   },
 });
 
-const stravaOauthApi: AxiosInstance = axios.create({
+export const stravaOauthApi: AxiosInstance = axios.create({
   baseURL: `https://www.strava.com/oauth`,
   headers: {
     Authorization: 'AUTH TOKEN FROM INSTANCE (interceptor is not working)',
