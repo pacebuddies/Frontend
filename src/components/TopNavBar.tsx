@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
+import { getSession, signOut } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { getSession, signOut } from 'next-auth/react';
 import pacebuddiesApi, { stravaOauthApi } from '../instances/axiosConfigured';
 import avatar from '/src/img/avatar-example.jpg';
 
@@ -24,18 +24,18 @@ const TopNavBar: NextPage = () => {
   }
 
   async function Deauthorize() {
-    const session =  await getSession()
+    const session = await getSession();
     stravaOauthApi
-      .post("/deauthorize", {
+      .post('/deauthorize', {
         data: {
-          access_token: `${session?.accessToken}`
-        }
+          access_token: `${session?.accessToken}`,
+        },
       })
       .catch((err) => {
-        toast.error(err.message)
-        console.log(err.message)
-      })
-    return await signOut({ callbackUrl: "/"})
+        toast.error(err.message);
+        console.log(err.message);
+      });
+    return await signOut({ callbackUrl: '/' });
   }
 
   return (
@@ -113,24 +113,24 @@ const TopNavBar: NextPage = () => {
             </div>
             {/*Logout*/}
             <div className="flex items-center">
-                <button
-                  type="button"
-                  className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-sm"
-                  onClick={() => Deauthorize()}
+              <button
+                type="button"
+                className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-sm"
+                onClick={() => Deauthorize()}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  className="h-8 w-8 rounded-full"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="white"
-                    className="h-8 w-8 rounded-full"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
+                  <path
+                    fillRule="evenodd"
+                    d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
