@@ -61,3 +61,22 @@ export interface IAthlete {
   sex: string;
   state: string;
 }
+
+export interface IActivityDaySummary {
+  week_day: string;
+  summary: number;
+}
+
+export interface IActivityDaySummaryResult {
+  result: IActivityDaySummary[];
+}
+
+export interface IActivityWeekSummary {
+  week: string;
+  week_start_date: string;
+  average_distance: number;
+}
+
+export interface IActivityWeekSummaryResult {
+  result: IActivityWeekSummary[];
+}
