@@ -7,7 +7,7 @@ interface IProps {
   opened: boolean;
 }
 
-interface RecommendationData {
+export interface RecommendationData {
   name: string;
   surname: string;
   age: number;
@@ -25,7 +25,7 @@ const data1: RecommendationData[] = [
     age: 38,
   },
   {
-    name: 'Jane',
+    name: 'Mark',
     surname: 'Marks',
     age: 29,
   },
@@ -72,6 +72,7 @@ const RecommendationsModal = (props: IProps) => {
                         viewBox="0 0 24 24"
                         fill="currentColor"
                         className="h-6 w-6"
+                        onClick={() => previousRecommendation()}
                       >
                         <path
                           fillRule="evenodd"
@@ -83,7 +84,7 @@ const RecommendationsModal = (props: IProps) => {
                   </div>
                   <div className="flex w-full flex-row rounded-lg border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
                     <div className="relative h-64 w-128 flex-auto bg-blue-500 p-6 md:h-64 md:w-128 lg:h-96 lg:w-192 xl:h-128 xl:w-256">
-                      <RecommendationsModalContent />
+                      <RecommendationsModalContent num={recommendationNumber} data={data1} />
                     </div>
                   </div>
                   {/*Next button*/}
@@ -93,6 +94,7 @@ const RecommendationsModal = (props: IProps) => {
                       viewBox="0 0 24 24"
                       fill="currentColor"
                       className="h-6 w-6"
+                      onClick={() => nextRecommendation()}
                     >
                       <path
                         fillRule="evenodd"
