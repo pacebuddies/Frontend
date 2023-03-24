@@ -7,6 +7,7 @@ import MenuButton from '../components/MenuButton';
 import RecommendationsButton from '../components/Recommendations/RecommendationsButton';
 import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
+import MenuBar from '../components/MenuBar';
 import pacebuddiesApi from '../instances/axiosConfigured';
 import { IAthlete } from '../interfaces';
 import RecommendationsModal from "../components/Recommendations/RecommendationsModal";
@@ -47,6 +48,7 @@ const Home: NextPage = () => {
       </div>
       {/* <RecommendationsModal opened={true} /> */}
       <RecommendationsButton />
+      <MenuBar />
       <MenuButton />
       <StravaWatermark />
     </>
