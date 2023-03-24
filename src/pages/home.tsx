@@ -44,7 +44,6 @@ const Home: NextPage = () => {
           {isLoaded && <SummaryBarChart athlete={athlete!.activity_stats} />}
         </div>
       </div>
-      <RecommendationsModal opened={true} />
       <RecommendationsButton />
       <MenuButton />
       <StravaWatermark />

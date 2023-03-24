@@ -1,10 +1,10 @@
-// import { Modal } from "flowbite-react";
 import { useState } from 'react';
 import RecommendationsModalContent from './RecommendationsModalContent';
 //import svg
 
 interface IProps {
   opened: boolean;
+  onOpenedChange: (opened: boolean) => void;
 }
 
 export interface RecommendationData {
@@ -31,8 +31,7 @@ const data1: RecommendationData[] = [
   },
 ];
 
-const RecommendationsModal = (props: IProps) => {
-  const [showModal, setShowModal] = useState(props.opened);
+const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
   const [recommendationNumber, setRecommendationNumber] = useState(0);
 
   const nextRecommendation = () => {
@@ -49,14 +48,7 @@ const RecommendationsModal = (props: IProps) => {
 
   return (
     <>
-      <button
-        className="mr-1 mb-1 rounded bg-pink-500 px-6 py-3 text-sm font-bold uppercase text-white shadow outline-none transition-all duration-150 ease-linear hover:shadow-lg focus:outline-none active:bg-pink-600"
-        type="button"
-        onClick={() => setShowModal(true)}
-      >
-        Open large modal
-      </button>
-      {showModal ? (
+      {opened ? (
         <>
           <div className="fixed inset-0 z-50 flex flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
             <div className="relative my-6 mx-auto flex h-auto max-h-[80rem] w-auto max-w-7xl flex-row items-center justify-center">
@@ -84,7 +76,10 @@ const RecommendationsModal = (props: IProps) => {
                   </div>
                   <div className="flex w-full flex-row rounded-lg border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
                     <div className="relative h-64 w-128 flex-auto bg-blue-500 p-6 md:h-64 md:w-128 lg:h-96 lg:w-192 xl:h-128 xl:w-256">
-                      <RecommendationsModalContent num={recommendationNumber} data={data1} />
+                      <RecommendationsModalContent
+                        num={recommendationNumber}
+                        data={data1}
+                      />
                     </div>
                   </div>
                   {/*Next button*/}
@@ -110,7 +105,7 @@ const RecommendationsModal = (props: IProps) => {
                       viewBox="0 0 24 24"
                       fill="currentColor"
                       className="h-6 w-6"
-                      onClick={() => setShowModal(false)}
+                      onClick={() => onOpenedChange(false)}
                     >
                       <path
                         fillRule="evenodd"
