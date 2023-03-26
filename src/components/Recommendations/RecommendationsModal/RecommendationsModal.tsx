@@ -74,8 +74,10 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                       </svg>
                     </button>
                   </div>
-                  <div className="flex w-full flex-row rounded-lg border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
-                    <div className="relative h-64 w-128 flex-auto bg-blue-500 p-6 md:h-64 md:w-128 lg:h-96 lg:w-192 xl:h-128 xl:w-256">
+                  <div className="flex w-full flex-row rounded-full border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
+                    {/*UWAGA! Poniższa linia styli ustala szerokość modalu na różnych urządzeniach*/}
+                    <div className={"relative rounded-3xl h-64 w-128 flex-auto bg-blue-500 p-6 md:h-96 md:w-160 lg:h-128 lg:w-224 xl:h-160 xl:w-288 " +
+                      "2xl:h-192 2xl:w-352"}>
                       <RecommendationsModalContent
                         num={recommendationNumber}
                         data={data1}
@@ -99,13 +101,15 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                     </svg>
                   </button>
                   {/*Close button*/}
-                  <button className="relative right-7 bottom-28 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray md:bottom-28 lg:bottom-44 xl:bottom-60">
+                  <button
+                    className="relative right-7 bottom-28 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray md:bottom-28 lg:bottom-44 xl:bottom-60 2xl:bottom-92"
+                    onClick={() => onOpenedChange(false)}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
                       className="h-6 w-6"
-                      onClick={() => onOpenedChange(false)}
                     >
                       <path
                         fillRule="evenodd"
@@ -117,7 +121,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                 </div>
                 {/*Accept Decline Buttons*/}
                 <div>
-                  <div className="flex w-128 flex-auto items-center justify-center p-6 md:w-128 lg:w-192  xl:w-256">
+                  <div className="flex w-128 flex-auto items-center justify-center pt-6 md:w-128 lg:w-192  xl:w-256">
                     {/*Accept Button*/}
                     <div className="flex h-10 w-32 items-center justify-center rounded-full bg-pb-gray">
                       <button>Accept</button>

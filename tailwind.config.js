@@ -11,14 +11,30 @@ module.exports = {
   plugins: [require("flowbite/plugin")],
   theme: {
     extend:{
+      spacing:{
+        '92' : '23rem',
+      },
       height:{
         '128': '32rem',
+        '160': '40rem',
+        '192': '48rem',
+        '224': '56rem',
         '256': '64rem',
+        '288': '72rem',
+        '320': '80rem',
+        '352': '88rem',
+        '384': '96rem',
+        '512': '128rem',
       },
       width:{
         '128': '32rem',
+        '160': '40rem',
         '192': '48rem',
+        '224': '56rem',
         '256': '64rem',
+        '288': '72rem',
+        '320': '80rem',
+        '352': '88rem',
         '384': '96rem',
         '512': '128rem',
       },
