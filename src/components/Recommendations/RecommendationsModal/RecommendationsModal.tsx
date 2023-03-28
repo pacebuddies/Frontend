@@ -76,8 +76,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                   </div>
                   <div className="flex w-full flex-row rounded-full border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
                     {/*UWAGA! Poniższa linia styli ustala szerokość modalu na różnych urządzeniach*/}
-                    <div className={"relative rounded-3xl h-64 w-128 flex-auto bg-blue-500 p-6 md:h-96 md:w-160 lg:h-128 lg:w-224 xl:h-160 xl:w-288 " +
-                      "2xl:h-192 2xl:w-352"}>
+                    <div className={"relative rounded-3xl h-64 w-128 flex-auto bg-blue-500 p-6 md:h-96 md:w-160 lg:h-128 lg:w-224 xl:h-160 xl:w-288 2xl:h-160 2xl:w-320"}>
                       <RecommendationsModalContent
                         num={recommendationNumber}
                         data={data1}

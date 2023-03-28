@@ -8,7 +8,9 @@ import {
   RadialLinearScale,
   Tooltip,
 } from 'chart.js';
+import Image from 'next/image';
 import { Radar } from 'react-chartjs-2';
+import avatarPhoto from '../../../../src/img/avatar-example.jpg';
 import { RecommendationData } from './RecommendationsModal';
 
 ChartJS.register(
@@ -32,13 +34,22 @@ const dataChart = {
     },
   ],
 };
+
 interface IProps {
   data: RecommendationData[];
-  num?: number;
+  num: number;
 }
+
 const RecommendationsModalContent = ({ data, num }: IProps) => {
-  const number = num ?? 0;
+  const number = num;
   console.log(number);
+
+  const athlete: RecommendationData | undefined = data[number];
+
+  if (athlete === undefined) {
+    return <div>Brak danych</div>;
+  }
+
   const options: ChartOptions<'radar'> = {
     maintainAspectRatio: false,
     responsive: true,
@@ -63,8 +74,8 @@ const RecommendationsModalContent = ({ data, num }: IProps) => {
           font: {
             family: 'Arial',
             size: 20,
-          }
-        }
+          },
+        },
       },
       tooltip: {
         callbacks: {
@@ -85,8 +96,30 @@ const RecommendationsModalContent = ({ data, num }: IProps) => {
   };
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="mb-8 w-4/5 border border-green-500 bg-white p-8">
-        Blok top {data[number]?.name}
+      <div className="mb-8 flex w-4/5 flex-row justify-between border border-green-500 bg-white">
+        <div className="flex flex-row">
+          <Image
+            src={avatarPhoto.src}
+            height={128}
+            width={128}
+            alt={'user avatar'}
+          />
+          <div className="ml-8 flex h-full items-center justify-center">
+            <span>
+              {athlete.name} {athlete.surname}
+            </span>
+          </div>
+        </div>
+        <div className="mr-20 flex flex-row">
+          <div className="flex h-full flex-col justify-between py-4 pr-4">
+            <span>Gender</span>
+            <span>Location</span>
+          </div>
+          <div className="flex h-full flex-col justify-between py-4">
+            <span>Male</span>
+            <span>Warsaw</span>
+          </div>
+        </div>
       </div>
       <div className="flex grow">
         <div className="grow border border-green-500 bg-white p-8">Blok 1</div>
@@ -94,7 +127,7 @@ const RecommendationsModalContent = ({ data, num }: IProps) => {
           className="mx-4 shrink-0 grow-0 border border-green-500 bg-white p-8"
           style={{ width: 'calc(20% - 2rem)' }}
         >
-          Blok 2
+          {athlete.age}
         </div>
         <div className="relative grow border border-green-500 bg-white p-8">
           <div className="absolute top-0 left-0 h-full w-full p-4">
