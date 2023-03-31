@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    font-family: 'Istok Web', sans-serif;
-  }
+    body {
+        height: 100vh;
+    }
+
+    html {
+        font-family: 'Istok Web', sans-serif;
+    }
 }

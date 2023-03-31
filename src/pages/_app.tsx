@@ -1,12 +1,13 @@
 import { CustomFlowbiteTheme, Flowbite } from 'flowbite-react';
+import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/globals.css';
 
-function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <>
+    <SessionProvider session={session}>
       <Flowbite theme={{ theme }}>
         <Component {...pageProps} />
       </Flowbite>
@@ -22,7 +23,7 @@ function MyApp({ Component, pageProps: { ...pageProps } }: AppProps) {
         pauseOnHover
         theme="light"
       />
-    </>
+    </SessionProvider>
   );
 }
 
@@ -30,9 +31,6 @@ const theme: CustomFlowbiteTheme = {
   button: {
     color: {
       success: 'pb-green',
-    },
-    outline: {
-      on: 'bg-white text-gray-900 transition-all duration-75 ease-in group-hover:bg-opacity-0 group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full',
     },
   },
 };

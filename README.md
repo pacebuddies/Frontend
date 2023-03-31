@@ -22,6 +22,15 @@ If yarn is not working in PowerShell type this command in PowerShell with admini
 ```bash
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 ```
+
+You need to create ```.env.local``` based on ```.env.local.example```, in ```{}``` are values you need to change
+```
+STRAVA_CLIENT_ID={client id from strava}
+STRAVA_CLIENT_SECRET={client secret from strava}
+STRAVA_CLIENT_SCOPE=read,read_all,profile:read_all,activity:read,activity:read_all
+STRAVA_CALLBACK_URL=http://localhost:3000
+NEXTAUTH_SECRET=very_secret
+```
 To change the address of the API server go to `.env.local` and change the `NEXT_PUBLIC_API_GATEWAY_ADDRESS` variable
 
 #### 4. Start the dev server:
