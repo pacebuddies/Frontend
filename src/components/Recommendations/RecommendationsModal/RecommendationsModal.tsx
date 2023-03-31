@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import RecommendationsModalContent from './RecommendationsModalContent';
+import stravaApi from "../../../instances/axiosConfigured";
+import { toast } from "react-toastify";
 //import svg
 
 interface IProps {
@@ -8,26 +10,45 @@ interface IProps {
 }
 
 export interface RecommendationData {
-  name: string;
-  surname: string;
-  age: number;
+  id: string;
+  country: string;
+  city: string;
+  profile: string;
+  firstname: string;
+  lastname: string;
+  sex: string;
 }
 
 const data1: RecommendationData[] = [
   {
-    name: 'John',
-    surname: 'Doe',
-    age: 30,
+    id: '001',
+    country: 'France',
+    city: 'Paris',
+    profile:
+      'https://dgalywyr863hv.cloudfront.net/pictures/athletes/25373655/10192907/8/large.jpg',
+    firstname: 'John',
+    lastname: 'Doe',
+    sex: 'Male',
   },
   {
-    name: 'Jane',
-    surname: 'Doe',
-    age: 38,
+    id: '002',
+    country: 'Italy',
+    city: 'Rome',
+    profile:
+      'https://dgalywyr863hv.cloudfront.net/pictures/athletes/15118564/22631426/1/large.jpg',
+    firstname: 'Jane',
+    lastname: 'Smith',
+    sex: 'Female',
   },
   {
-    name: 'Mark',
-    surname: 'Marks',
-    age: 29,
+    id: '003',
+    country: 'Japan',
+    city: 'Tokyo',
+    profile:
+      'https://dgalywyr863hv.cloudfront.net/pictures/athletes/9189599/3097105/1/large.jpg',
+    firstname: 'Taro',
+    lastname: 'Yamada',
+    sex: 'Male',
   },
 ];
 
@@ -47,11 +68,26 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
   };
 
   const handleEscKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    console.log(event.key)
+    console.log(event.key);
     if (event.key === 'Escape') {
       onOpenedChange(false);
     }
   };
+
+  const fechRecommendations = () => {
+    stravaApi
+      .get('athlete/api/v1/recommendations/list')
+      .then((res) => {
+        if (res.status == 200) {
+          console.log(res.data);
+        }
+      })
+      .catch((err) => {
+        toast.error(err);
+        console.log(err.response);
+      });
+  }
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -65,6 +101,11 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [onOpenedChange]);
+
+  useEffect(() => {
+    fechRecommendations();
+  }, []);
+
   return (
     <>
       {opened ? (

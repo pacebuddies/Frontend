@@ -99,14 +99,14 @@ const RecommendationsModalContent = ({ data, num }: IProps) => {
       <div className="mb-8 flex w-4/5 flex-row justify-between border border-green-500 bg-white">
         <div className="flex flex-row">
           <Image
-            src={avatarPhoto.src}
+            src={athlete.profile}
             height={128}
             width={128}
             alt={'user avatar'}
           />
-          <div className="ml-8 flex h-full items-center justify-center text-pb-green text-4xl">
+          <div className="ml-8 flex h-full items-center justify-center text-4xl text-pb-green">
             <span>
-              {athlete.name} {athlete.surname}
+              {athlete.firstname} {athlete.lastname}
             </span>
           </div>
         </div>
@@ -116,9 +116,9 @@ const RecommendationsModalContent = ({ data, num }: IProps) => {
             <span>Location</span>
           </div>
           <div className="flex h-full max-w-sm flex-col justify-between py-8">
-            <span>Male</span>
+            <span>{athlete.sex}</span>
             <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-              Warsaw, Poland
+              {athlete.city}, {athlete.country}
             </span>
           </div>
         </div>
@@ -126,10 +126,10 @@ const RecommendationsModalContent = ({ data, num }: IProps) => {
       <div className="flex grow">
         <div className="grow border border-green-500 bg-white p-8">Blok 1</div>
         <div
-          className="flex items-center justify-center text-8xl md:pt-52 mx-4 shrink-0 grow-0 border border-green-500 bg-white p-8 "
+          className="mx-4 flex shrink-0 grow-0 items-center justify-center border border-green-500 bg-white p-8 text-8xl md:pt-52 "
           style={{ width: 'calc(20% - 2rem)' }}
         >
-          <span>{athlete.age}%</span>
+          <span>20%</span>
         </div>
         <div className="relative grow border border-green-500 bg-white p-8">
           <div className="absolute top-0 left-0 h-full w-full p-4">
