@@ -89,7 +89,7 @@ const RecommendationsModalContent = ({ data, num }: IProps) => {
         },
         bodyFont: {
           family: 'Arial',
-          size: 40,
+          size: 20,
         },
       },
     },
@@ -104,30 +104,32 @@ const RecommendationsModalContent = ({ data, num }: IProps) => {
             width={128}
             alt={'user avatar'}
           />
-          <div className="ml-8 flex h-full items-center justify-center">
+          <div className="ml-8 flex h-full items-center justify-center text-pb-green text-4xl">
             <span>
               {athlete.name} {athlete.surname}
             </span>
           </div>
         </div>
         <div className="mr-20 flex flex-row">
-          <div className="flex h-full flex-col justify-between py-4 pr-4">
+          <div className="flex h-full flex-col justify-between py-8 pr-4 text-pb-green">
             <span>Gender</span>
             <span>Location</span>
           </div>
-          <div className="flex h-full flex-col justify-between py-4">
+          <div className="flex h-full max-w-sm flex-col justify-between py-8">
             <span>Male</span>
-            <span>Warsaw</span>
+            <span className="overflow-hidden text-ellipsis whitespace-nowrap">
+              Warsaw, Poland
+            </span>
           </div>
         </div>
       </div>
       <div className="flex grow">
         <div className="grow border border-green-500 bg-white p-8">Blok 1</div>
         <div
-          className="mx-4 shrink-0 grow-0 border border-green-500 bg-white p-8"
+          className="flex items-center justify-center text-8xl md:pt-52 mx-4 shrink-0 grow-0 border border-green-500 bg-white p-8 "
           style={{ width: 'calc(20% - 2rem)' }}
         >
-          {athlete.age}
+          <span>{athlete.age}%</span>
         </div>
         <div className="relative grow border border-green-500 bg-white p-8">
           <div className="absolute top-0 left-0 h-full w-full p-4">

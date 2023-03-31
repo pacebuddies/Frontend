@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import RecommendationsModalContent from './RecommendationsModalContent';
 //import svg
 
@@ -46,6 +46,25 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
     }
   };
 
+  const handleEscKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    console.log(event.key)
+    if (event.key === 'Escape') {
+      onOpenedChange(false);
+    }
+  };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onOpenedChange(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onOpenedChange]);
   return (
     <>
       {opened ? (
@@ -76,7 +95,11 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                   </div>
                   <div className="flex w-full flex-row rounded-full border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
                     {/*UWAGA! Poniższa linia styli ustala szerokość modalu na różnych urządzeniach*/}
-                    <div className={"relative rounded-3xl h-64 w-128 flex-auto bg-blue-500 p-6 md:h-96 md:w-160 lg:h-128 lg:w-224 xl:h-160 xl:w-288 2xl:h-160 2xl:w-320"}>
+                    <div
+                      className={
+                        'relative h-64 w-128 flex-auto rounded-3xl bg-white p-6 md:h-96 md:w-160 lg:h-128 lg:w-224 xl:h-160 xl:w-288 2xl:h-160 2xl:w-320'
+                      }
+                    >
                       <RecommendationsModalContent
                         num={recommendationNumber}
                         data={data1}
@@ -101,8 +124,9 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                   </button>
                   {/*Close button*/}
                   <button
-                    className="relative right-7 bottom-28 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray md:bottom-28 lg:bottom-44 xl:bottom-60 2xl:bottom-92"
+                    className="relative right-7 bottom-28 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray md:bottom-28 lg:bottom-44 xl:bottom-60 2xl:bottom-72"
                     onClick={() => onOpenedChange(false)}
+                    onKeyDown={(event) => handleEscKeyDown(event)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
