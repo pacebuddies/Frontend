@@ -35,11 +35,12 @@ const SettingsPage: NextPage = () => {
   );
   return (
     <>
+      <div className="h-screen flex-col">
       <TopNavBar />
       {/*TODO: Poprawić wyświetlanie tabów*/}
-      <div className="mt-[91px] flex h-screen">
+      <div className="flex h-auto">
         {/*Options tabs*/}
-        <div className="flex h-full w-72  flex-col overflow-y-auto  border-r-[1px] border-pb-gray">
+        <div className="flex h-[calc(100vh-71px)] w-72 flex-col overflow-y-auto  border-r-[1px] border-pb-gray">
           <button
             onClick={() => {
               setSettingsTab(SettingsTabs.Account);
@@ -68,6 +69,7 @@ const SettingsPage: NextPage = () => {
         </div>
         {/*Settings tab content*/}
         <div>{selectSettingsTab(settingsTab)}</div>
+      </div>
       </div>
       <RecommendationsButton />
       <MenuButton />
