@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import RecommendationsModalContent from './RecommendationsModalContent';
-import stravaApi from "../../../instances/axiosConfigured";
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
+import pacebuddiesApi from '../../../instances/axiosConfigured';
+import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
+import AcceptButton from './AcceptButton';
+import DeclineButton from './DeclineButton';
+import RecommendationsModalContent from './RecommendationModalContent/RecommendationsModalContent';
+
 //import svg
 
 interface IProps {
@@ -17,6 +21,7 @@ export interface RecommendationData {
   firstname: string;
   lastname: string;
   sex: string;
+  compatibility: number;
 }
 
 const data1: RecommendationData[] = [
@@ -29,6 +34,7 @@ const data1: RecommendationData[] = [
     firstname: 'John',
     lastname: 'Doe',
     sex: 'Male',
+    compatibility: 80,
   },
   {
     id: '002',
@@ -39,6 +45,7 @@ const data1: RecommendationData[] = [
     firstname: 'Jane',
     lastname: 'Smith',
     sex: 'Female',
+    compatibility: 90,
   },
   {
     id: '003',
@@ -49,6 +56,7 @@ const data1: RecommendationData[] = [
     firstname: 'Taro',
     lastname: 'Yamada',
     sex: 'Male',
+    compatibility: 70,
   },
 ];
 
@@ -75,18 +83,63 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
   };
 
   const fechRecommendations = () => {
-    stravaApi
-      .get('athlete/api/v1/recommendations/list')
+    // pacebuddiesApi
+    //   .post('recommender/athlete_stats/updateAthleteStats',
+    //     {
+    //       sport_type: SportTypeEnum.Run,
+    //       how_many_months: 24,
+    //     },
+    //   )
+    //   .then((res) => {
+    //     if (res.status == 200) {
+    //       console.log(res.data);
+    //     }
+    //     if (res.status == 204) {
+    //       console.log('No recommendations');
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     toast.error(err);
+    //     console.log(err.response);
+    //   });
+    pacebuddiesApi
+      .get('recommender/recommendations/list', {
+        params: {
+          sportType: SportTypeEnum.Run,
+          sex: 'M',
+        },
+      })
       .then((res) => {
         if (res.status == 200) {
           console.log(res.data);
+        }
+        if (res.status == 204) {
+          console.log('No recommendations');
         }
       })
       .catch((err) => {
         toast.error(err);
         console.log(err.response);
       });
-  }
+    // pacebuddiesApi
+    //   .get('recommender/recommendations/getFilter', {
+    //     params: {
+    //       sportType: SportTypeEnum.Run,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     if (res.status == 200) {
+    //       console.log(res.data);
+    //     }
+    //     if (res.status == 204) {
+    //       console.log('No recommendations');
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     toast.error(err);
+    //     console.log(err.response);
+    //   });
+  };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -101,6 +154,26 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [onOpenedChange]);
+
+  const recommendationDecisionHandler = (id: string) => {
+    console.log('Action', id);
+    // remove recommendation from list
+    const index = data1.findIndex((item) => item.id === id);
+
+    if (index === -1) {
+      return;
+    }
+    data1.splice(index, 1);
+    console.log('index', index, recommendationNumber, data1.length, data1);
+    //TODO: remove recommendation from list and update recommendationNumber
+    if (data1.length > 0) {
+      if (data1[recommendationNumber] !== undefined) {
+        setRecommendationNumber(recommendationNumber + 1);
+      } else {
+        setRecommendationNumber(recommendationNumber - 1);
+      }
+    }
+  };
 
   useEffect(() => {
     fechRecommendations();
@@ -118,13 +191,15 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                 <div className="flex flex-row items-center justify-center">
                   <div className="w-20 shrink-0">
                     {/*Previous button*/}
-                    <button className="relative left-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray">
+                    <button
+                      className="relative left-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray"
+                      onClick={() => previousRecommendation()}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
                         className="h-6 w-6"
-                        onClick={() => previousRecommendation()}
                       >
                         <path
                           fillRule="evenodd"
@@ -148,13 +223,15 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                     </div>
                   </div>
                   {/*Next button*/}
-                  <button className="relative left-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray">
+                  <button
+                    className="relative left-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray"
+                    onClick={() => nextRecommendation()}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
                       className="h-6 w-6"
-                      onClick={() => nextRecommendation()}
                     >
                       <path
                         fillRule="evenodd"
@@ -185,16 +262,22 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                 </div>
                 {/*Accept Decline Buttons*/}
                 <div>
-                  <div className="flex w-128 flex-auto items-center justify-center pt-6 md:w-128 lg:w-192  xl:w-256">
-                    {/*Accept Button*/}
-                    <div className="flex h-10 w-32 items-center justify-center rounded-full bg-pb-gray">
-                      <button>Accept</button>
+                  {data1.length > 0 && (
+                    <div className="flex w-128 flex-auto items-center justify-center pt-6 md:w-128 lg:w-192  xl:w-256">
+                      {/*Accept Button*/}
+                      <AcceptButton
+                        user_id={data1[recommendationNumber]?.id ?? '0'}
+                        sportType={SportTypeEnum.Run}
+                        onAccepted={recommendationDecisionHandler}
+                      />
+                      {/*Decline Button*/}
+                      <DeclineButton
+                        user_id={data1[recommendationNumber]?.id ?? '0'}
+                        sportType={SportTypeEnum.Run}
+                        onDeclined={recommendationDecisionHandler}
+                      />
                     </div>
-                    {/*Decline Button*/}
-                    <div className="ml-20 flex h-10 w-32 items-center justify-center rounded-full bg-pb-gray">
-                      <button>Decline</button>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

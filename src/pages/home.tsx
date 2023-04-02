@@ -22,7 +22,7 @@ const Home: NextPage = () => {
       .then((res) => {
         if (res.status == 200) {
           setAthlete(res.data);
-          console.log(athlete?.firstname);
+          console.log(res.data);
           setIsLoaded(true);
         }
       })
@@ -31,7 +31,8 @@ const Home: NextPage = () => {
         console.log(err.response);
       });
   }
-
+  // Kielkowski id 110806016
+  // Kołkowksi id 115836057
   useEffect(() => {
     fetchAthleteHandler();
   }, []);

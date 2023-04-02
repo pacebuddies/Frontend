@@ -40,8 +40,10 @@ module.exports = {
       },
       colors:{
         'pb-gray': '#D9D9D9',
+        'pb-dark-gray': '#565656',
         'pb-green': '#4CBD17',
         'pb-dark-green': '#1B4308',
+        'pb-red-discard': '#BD1717'
       },
       boxShadow: {
         'border': '4px 4px 10px 0px rgba(76, 189, 23, 1)',
