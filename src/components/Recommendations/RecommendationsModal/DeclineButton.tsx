@@ -2,17 +2,17 @@ import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 
 interface IProps {
-  user_id: string;
+  userId: string;
   sportType: SportTypeEnum;
   onDeclined: (id: string) => void;
 }
 
-const DeclineButton = ({ user_id, sportType, onDeclined }: IProps) => {
+const DeclineButton = ({ userId, sportType, onDeclined }: IProps) => {
   const declineRecommendation = () => {
     pacebuddiesApi
       .post(`recommender/recommendations/match/decline`, {
         sport_type: sportType,
-        recommendation_athlete_id: user_id,
+        recommendation_athlete_id: userId,
       })
       .then((r) => {
         console.log(r);
@@ -20,7 +20,7 @@ const DeclineButton = ({ user_id, sportType, onDeclined }: IProps) => {
       .catch((err) => {
         console.log(err);
       });
-    onDeclined(user_id);
+    onDeclined(userId);
   };
 
   return (

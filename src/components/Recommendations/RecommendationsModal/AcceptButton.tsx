@@ -2,17 +2,17 @@ import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 
 interface IProps {
-  user_id: string;
+  userId: string;
   sportType: SportTypeEnum;
   onAccepted: (id: string) => void;
 }
 
-const AcceptButton = ({user_id, sportType, onAccepted }: IProps) => {
+const AcceptButton = ({ userId, sportType, onAccepted }: IProps) => {
   const acceptRecommendation = () => {
     pacebuddiesApi
       .post(`recommender/recommendations/match/accept`, {
         sport_type: sportType,
-        recommendation_athlete_id: user_id,
+        recommendation_athlete_id: userId,
       })
       .then((r) => {
         console.log(r);
@@ -20,7 +20,7 @@ const AcceptButton = ({user_id, sportType, onAccepted }: IProps) => {
       .catch((err) => {
         console.log(err);
       });
-    onAccepted(user_id);
+    onAccepted(userId);
   };
 
   return (

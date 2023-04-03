@@ -62,9 +62,12 @@ const data1: RecommendationData[] = [
 
 const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
   const [recommendationNumber, setRecommendationNumber] = useState(0);
+  const [recommendationData, setRecommendationData] = useState<
+    RecommendationData[]
+  >([]);
 
   const nextRecommendation = () => {
-    if (recommendationNumber < data1.length - 1) {
+    if (recommendationNumber < recommendationData.length - 1) {
       setRecommendationNumber(recommendationNumber + 1);
     }
   };
@@ -112,6 +115,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
       .then((res) => {
         if (res.status == 200) {
           console.log(res.data);
+          setRecommendationData(res.data);
         }
         if (res.status == 204) {
           console.log('No recommendations');
@@ -158,16 +162,22 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
   const recommendationDecisionHandler = (id: string) => {
     console.log('Action', id);
     // remove recommendation from list
-    const index = data1.findIndex((item) => item.id === id);
+    const index = recommendationData.findIndex((item) => item.id === id);
 
     if (index === -1) {
       return;
     }
-    data1.splice(index, 1);
-    console.log('index', index, recommendationNumber, data1.length, data1);
+    recommendationData.splice(index, 1);
+    console.log(
+      'index',
+      index,
+      recommendationNumber,
+      recommendationData.length,
+      recommendationData,
+    );
     //TODO: remove recommendation from list and update recommendationNumber
-    if (data1.length > 0) {
-      if (data1[recommendationNumber] !== undefined) {
+    if (recommendationData.length > 0) {
+      if (recommendationData[recommendationNumber] !== undefined) {
         setRecommendationNumber(recommendationNumber + 1);
       } else {
         setRecommendationNumber(recommendationNumber - 1);
@@ -178,6 +188,8 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
   useEffect(() => {
     fechRecommendations();
   }, []);
+
+  // setRecommendationData(data1);
 
   return (
     <>
@@ -218,7 +230,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                     >
                       <RecommendationsModalContent
                         num={recommendationNumber}
-                        data={data1}
+                        data={recommendationData}
                       />
                     </div>
                   </div>
@@ -262,17 +274,21 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                 </div>
                 {/*Accept Decline Buttons*/}
                 <div>
-                  {data1.length > 0 && (
+                  {recommendationData.length > 0 && (
                     <div className="flex w-128 flex-auto items-center justify-center pt-6 md:w-128 lg:w-192  xl:w-256">
                       {/*Accept Button*/}
                       <AcceptButton
-                        user_id={data1[recommendationNumber]?.id ?? '0'}
+                        userId={
+                          recommendationData[recommendationNumber]?.id ?? '0'
+                        }
                         sportType={SportTypeEnum.Run}
                         onAccepted={recommendationDecisionHandler}
                       />
                       {/*Decline Button*/}
                       <DeclineButton
-                        user_id={data1[recommendationNumber]?.id ?? '0'}
+                        userId={
+                          recommendationData[recommendationNumber]?.id ?? '0'
+                        }
                         sportType={SportTypeEnum.Run}
                         onDeclined={recommendationDecisionHandler}
                       />
