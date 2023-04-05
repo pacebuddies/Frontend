@@ -55,6 +55,9 @@ module.exports = {
       },
       fontFamily:{
         'istok-web': ['Istok Web', 'sans-serif'],
+      },
+      fontSize:{
+        'size404': '13rem',
       }
 
     }
