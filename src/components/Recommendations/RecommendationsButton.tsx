@@ -21,7 +21,10 @@ const RecommendationsButton = () => {
           Find your buddy
         </button>
       </div>
-      <RecommendationsModal opened={recommendationsOpened} onOpenedChange={openedChangeHandler} />
+      <RecommendationsModal
+        opened={recommendationsOpened}
+        onOpenedChange={openedChangeHandler}
+      />
     </>
   );
 };

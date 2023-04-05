@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import { signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import SummaryBarChart from '../components/Charts/SummaryBarChart';
@@ -9,7 +8,6 @@ import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
 import pacebuddiesApi from '../instances/axiosConfigured';
 import { IAthlete } from '../internalTypes/interfaces';
-import RecommendationsModal from "../components/Recommendations/RecommendationsModal/RecommendationsModal";
 
 const Home: NextPage = () => {
   const [athlete, setAthlete] = useState<IAthlete | null>(null);
@@ -31,8 +29,7 @@ const Home: NextPage = () => {
         console.log(err.response);
       });
   }
-  // Kielkowski id 110806016
-  // Kołkowksi id 115836057
+
   useEffect(() => {
     fetchAthleteHandler();
   }, []);
