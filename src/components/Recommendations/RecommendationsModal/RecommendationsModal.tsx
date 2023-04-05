@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
+import { RecommendationData } from '../../../internalTypes/recommendationData';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 import AcceptButton from './AcceptButton';
 import DeclineButton from './DeclineButton';
@@ -11,17 +12,6 @@ import RecommendationsModalContent from './RecommendationModalContent/Recommenda
 interface IProps {
   opened: boolean;
   onOpenedChange: (opened: boolean) => void;
-}
-
-export interface RecommendationData {
-  id: string;
-  country: string;
-  city: string;
-  profile: string;
-  firstname: string;
-  lastname: string;
-  sex: string;
-  compatibility: number;
 }
 
 const data1: RecommendationData[] = [
@@ -65,6 +55,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
   const [recommendationData, setRecommendationData] = useState<
     RecommendationData[]
   >([]);
+  const [reRender, setReRender] = useState(0);
 
   const nextRecommendation = () => {
     if (recommendationNumber < recommendationData.length - 1) {
@@ -85,26 +76,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
     }
   };
 
-  const fechRecommendations = () => {
-    // pacebuddiesApi
-    //   .post('recommender/athlete_stats/updateAthleteStats',
-    //     {
-    //       sport_type: SportTypeEnum.Run,
-    //       how_many_months: 24,
-    //     },
-    //   )
-    //   .then((res) => {
-    //     if (res.status == 200) {
-    //       console.log(res.data);
-    //     }
-    //     if (res.status == 204) {
-    //       console.log('No recommendations');
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     toast.error(err);
-    //     console.log(err.response);
-    //   });
+  const fetchRecommendations = () => {
     pacebuddiesApi
       .get('recommender/recommendations/list', {
         params: {
@@ -125,26 +97,53 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
         toast.error(err);
         console.log(err.response);
       });
-    // pacebuddiesApi
-    //   .get('recommender/recommendations/getFilter', {
-    //     params: {
-    //       sportType: SportTypeEnum.Run,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     if (res.status == 200) {
-    //       console.log(res.data);
-    //     }
-    //     if (res.status == 204) {
-    //       console.log('No recommendations');
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     toast.error(err);
-    //     console.log(err.response);
-    //   });
   };
 
+  // Loop through the array to find the next recommendation that is not undefined (deleted) and return the index of that recommendation
+  // If there is no next recommendation, loop through the array backwards to find the previous recommendation that is not undefined (deleted) and return the index of that recommendation
+  // If there is no previous recommendation, return 0
+  const findNextRecommendation = (
+    data: RecommendationData[],
+    num: number,
+  ): number => {
+    for (let i = num; i < data.length; i++) {
+      if (data[i] !== undefined) {
+        return i;
+      }
+    }
+    for (let i = num; i > 0; i--) {
+      if (data[i] !== undefined) {
+        return i;
+      }
+    }
+    return 0;
+  };
+
+  const recommendationDecisionHandler = (id: string) => {
+    console.log('Action', id);
+    // remove recommendation from list
+    const index = recommendationData.findIndex((item) => item.id === id);
+    if (index === -1) {
+      return;
+    }
+    recommendationData.splice(index, 1);
+    console.log(
+      'index',
+      index,
+      recommendationNumber,
+      recommendationData.length,
+      recommendationData,
+    );
+    const newRecommendationNumber = findNextRecommendation(
+      recommendationData,
+      recommendationNumber,
+    );
+    if (newRecommendationNumber === recommendationNumber) {
+      setReRender(reRender + 1);
+    } else {
+      setRecommendationNumber(newRecommendationNumber);
+    }
+  };
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -158,38 +157,10 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [onOpenedChange]);
-
-  const recommendationDecisionHandler = (id: string) => {
-    console.log('Action', id);
-    // remove recommendation from list
-    const index = recommendationData.findIndex((item) => item.id === id);
-
-    if (index === -1) {
-      return;
-    }
-    recommendationData.splice(index, 1);
-    console.log(
-      'index',
-      index,
-      recommendationNumber,
-      recommendationData.length,
-      recommendationData,
-    );
-    //TODO: remove recommendation from list and update recommendationNumber
-    if (recommendationData.length > 0) {
-      if (recommendationData[recommendationNumber] !== undefined) {
-        setRecommendationNumber(recommendationNumber + 1);
-      } else {
-        setRecommendationNumber(recommendationNumber - 1);
-      }
-    }
-  };
-
   useEffect(() => {
-    fechRecommendations();
+    // fetchRecommendations();
+    setRecommendationData(data1);
   }, []);
-
-  // setRecommendationData(data1);
 
   return (
     <>
@@ -231,6 +202,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                       <RecommendationsModalContent
                         num={recommendationNumber}
                         data={recommendationData}
+                        reRender={reRender}
                       />
                     </div>
                   </div>
@@ -274,9 +246,9 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                 </div>
                 {/*Accept Decline Buttons*/}
                 <div>
-                  {recommendationData.length > 0 && (
-                    <div className="flex w-128 flex-auto items-center justify-center pt-6 md:w-128 lg:w-192  xl:w-256">
-                      {/*Accept Button*/}
+                  <div className="flex w-128 flex-auto items-center justify-center pt-6 md:w-128 lg:w-192  xl:w-256">
+                    {/*Accept Button*/}
+                    {recommendationData.length > 0 && (
                       <AcceptButton
                         userId={
                           recommendationData[recommendationNumber]?.id ?? '0'
@@ -284,7 +256,9 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                         sportType={SportTypeEnum.Run}
                         onAccepted={recommendationDecisionHandler}
                       />
-                      {/*Decline Button*/}
+                    )}
+                    {/*Decline Button*/}
+                    {recommendationData.length > 0 && (
                       <DeclineButton
                         userId={
                           recommendationData[recommendationNumber]?.id ?? '0'
@@ -292,8 +266,8 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                         sportType={SportTypeEnum.Run}
                         onDeclined={recommendationDecisionHandler}
                       />
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

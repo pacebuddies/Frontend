@@ -8,7 +8,7 @@ import RecommendationsButton from '../components/Recommendations/Recommendations
 import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
 import pacebuddiesApi from '../instances/axiosConfigured';
-import { IAthlete } from '../interfaces';
+import { IAthlete } from '../internalTypes/interfaces';
 import RecommendationsModal from "../components/Recommendations/RecommendationsModal/RecommendationsModal";
 
 const Home: NextPage = () => {
