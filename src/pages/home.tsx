@@ -36,9 +36,10 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="flex h-screen shrink-0 flex-col flex-nowrap items-center justify-center">
-        <TopNavBar />
+      <TopNavBar />
+      <div className="flex h-screen shrink-0 flex-col flex-nowrap items-center">
         Home page
+        {/* TODO: poprawienie wyświetlania wykresu na mniejszym screenie */}
         <div>
           {isLoaded && <SummaryBarChart athlete={athlete!.activity_stats} />}
         </div>
