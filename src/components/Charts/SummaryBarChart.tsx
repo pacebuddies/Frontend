@@ -10,7 +10,7 @@ import {
 import { Dropdown } from 'flowbite-react';
 import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { IAthleteActivityStats } from '../../interfaces';
+import { IAthleteActivityStats } from '../../internalTypes/interfaces';
 import { toast } from "react-toastify";
 
 ChartJS.register(

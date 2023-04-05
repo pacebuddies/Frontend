@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import { signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import SummaryBarChart from '../components/Charts/SummaryBarChart';
@@ -8,8 +7,7 @@ import RecommendationsButton from '../components/Recommendations/Recommendations
 import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
 import pacebuddiesApi from '../instances/axiosConfigured';
-import { IAthlete } from '../interfaces';
-import RecommendationsModal from "../components/Recommendations/RecommendationsModal";
+import { IAthlete } from '../internalTypes/interfaces';
 
 const Home: NextPage = () => {
   const [athlete, setAthlete] = useState<IAthlete | null>(null);
@@ -22,7 +20,7 @@ const Home: NextPage = () => {
       .then((res) => {
         if (res.status == 200) {
           setAthlete(res.data);
-          console.log(athlete?.firstname);
+          console.log(res.data);
           setIsLoaded(true);
         }
       })
@@ -46,7 +44,6 @@ const Home: NextPage = () => {
           {isLoaded && <SummaryBarChart athlete={athlete!.activity_stats} />}
         </div>
       </div>
-      {/* <RecommendationsModal opened={true} /> */}
       <RecommendationsButton />
       <MenuButton />
       <StravaWatermark />
