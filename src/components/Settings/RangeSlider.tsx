@@ -1,14 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 interface IProps {
   step: number;
   min: number;
   max: number;
+  default_min?: number;
+  default_max?: number;
   value?: { min: number; max: number };
   onChange: (value: { min: number; max: number }) => void;
 }
 
-const RangeSlider = ({ min, max, value, step, onChange }: IProps) => {
+const RangeSlider = ({
+  min,
+  max,
+  default_min,
+  default_max,
+  value,
+  step,
+  onChange,
+}: IProps) => {
   const [minValue, setMinValue] = useState(value ? value.min : min);
   const [maxValue, setMaxValue] = useState(value ? value.max : max);
 
@@ -36,12 +46,26 @@ const RangeSlider = ({ min, max, value, step, onChange }: IProps) => {
   const minPos = ((minValue - min) / (max - min)) * 100;
   const maxPos = ((maxValue - min) / (max - min)) * 100;
 
+  if (default_min === undefined) default_min = min;
+  if (default_max === undefined) default_max = max;
+
+  let default_minPos = ((default_min - min) / (max - min)) * 100;
+  let default_maxPos = ((default_max - min) / (max - min)) * 100;
+
+  // console.log(default_minPos, default_maxPos)
+
+  if (default_min < minValue) {
+    default_minPos = minPos;
+  }
+  if (default_max > maxValue) {
+    default_maxPos = maxPos;
+  }
 
   return (
-    <div className="relative flex items-center p-t-6 h-[calc(16px+1.6rem)]">
-      <div className="w-[calc(100%+16px)] -mx-2 absolute h-4">
+    <div className="wrapper">
+      <div className="input-wrapper">
         <input
-          className="absolute w-full h-full z-1 p-0 appearance-none"
+          className="input"
           type="range"
           value={minValue}
           min={min}
@@ -50,7 +74,7 @@ const RangeSlider = ({ min, max, value, step, onChange }: IProps) => {
           onChange={handleMinChange}
         />
         <input
-          className="absolute w-full h-full z-1 p-0 appearance-none"
+          className="input"
           type="range"
           value={maxValue}
           min={min}
@@ -60,19 +84,21 @@ const RangeSlider = ({ min, max, value, step, onChange }: IProps) => {
         />
       </div>
 
-      <div className="w-full absolute h-4 pointer-events-none">
-        <div className="w-4 h-4 rounded-full absolute bg-pb-green top-1/2 -ml-2 transform -translate-y-1/2 z-2 " style={{ left: `${minPos}%` }} />
-        <div className="absolute w-full h-1.5 top-1/2 -translate-y-1/2 rounded bg-gray-400">
+      <div className="control-wrapper">
+        <div className="control" style={{ left: `${minPos}%` }} />
+        <div className="rail">
           <div
-            className="absolute h-full bg-pb-green opacity-50"
+            className="inner-rail bg-pb-orange"
             style={{ left: `${minPos}%`, right: `${100 - maxPos}%` }}
           />
+          <div
+            className="inner-rail bg-pb-green"
+            style={{ left: `${default_minPos}%`, right: `${100 -default_maxPos}%` }}
+          />
         </div>
-        <div className="w-4 h-4 rounded-full absolute bg-pb-green top-1/2 -ml-2 transform -translate-y-1/2 z-2 " style={{ left: `${maxPos}%` }} />
+        <div className="control" style={{ left: `${maxPos}%` }} />
       </div>
     </div>
   );
 };
-
-
 export default RangeSlider;
