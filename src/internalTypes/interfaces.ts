@@ -80,3 +80,82 @@ export interface IActivityWeekSummary {
 export interface IActivityWeekSummaryResult {
   result: IActivityWeekSummary[];
 }
+
+export interface ILastNActivitiesPaceAvg {
+  id: string;
+  avg_pace_per_km: number;
+}
+
+export interface ILastNActivitiesPaceAvgResult {
+  result: ILastNActivitiesPaceAvg;
+}
+
+export interface ILastNMonthsDistanceSum {
+  month_name: string;
+  month_start: string;
+  distance: number;
+}
+
+export interface ILastNMonthsDistanceSumResult {
+  result: ILastNMonthsDistanceSum[];
+}
+
+export interface ILastNWeeksDistanceSum {
+  week_start_date: string;
+  total_distance: number;
+}
+
+export interface ILastNWeeksDistanceSumResult {
+  result: ILastNWeeksDistanceSum[];
+}
+
+export interface ILastNWeeksPaceAvg {
+  week_start: string;
+  avg_pace_per_km: number;
+}
+
+export interface ILastNWeeksPaceAvgResult {
+  result: ILastNWeeksPaceAvg[];
+}
+
+export interface ITimeIntervalSummary {
+  avg_distance: number;
+  total_distance: number;
+}
+
+export interface ITimeIntervalSummaryResult {
+  result: ITimeIntervalSummary[];
+}
+
+export interface IWeekByDayDistanceSum {
+  weeks: string;
+  monday: number;
+  tuesday: number;
+  wednesday: number;
+  thursday: number;
+  friday: number;
+  saturday: number;
+  sunday: number;
+}
+
+export interface IWeekByDayDistanceSumResult {
+  result: IWeekByDayDistanceSum[];
+}
+
+export interface IYearSummary {
+  activity_count: number;
+  year: number;
+  avg_distance: number;
+  total_distance: number;
+  avg_moving_time: number;
+  total_moving_time: number;
+  avg_pace: number;
+  total_elev_high: number;
+  total_distance_downhill: number;
+  avg_activity_count_per_month: number;
+  median_distance: number;
+}
+
+export interface IYearSummaryResult {
+  result: IYearSummary[];
+}
