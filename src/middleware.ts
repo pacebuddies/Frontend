@@ -8,7 +8,7 @@ export const config = {
     '/home/:path*',
     '/profile/:path*',
     '/settings/:path*',
-    'statistics/:path*',
-    'activities/:path*',
+    '/statistics/:path*',
+    '/activities/:path*',
   ],
 };

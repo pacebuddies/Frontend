@@ -1,5 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { RecommendationData } from '../../../internalTypes/recommendationData';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
@@ -76,28 +76,20 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
     }
   };
 
-  const fetchRecommendations = () => {
-    pacebuddiesApi
+  const fetchRecommendations = (): Promise<RecommendationData> => {
+    return pacebuddiesApi
       .get('recommender/recommendations/list', {
         params: {
           sportType: SportTypeEnum.Run,
           sex: 'M',
         },
       })
-      .then((res) => {
-        if (res.status == 200) {
-          console.log(res.data);
-          setRecommendationData(res.data);
-        }
-        if (res.status == 204) {
-          console.log('No recommendations');
-        }
-      })
-      .catch((err) => {
-        toast.error(err);
-        console.log(err.response);
-      });
+      .then((response) => response.data);
   };
+  const recommendationQuery = useQuery({
+    queryKey: ['recommendations'],
+    queryFn: fetchRecommendations,
+  });
 
   // Loop through the array to find the next recommendation that is not undefined (deleted) and return the index of that recommendation
   // If there is no next recommendation, loop through the array backwards to find the previous recommendation that is not undefined (deleted) and return the index of that recommendation
@@ -120,20 +112,12 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
   };
 
   const recommendationDecisionHandler = (id: string) => {
-    console.log('Action', id);
     // remove recommendation from list
     const index = recommendationData.findIndex((item) => item.id === id);
     if (index === -1) {
       return;
     }
     recommendationData.splice(index, 1);
-    console.log(
-      'index',
-      index,
-      recommendationNumber,
-      recommendationData.length,
-      recommendationData,
-    );
     const newRecommendationNumber = findNextRecommendation(
       recommendationData,
       recommendationNumber,
@@ -167,7 +151,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
       {opened ? (
         <>
           <div className="fixed inset-0 z-50 flex flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-            <div className="relative my-6 mx-auto flex h-auto max-h-[80rem] w-auto max-w-7xl flex-row items-center justify-center">
+            <div className="relative mx-auto my-6 flex h-auto max-h-[80rem] w-auto max-w-7xl flex-row items-center justify-center">
               {/*Content*/}
               <div className="flex flex-col items-center justify-center">
                 {/*Upper content*/}
@@ -226,7 +210,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                   </button>
                   {/*Close button*/}
                   <button
-                    className="relative right-7 bottom-28 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray md:bottom-28 lg:bottom-44 xl:bottom-60 2xl:bottom-72"
+                    className="relative bottom-28 right-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray md:bottom-28 lg:bottom-44 xl:bottom-60 2xl:bottom-72"
                     onClick={() => onOpenedChange(false)}
                     onKeyDown={(event) => handleEscKeyDown(event)}
                   >

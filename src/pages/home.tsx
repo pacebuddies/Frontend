@@ -1,6 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 import SummaryBarChart from '../components/Charts/SummaryBarChart';
 import MenuButton from '../components/MenuButton';
 import RecommendationsButton from '../components/Recommendations/RecommendationsButton';
@@ -10,29 +9,16 @@ import pacebuddiesApi from '../instances/axiosConfigured';
 import { IAthlete } from '../internalTypes/interfaces';
 
 const Home: NextPage = () => {
-  const [athlete, setAthlete] = useState<IAthlete | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  function fetchAthleteHandler() {
-    setIsLoaded(false);
-    pacebuddiesApi
+  const fetchAthleteHandler = (): Promise<IAthlete> => {
+    return pacebuddiesApi
       .get('bridge/athlete')
-      .then((res) => {
-        if (res.status == 200) {
-          setAthlete(res.data);
-          console.log(res.data);
-          setIsLoaded(true);
-        }
-      })
-      .catch((err) => {
-        toast.error(err.response.data.error);
-        console.log(err.response);
-      });
-  }
+      .then((response) => response.data);
+  };
 
-  useEffect(() => {
-    fetchAthleteHandler();
-  }, []);
+  const athleteQuery = useQuery({
+    queryKey: ['athlete'],
+    queryFn: fetchAthleteHandler,
+  });
 
   return (
     <>
@@ -41,7 +27,13 @@ const Home: NextPage = () => {
         Home page
         {/* TODO: poprawienie wyświetlania wykresu na mniejszym screenie */}
         <div>
-          {isLoaded && <SummaryBarChart athlete={athlete!.activity_stats} />}
+          {athleteQuery.isSuccess && (
+            <SummaryBarChart athlete={athleteQuery.data.activity_stats} />
+          )}
+          {athleteQuery.isError && (
+            // @ts-expect-error
+            <div>error : {athleteQuery.error.message}</div>
+          )}
         </div>
       </div>
       <RecommendationsButton />
