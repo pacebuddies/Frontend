@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import RecommendationsModal from './RecommendationsModal';
+import RecommendationsModal from './RecommendationsModal/RecommendationsModal';
 
 const RecommendationsButton = () => {
   const [recommendationsOpened, setRecommendationsOpened] = useState(false);
+
+  const openedChangeHandler = (opened: boolean) => {
+    setRecommendationsOpened(opened);
+  };
   return (
     <>
       {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
@@ -17,7 +21,10 @@ const RecommendationsButton = () => {
           Find your buddy
         </button>
       </div>
-      {/*<RecommendationsModal opened={recommendationsOpened} />*/}
+      <RecommendationsModal
+        opened={recommendationsOpened}
+        onOpenedChange={openedChangeHandler}
+      />
     </>
   );
 };

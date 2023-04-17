@@ -11,10 +11,40 @@ module.exports = {
   plugins: [require("flowbite/plugin")],
   theme: {
     extend:{
+      spacing:{
+        '92' : '23rem',
+      },
+      height:{
+        '128': '32rem',
+        '160': '40rem',
+        '192': '48rem',
+        '224': '56rem',
+        '256': '64rem',
+        '288': '72rem',
+        '320': '80rem',
+        '352': '88rem',
+        '384': '96rem',
+        '512': '128rem',
+      },
+      width:{
+        '128': '32rem',
+        '160': '40rem',
+        '192': '48rem',
+        '224': '56rem',
+        '256': '64rem',
+        '288': '72rem',
+        '320': '80rem',
+        '352': '88rem',
+        '384': '96rem',
+        '512': '128rem',
+      },
       colors:{
         'pb-gray': '#D9D9D9',
+        'pb-dark-gray': '#565656',
         'pb-green': '#4CBD17',
         'pb-dark-green': '#1B4308',
+        'pb-red-discard': '#BD1717',
+        'pb-orange': "#EF8A17",
       },
       boxShadow: {
         'border': '4px 4px 10px 0px rgba(76, 189, 23, 1)',
@@ -54,6 +84,9 @@ module.exports = {
       },
       fontFamily:{
         'istok-web': ['Istok Web', 'sans-serif'],
+      },
+      fontSize:{
+        'size404': '13rem',
       }
 
     }
