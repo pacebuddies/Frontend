@@ -7,7 +7,7 @@ import RecommendationFilterRangeSlider from './RecommendationFilterRangeSlider';
 pacebuddiesApi
   .get('recommender/recommendations/getFilter', {
     params: {
-      sport_type: SportTypeEnum.Ride,
+      sport_type: SportTypeEnum.Run,
     },
   })
   .then((res) => {

@@ -7,6 +7,7 @@ import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
 import pacebuddiesApi from '../instances/axiosConfigured';
 import { IAthlete } from '../internalTypes/interfaces';
+import { useSetAthleteStore } from '../store/athleteStore';
 
 const Home: NextPage = () => {
   const fetchAthleteHandler = (): Promise<IAthlete> => {
@@ -15,10 +16,15 @@ const Home: NextPage = () => {
       .then((response) => response.data);
   };
 
-  const athleteQuery = useQuery({
+  const athleteQuery = useQuery<IAthlete>({
     queryKey: ['athlete'],
     queryFn: fetchAthleteHandler,
   });
+
+  const setAthleteStore = useSetAthleteStore((state) => state.setAthlete);
+  if (athleteQuery.isSuccess) {
+    setAthleteStore({ athlete: athleteQuery.data });
+  }
 
   return (
     <>
