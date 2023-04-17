@@ -8,6 +8,13 @@ import TopNavBar from '../components/TopNavBar';
 import pacebuddiesApi from '../instances/axiosConfigured';
 import { IAthlete } from '../internalTypes/interfaces';
 import { useSetAthleteStore } from '../store/athleteStore';
+import stravaApi from '../instances/axiosConfigured';
+import { IActivityDaySummaryResult, IAthlete } from "../interfaces";
+import {IActivityDaySummary} from "../interfaces";
+import RecommendationsModal from "../components/Recommendations/RecommendationsModal";
+import DaySummaryChart from "../components/Charts/DaySummaryChart";
+import WeekSummaryChart from "../components/Charts/WeekSummaryChart";
+import WeekByDayDistanceSumChart from "../components/Charts/WeekByDayDistanceSumChart";
 
 const Home: NextPage = () => {
   const fetchAthleteHandler = (): Promise<IAthlete> => {
