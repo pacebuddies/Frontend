@@ -6,6 +6,7 @@ import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 import AcceptButton from './AcceptButton';
 import DeclineButton from './DeclineButton';
 import RecommendationsModalContent from './RecommendationModalContent/RecommendationsModalContent';
+import SportSelector from "../../SportSelector/SportSelector";
 
 //import svg
 
@@ -147,6 +148,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
           <div className="fixed inset-0 z-50 flex flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
             <div className="relative mx-auto my-6 flex h-auto max-h-[80rem] w-auto max-w-7xl flex-row items-center justify-center">
               {/*Content*/}
+              <SportSelector onSportChange={(sport) => {console.log(sport)}} />
               <div className="flex flex-col items-center justify-center">
                 {/*Upper content*/}
                 <div className="flex flex-row items-center justify-center">
