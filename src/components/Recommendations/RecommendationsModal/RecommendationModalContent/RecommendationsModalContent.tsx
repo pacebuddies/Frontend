@@ -37,7 +37,7 @@ const RecommendationsModalContent = ({ data, num }: IProps) => {
         <div className=" flex w-2/5 flex-col justify-between border border-green-500 bg-white p-8">
           <SameSportTypes />
           <div className="flex min-h-[50%] w-full flex-col">
-            <SameClubs />
+            <SameClubs clubs={athlete.clubs} />
           </div>
         </div>
         {/*Center block information / compatibility percent */}
