@@ -7,4 +7,5 @@ export interface RecommendationData {
   lastname: string;
   sex: string;
   compatibility: number;
+  clubs: string[];
 }
