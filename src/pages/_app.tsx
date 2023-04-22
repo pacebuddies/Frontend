@@ -45,7 +45,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 const theme: CustomFlowbiteTheme = {
   button: {
     color: {
-      success: 'pb-green',
+      success:
+        'text-white bg-pb-green border border-transparent hover:bg-pb-green focus:ring-4 focus:ring-green-300 disabled:hover:bg-pb-green dark:bg-pb-green dark:hover:bg-pb-green dark:focus:bg-pb-green dark:disabled:hover:bg-pb-green',
+    },
+    outline: {
+      on: 'flex justify-center bg-white text-gray-900 transition-all duration-75 ease-in group-hover:bg-opacity-0 group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full',
     },
   },
 };
