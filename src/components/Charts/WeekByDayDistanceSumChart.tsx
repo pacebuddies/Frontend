@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import {
   BarElement,
   CategoryScale,
@@ -7,11 +8,11 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
-import stravaApi from '../../instances/axiosConfigured';
-import { IWeekByDayDistanceSumResult } from '../../interfaces';
+import pacebuddiesApi from '../../instances/axiosConfigured';
+import { IWeekByDayDistanceSum } from '../../internalTypes/interfaces';
 
 ChartJS.register(
   CategoryScale,
@@ -22,63 +23,75 @@ ChartJS.register(
   Legend,
 );
 
-const WeekByDayDistanceChart = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [distanceSum, setDistanceSum] = useState<IWeekByDayDistanceSumResult | null>(null);
-  const [currentWeek, setCurrentWeek] = useState(0);
-  const chartRef = React.useRef<HTMLCanvasElement>(null);
+const fetchDistanceSum = async (): Promise<IWeekByDayDistanceSum[]> => {
+  const { data } = await pacebuddiesApi.get(
+    'http://devudevu.pacebuddies.club:8080/api/v1/chart/WeekByDayDistanceSum',
+    { params: { sport_type: 26 } },
+  );
+  return data;
+};
 
-  function fetchDistanceSum() {
-    setIsLoaded(false);
-    stravaApi
-      .get('chart/daySummary')
-      .then((res) => {
-        if (res.status === 200) {
-          setDistanceSum(res.data);
-          setIsLoaded(true);
-        }
-      })
-      .catch((err) => {
-        toast.error(err.toString());
-        console.error(err);
-      });
+const WeekByDayDistanceChart = () => {
+  const [currentWeek, setCurrentWeek] = useState<number>(0);
+
+  const {
+    data: distanceSum,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<IWeekByDayDistanceSum[]>({
+    queryKey: ['distanceSum'],
+    queryFn: fetchDistanceSum,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) {
+    toast.error((error as Error).message);
+    return <div>{(error as Error).message}</div>;
   }
 
-  useEffect(() => {
-    fetchDistanceSum();
-  }, []);
+  const getMaxValue = () => {
+    const values = distanceSum.flatMap((week) => [
+      week.monday,
+      week.tuesday,
+      week.wednesday,
+      week.thursday,
+      week.friday,
+      week.saturday,
+      week.sunday,
+    ]);
+    return Math.round(Math.max(...values) / 100) * 100;
+  };
 
-  useEffect(() => {
-    if (chartRef.current) {
-      const chartData = {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        datasets: [
-          {
-            label: `Week of ${distanceSum?.result[currentWeek]?.weeks}`,
-            data: [
-              distanceSum?.result[currentWeek]?.monday || 0,
-              distanceSum?.result[currentWeek]?.tuesday || 0,
-              distanceSum?.result[currentWeek]?.wednesday || 0,
-              distanceSum?.result[currentWeek]?.thursday || 0,
-              distanceSum?.result[currentWeek]?.friday || 0,
-              distanceSum?.result[currentWeek]?.saturday || 0,
-              distanceSum?.result[currentWeek]?.sunday || 0,
-            ],
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1,
-          },
+  const chartData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      {
+        label: `Week of ${distanceSum[currentWeek]?.weeks}`,
+        data: [
+          distanceSum[currentWeek]?.monday ?? 0,
+          distanceSum[currentWeek]?.tuesday ?? 0,
+          distanceSum[currentWeek]?.wednesday ?? 0,
+          distanceSum[currentWeek]?.thursday ?? 0,
+          distanceSum[currentWeek]?.friday ?? 0,
+          distanceSum[currentWeek]?.saturday ?? 0,
+          distanceSum[currentWeek]?.sunday ?? 0,
         ],
-      };
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
 
-      new ChartJS(chartRef.current, {
-        type: 'bar',
-        data: chartData,
-        options: {
-        },
-      });
-    }
-  }, [chartRef, distanceSum, currentWeek]);
+  const chartOptions = {
+    scales: {
+      y: {
+        min: 0,
+        max: getMaxValue(),
+      },
+    },
+  };
 
   const handlePrevWeek = () => {
     if (currentWeek > 0) {
@@ -87,18 +100,25 @@ const WeekByDayDistanceChart = () => {
   };
 
   const handleNextWeek = () => {
-    if (distanceSum?.result && currentWeek < distanceSum?.result.length - 1) {
+    if (currentWeek < distanceSum!.length - 1) {
       setCurrentWeek(currentWeek + 1);
     }
   };
 
   return (
-    <div>
-      <canvas ref={chartRef}></canvas>
-      <button onClick={handlePrevWeek}>Prev week</button>
-  <button onClick={handleNextWeek}>Next week</button>
-  </div>
-);
+    <div className="flex flex-row ">
+      {currentWeek > 0 && <button onClick={handlePrevWeek}>Prev week</button>}
+      <Bar
+        data={chartData}
+        options={chartOptions}
+        width={600}
+        height={400}
+      ></Bar>
+      {currentWeek < distanceSum!.length - 1 && (
+        <button onClick={handleNextWeek}>Next week</button>
+      )}
+    </div>
+  );
 };
 
 export default WeekByDayDistanceChart;

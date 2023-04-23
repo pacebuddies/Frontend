@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
 import stravaApi from '../../instances/axiosConfigured';
-import { IActivityDaySummaryResult } from '../../interfaces';
+import { IActivityDaySummary } from "../../internalTypes/interfaces";
 
 
 ChartJS.register(
@@ -26,7 +26,7 @@ ChartJS.register(
 const DaySummaryChart = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [daySummary, setDaySummary] =
-    useState<IActivityDaySummaryResult | null>(null);
+    useState<IActivityDaySummary[] | null>(null);
   const [weekDays, setWeekDays] = useState<
     | 'Monday'
     | 'Tuesday'
@@ -40,7 +40,7 @@ const DaySummaryChart = () => {
   function fetchActivityDaySummaryHandler() {
     setIsLoaded(false);
     stravaApi
-      .get('chart/daySummary')
+      .get('http://devudevu.pacebuddies.club:8080/api/v1/chart/LastNWeeksDistanceSum', {params: { sport_type: 26, weeks_number: 12 }})
       .then((res) => {
         //console.log(res.data)
         if (res.status == 200) {
@@ -76,7 +76,7 @@ const DaySummaryChart = () => {
       {
         label: 'Monday',
         data: [
-          daySummary?.result.find(
+          daySummary?.find(
             (e) => e.week_day == 'Monday'
           )?.summary
         ],
@@ -85,7 +85,7 @@ const DaySummaryChart = () => {
       {
         label: 'Tuesday',
         data: [
-          daySummary?.result.find(
+          daySummary?.find(
             (e) => e.week_day == 'Tuesday'
           )?.summary
         ],
@@ -94,7 +94,7 @@ const DaySummaryChart = () => {
       {
         label: 'Wednesday',
         data: [
-          daySummary?.result.find(
+          daySummary?.find(
             (e) => e.week_day == 'Wednesday'
           )?.summary
         ],
@@ -103,7 +103,7 @@ const DaySummaryChart = () => {
       {
         label: 'Thursday',
         data: [
-          daySummary?.result.find(
+          daySummary?.find(
             (e) => e.week_day == 'Thursday'
           )?.summary
         ],
@@ -112,7 +112,7 @@ const DaySummaryChart = () => {
       {
         label: 'Friday',
         data: [
-          daySummary?.result.find(
+          daySummary?.find(
             (e) => e.week_day == 'Friday'
           )?.summary
         ],
@@ -121,7 +121,7 @@ const DaySummaryChart = () => {
       {
         label: 'Saturday',
         data: [
-          daySummary?.result.find(
+          daySummary?.find(
             (e) => e.week_day == 'Saturday'
           )?.summary
         ],
@@ -130,7 +130,7 @@ const DaySummaryChart = () => {
       {
         label: 'Sunday',
         data: [
-          daySummary?.result.find(
+          daySummary?.find(
             (e) => e.week_day == 'Sunday'
           )?.summary
         ],
