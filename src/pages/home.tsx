@@ -6,8 +6,10 @@ import RecommendationsButton from '../components/Recommendations/Recommendations
 import StravaWatermark from '../components/StravaWatermark';
 import TopNavBar from '../components/TopNavBar';
 import pacebuddiesApi from '../instances/axiosConfigured';
-import { IAthlete } from '../internalTypes/interfaces';
 import { useSetAthleteStore } from '../store/athleteStore';
+import stravaApi from '../instances/axiosConfigured';
+import { IAthlete } from "../internalTypes/interfaces";
+
 
 const Home: NextPage = () => {
   const fetchAthleteHandler = (): Promise<IAthlete> => {
