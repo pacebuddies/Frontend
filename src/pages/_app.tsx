@@ -6,6 +6,7 @@ import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import StravaWatermark from '../components/StravaWatermark';
 import '../styles/globals.css';
 
 const queryClient = new QueryClient({
@@ -23,6 +24,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <Flowbite theme={{ theme }}>
         <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />
+          <StravaWatermark />
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </Flowbite>

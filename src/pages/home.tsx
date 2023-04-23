@@ -1,15 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { NextPage } from 'next';
 import SummaryBarChart from '../components/Charts/SummaryBarChart';
-import MenuButton from '../components/MenuButton';
-import RecommendationsButton from '../components/Recommendations/RecommendationsButton';
-import StravaWatermark from '../components/StravaWatermark';
-import TopNavBar from '../components/TopNavBar';
 import pacebuddiesApi from '../instances/axiosConfigured';
+import { IAthlete } from '../internalTypes/interfaces';
+import Layout from '../Layout';
 import { useSetAthleteStore } from '../store/athleteStore';
-import stravaApi from '../instances/axiosConfigured';
-import { IAthlete } from "../internalTypes/interfaces";
-
 
 const Home: NextPage = () => {
   const fetchAthleteHandler = (): Promise<IAthlete> => {
@@ -30,23 +25,21 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <TopNavBar />
-      <div className="flex h-screen shrink-0 flex-col flex-nowrap items-center">
-        Home page
-        {/* TODO: poprawienie wyświetlania wykresu na mniejszym screenie */}
-        <div>
-          {athleteQuery.isSuccess && (
-            <SummaryBarChart athlete={athleteQuery.data.activity_stats} />
-          )}
-          {athleteQuery.isError && (
-            // @ts-expect-error
-            <div>error : {athleteQuery.error.message}</div>
-          )}
+      <Layout>
+        <div className="flex h-screen shrink-0 flex-col flex-nowrap items-center">
+          Home page
+          {/* TODO: poprawienie wyświetlania wykresu na mniejszym screenie */}
+          <div>
+            {athleteQuery.isSuccess && (
+              <SummaryBarChart athlete={athleteQuery.data.activity_stats} />
+            )}
+            {athleteQuery.isError && (
+              // @ts-expect-error
+              <div>error : {athleteQuery.error.message}</div>
+            )}
+          </div>
         </div>
-      </div>
-      <RecommendationsButton />
-      <MenuButton />
-      <StravaWatermark />
+      </Layout>
     </>
   );
 };
