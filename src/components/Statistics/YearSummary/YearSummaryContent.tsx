@@ -1,7 +1,9 @@
 import { ClockIcon, MapIcon } from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
 import { Dropdown } from 'flowbite-react';
+import Image from 'next/image';
 import { useState } from 'react';
+import time_activity from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/time_activity.svg';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { IYearSummary } from '../../../internalTypes/interfaces';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
@@ -34,7 +36,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
     const hours = Math.floor(time / 3600);
     const remainingSeconds = time % 3600;
     const mins = Math.floor(remainingSeconds / 60);
-    const secs = remainingSeconds % 60;
+    const secs = Math.floor(remainingSeconds % 60);
 
     // Format the result as hh:mm:ss
     return [
@@ -77,14 +79,29 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
           <>
             {/*TODO Add more elements*/}
             <YearSummaryElement
-              icon={<ClockIcon className="h-8 w-8 text-white" />}
+              icon={<ClockIcon className="h-10 w-10 text-white" />}
               label={'Total time'}
               value={formatSecondsToHMS(data[0]?.total_moving_time ?? 0)}
             />
             <YearSummaryElement
-              icon={<MapIcon className="h-8 w-8 text-white" />}
+              icon={<MapIcon className="h-10 w-10 text-white" />}
               label={'Activities'}
               value={data[0]?.activity_count?.toString() ?? '0'}
+            />
+            <YearSummaryElement
+              icon={
+                <Image
+                  src={time_activity.src}
+                  alt={'time per activity'}
+                  width={40}
+                  height={40}
+                />
+              }
+              label={'Time/Activity'}
+              value={formatSecondsToHMS(
+                (data[0]?.total_moving_time ?? 0) /
+                  (data[0]?.activity_count ?? 1),
+              )}
             />
           </>
         )}

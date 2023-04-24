@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
 import pacebuddiesApi from '../../instances/axiosConfigured';
-import { ILastNWeeksDistanceSum } from '../../internalTypes/interfaces';
+import { ILastNMonthsDistanceSum } from '../../internalTypes/interfaces';
 
 ChartJS.register(
   CategoryScale,
@@ -27,42 +27,39 @@ interface IProps {
   selectedSport: number | null;
 }
 
-const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
-  const [weeksNumber, setWeeksNumber] = useState<number>(4);
+const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
+  const [monthsNumber, setMonthsNumber] = useState<number>(4);
 
   const handleWeeksNumberChange = (value: number) => {
-    setWeeksNumber(value);
+    setMonthsNumber(value);
   };
-  const fetchWeekSummary = (): Promise<ILastNWeeksDistanceSum[]> => {
+  const fetchWeekSummary = (): Promise<ILastNMonthsDistanceSum[]> => {
     return pacebuddiesApi
-      .get(
-        'bridge/chart/LastNWeeksDistanceSum',
-        {
-          params: { sport_type: selectedSport, weeks_number: weeksNumber },
-        },
-      )
+      .get('bridge/chart/LastNMonthsDistanceSum', {
+        params: { sport_type: selectedSport, months_number: monthsNumber },
+      })
       .then((response) => response.data);
   };
 
   const { data, isLoading, isError, error } = useQuery<
-    ILastNWeeksDistanceSum[]
+    ILastNMonthsDistanceSum[]
   >({
-    queryKey: ['LastNWeeksDistanceSum', selectedSport, weeksNumber],
+    queryKey: ['LastNMonthsDistanceSum', selectedSport, monthsNumber],
     queryFn: fetchWeekSummary,
   });
 
   const meanValue = Math.round(
     data?.length
-      ? data.reduce((acc, item) => acc + item.total_distance, 0) / data.length
+      ? data.reduce((acc, item) => acc + item.distance, 0) / data.length
       : 0,
   );
 
   const barChartData = {
-    labels: data?.map((item) => `Week ${item.week_start_date}`) ?? [],
+    labels: data?.map((item) => `${item.month_name}`) ?? [],
     datasets: [
       {
         label: 'Dystans',
-        data: data?.map((item) => item.total_distance) ?? [],
+        data: data?.map((item) => item.distance) ?? [],
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
@@ -114,19 +111,19 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
     <>
       <div className="mb-4">
         <label htmlFor="monthsNumber" className="mr-2">
-          Number of weeks:
+          Number of months:
         </label>
         <Dropdown
-          label={weeksNumber}
+          label={monthsNumber}
           outline={true}
           pill={true}
           color={'success'}
         >
           <Dropdown.Item onClick={() => handleWeeksNumberChange(3)}>
-            4
+            3
           </Dropdown.Item>
           <Dropdown.Item onClick={() => handleWeeksNumberChange(6)}>
-            8
+            6
           </Dropdown.Item>
           <Dropdown.Item onClick={() => handleWeeksNumberChange(12)}>
             12
@@ -144,4 +141,4 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
   );
 };
 
-export default LastNWeeksDistanceSumChart;
+export default LastNMonthsDistanceSumChart;

@@ -2,15 +2,17 @@ import { useQuery } from '@tanstack/react-query';
 import { Dropdown } from 'flowbite-react';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
+import LastNActivitiesPaceAvgChart from '../../components/Charts/LastNActivitiesPaceAvgChart';
+import LastNMonthsDistanceAvgChart from '../../components/Charts/LastNMonthsDistanceAvgChart';
 import LastNWeeksDistanceSumChart from '../../components/Charts/LastNWeeksDistanceSumChart';
 import WeekByDayDistanceSumChart from '../../components/Charts/WeekByDayDistanceSumChart';
+import YearSummaryContent from '../../components/Statistics/YearSummary/YearSummaryContent';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
-import YearSummaryContent from "../../components/Statistics/YearSummary/YearSummaryContent";
-import LastNActivitiesPaceAvgChart from "../../components/Charts/LastNActivitiesPaceAvgChart";
-import LastNMonthsDistanceAvgChart from "../../components/Charts/LastNMonthsDistanceAvgChart";
+import LastNMonthsDistanceSumChart from "../../components/Charts/LastNMonthsDistanceSumChart";
+import LastNWeeksPaceAvgChart from "../../components/Charts/LastNWeeksPaceAvgChart";
 
 const StatisticsPage: NextPage = () => {
   const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
@@ -83,15 +85,17 @@ const StatisticsPage: NextPage = () => {
               {/*Year summary*/}
               <div className="flex w-full shrink-0 flex-col border-b-2 border-b-pb-green p-4 ">
                 {/*Title and year dropdown*/}
-                <YearSummaryContent selectedSport={selectedSport}/>
+                <YearSummaryContent selectedSport={selectedSport} />
               </div>
               {/*Distance*/}
               <div className="flex shrink-0  flex-col">
-                <span>Distance</span>
+                {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
                 <WeekByDayDistanceSumChart />
-                <LastNWeeksDistanceSumChart selectedSport={selectedSport}/>
-                <LastNActivitiesPaceAvgChart selectedSport={selectedSport}/>
-                <LastNMonthsDistanceAvgChart selectedSport={selectedSport}/>
+                <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
+                <LastNMonthsDistanceSumChart selectedSport={selectedSport} />
+                <LastNActivitiesPaceAvgChart selectedSport={selectedSport} />
+                <LastNMonthsDistanceAvgChart selectedSport={selectedSport} />
+                <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
               </div>
             </div>
           </div>

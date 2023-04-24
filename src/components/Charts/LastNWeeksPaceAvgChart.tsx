@@ -14,7 +14,7 @@ import { Dropdown } from 'flowbite-react';
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import pacebuddiesApi from '../../instances/axiosConfigured';
-import { ILastNMonthsDistanceAvg } from '../../internalTypes/interfaces';
+import { ILastNWeeksPaceAvg } from '../../internalTypes/interfaces';
 
 ChartJS.register(
   CategoryScale,
@@ -29,34 +29,29 @@ interface IProps {
   selectedSport: number | null;
 }
 
-const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
+const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
   selectedSport,
 }: IProps) => {
-  const [monthsNumber, setMonthsNumber] = useState<number>(3);
+  const [weekNumber, setWeekNumber] = useState<number>(3);
 
-  const fetchData = (): Promise<ILastNMonthsDistanceAvg[]> => {
-    // TODO: change path after moving headers to params
+  const fetchData = (): Promise<ILastNWeeksPaceAvg[]> => {
     return pacebuddiesApi
-      .get(
-        'http://devudevu.pacebuddies.club:8080/api/v1/chart/LastNMonthsDistanceAvg',
-        {
-          params: { sport_type: selectedSport },
-          headers: { months_number: monthsNumber },
-        },
-      )
+      .get('bridge/chart/LastNWeeksPaceAvg', {
+        params: { sport_type: selectedSport, weeks: weekNumber },
+      })
       .then((response) => response.data);
   };
 
   const { data, isError, isLoading, isSuccess } = useQuery<
-    ILastNMonthsDistanceAvg[]
-  >(['LastNMonthsDistanceAvg', selectedSport, monthsNumber], fetchData);
+    ILastNWeeksPaceAvg[]
+  >(['LastNWeeksPaceAvg', selectedSport, weekNumber], fetchData);
 
   const chartData: ChartData<'bar', number[], string> = {
-    labels: data?.map((item) => item.month_name.trim()) ?? [],
+    labels: data?.map((item) => item.week_start) ?? [],
     datasets: [
       {
         label: 'Distance',
-        data: data?.map((item) => item.distance) ?? [],
+        data: data?.map((item) => item.avg_pace_per_km) ?? [],
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
@@ -72,10 +67,6 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
     },
   };
 
-  const handeMonthsNumberChange = (value: number) => {
-    setMonthsNumber(value);
-  };
-
   return (
     <div>
       <div className="mb-4">
@@ -83,20 +74,14 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
           Number of months:
         </label>
         <Dropdown
-          label={monthsNumber}
+          label={weekNumber}
           outline={true}
           pill={true}
           color={'success'}
         >
-          <Dropdown.Item onClick={() => handeMonthsNumberChange(3)}>
-            3
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handeMonthsNumberChange(6)}>
-            6
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handeMonthsNumberChange(12)}>
-            12
-          </Dropdown.Item>
+          <Dropdown.Item onClick={() => setWeekNumber(3)}>3</Dropdown.Item>
+          <Dropdown.Item onClick={() => setWeekNumber(6)}>6</Dropdown.Item>
+          <Dropdown.Item onClick={() => setWeekNumber(12)}>12</Dropdown.Item>
         </Dropdown>
       </div>
       {isLoading && <div>Loading...</div>}
@@ -106,4 +91,4 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
   );
 };
 
-export default LastNMonthsDistanceAvgChart;
+export default LastNWeeksPaceAvgChart;

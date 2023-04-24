@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import {
   BarElement,
   CategoryScale,
@@ -11,11 +10,11 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import { Dropdown } from 'flowbite-react';
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import pacebuddiesApi from '../../instances/axiosConfigured';
 import { ILastNActivitiesPaceAvg } from '../../internalTypes/interfaces';
-import pacebuddiesApi from "../../instances/axiosConfigured";
-import { Dropdown } from 'flowbite-react';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -34,12 +33,9 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
 
   const fetchData = (): Promise<ILastNActivitiesPaceAvg[]> => {
     return pacebuddiesApi
-      .get(
-        'bridge/chart/LastNActivitiesPaceAvg',
-        {
-          params: { sport_type: selectedSport, num_activities: numActivities },
-        },
-      )
+      .get('bridge/chart/LastNActivitiesPaceAvg', {
+        params: { sport_type: selectedSport, num_activities: numActivities },
+      })
       .then((response) => response.data);
   };
 
