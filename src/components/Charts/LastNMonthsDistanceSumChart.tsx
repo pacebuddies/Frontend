@@ -110,9 +110,9 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
   return (
     <>
       <div className="mb-4">
-        <label htmlFor="monthsNumber" className="mr-2">
+        <span className="mr-2">
           Number of months:
-        </label>
+        </span>
         <Dropdown
           label={monthsNumber}
           outline={true}

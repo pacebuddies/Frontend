@@ -71,9 +71,9 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
   return (
     <div>
       <div className="mb-4">
-        <label htmlFor="numActivities" className="mr-2">
+        <span className="mr-2">
           Number of activities:
-        </label>
+        </span>
         <Dropdown
           label={numActivities}
           outline={true}

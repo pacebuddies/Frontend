@@ -113,9 +113,9 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
   return (
     <>
       <div className="mb-4">
-        <label htmlFor="monthsNumber" className="mr-2">
+        <span className="mr-2">
           Number of weeks:
-        </label>
+        </span>
         <Dropdown
           label={weeksNumber}
           outline={true}

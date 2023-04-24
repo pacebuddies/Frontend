@@ -13,6 +13,7 @@ import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
 import LastNMonthsDistanceSumChart from "../../components/Charts/LastNMonthsDistanceSumChart";
 import LastNWeeksPaceAvgChart from "../../components/Charts/LastNWeeksPaceAvgChart";
+import ScrollToTop from "../../components/ScrollToTop";
 
 const StatisticsPage: NextPage = () => {
   const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
@@ -91,15 +92,16 @@ const StatisticsPage: NextPage = () => {
               <div className="flex shrink-0  flex-col">
                 {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
                 <WeekByDayDistanceSumChart />
+                <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
                 <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
                 <LastNMonthsDistanceSumChart selectedSport={selectedSport} />
-                <LastNActivitiesPaceAvgChart selectedSport={selectedSport} />
                 <LastNMonthsDistanceAvgChart selectedSport={selectedSport} />
-                <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
+                <LastNActivitiesPaceAvgChart selectedSport={selectedSport} />
               </div>
             </div>
           </div>
         </div>
+        <ScrollToTop />
       </Layout>
     </>
   );

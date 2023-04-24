@@ -70,9 +70,9 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
   return (
     <div>
       <div className="mb-4">
-        <label htmlFor="monthsNumber" className="mr-2">
-          Number of months:
-        </label>
+        <span className="mr-2">
+          Number of weeks:
+        </span>
         <Dropdown
           label={weekNumber}
           outline={true}
