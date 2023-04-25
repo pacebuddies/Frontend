@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import {NextPage} from 'next';
 import StravaWatermark from '../../components/StravaWatermark';
 import TopNavBar from '../../components/TopNavBar';
 import MenuButton from '../../components/MenuButton';
@@ -12,10 +12,11 @@ const ProfilePage: NextPage = () => {
 
   return (
     <>
-      <div className="flex h-screen shrink flex-col items-center justify-center bg-pb-gray">
+      <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
 
-        <TopNavBar />
-        <div className="flex flex-col w-full space-y-3 shrink-0 h-56 items-center justify-center bg-gradient-to-r from-pb-orange via-white to-pb-green">
+        <TopNavBar/>
+        <div
+          className="flex flex-col w-full space-y-3 shrink-0 h-56 items-center justify-center bg-gradient-to-r from-pb-orange via-white to-pb-green">
           {/*<span>Naglowek</span>*/}
           <img
             className="w-32 h-32 items-center border-pb-green border-2"
@@ -27,7 +28,7 @@ const ProfilePage: NextPage = () => {
           </span>
 
         </div>
-        <div className="flex w-full h-full justify-center border-2 border-t-pb-green">
+        <div className="flex w-full h-full justify-center border-t border-pb-green">
           <div className="flex flex-col h-full w-full md:w-2/3 bg-white items-center">
             {/*number of activities + wykres ostatniego tygodnia*/}
             <div className="flex flex-col md:flex-row items-center justify-between
@@ -64,18 +65,76 @@ const ProfilePage: NextPage = () => {
               </div>
             </div>
             {/*PERSONAL INFO SECTION*/}
-            <div className="flex flex-col items-center justify-center mt-2">
+            <div className="flex flex-col w-full items-start justify-start mt-2 px-10 md:px-16">
               {/*PERSONAL INFO HEADER*/}
-              <span className="justify-self-start whitespace-nowrap font-istok-web text-pb-green text-xl">
-                Personal info
-              </span>
+              <div className="flex flex-col w-full border-b-2 border-pb-green">
+                <span
+                  className="justify-self-start justify-items-start whitespace-nowrap font-istok-web text-pb-green text-xl">
+                  Personal info
+                </span>
+              </div>
+              {/*CONTENT PERSONAL INFO*/}
+              <div className="flex flex-col w-full items-start justify-start space-y-2 mt-2">
+                {/*GENDER SECTION*/}
+                <div className="flex flex-row items-center justify-center space-x-5  pl-16">
+                  {/*Gender header*/}
+                  <span className="flex items-center justify-center text-pb-green">
+                    Gender
+                  </span>
+                  {/*Zmienna athletes.sex*/}
+                  <span className="flex items-center justify-center text-pb-dark-gray">
+                    Male
+                  </span>
+                </div>
+                {/*LOCATION SECTION*/}
+                <div className="flex flex-row items-center justify-center space-x-5 pl-14">
+                  {/*Location header*/}
+                  <span className="flex items-center justify-center text-pb-green">
+                    Location
+                  </span>
+                  {/*Zmienna athletes.city + woj + kraj?*/}
+                  <span className="flex items-center justify-center text-pb-dark-gray">
+                    Toruń
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/*SUMMARY OF ACTV SECTION*/}
+            <div className="flex flex-col w-full items-start justify-start mt-2 px-10 md:px-16">
+              {/*SUMMARY OF ACTV HEADER*/}
+              <div className="flex flex-col w-full border-b-2 border-pb-green">
+                <span
+                  className="justify-self-start justify-items-start whitespace-nowrap font-istok-web text-pb-green text-xl">
+                  Summary of Activities
+                </span>
+              </div>
+              {/*WYKRESY*/}
+              <div className="flex flex-col w-full items-center justify-center mt-2 space-y-3">
+                <span className="flex text-pb-dark-gray text-lg">Distance per day</span>
+                <span className="flex text-xl italic">Wykres1</span>
+                <span className="flex text-pb-dark-gray text-lg">Sports Type</span>
+                <span className="flex text-xl italic">Wykres2</span>
+              </div>
+            </div>
+            {/*Latest Activities SECTION*/}
+            <div className="flex flex-col w-full items-start justify-start mt-2 px-10 md:px-16">
+              {/*Latest Activity HEADER*/}
+              <div className="flex flex-col w-full border-b-2 border-pb-green">
+                <span
+                  className="justify-self-start justify-items-start whitespace-nowrap font-istok-web text-pb-green text-xl">
+                  Latest Activities
+                </span>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+
+              </div>
             </div>
           </div>
         </div>
 
       </div>
-      <RecommendationsButton />
-      <MenuButton />
+      <RecommendationsButton/>
+      <MenuButton/>
     </>
   );
 };
