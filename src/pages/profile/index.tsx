@@ -6,9 +6,13 @@ import RecommendationsButton from '../../components/Recommendations/Recommendati
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import Image from 'next/image';
 import avatar from '/src/img/avatar-example.jpg';
+import { useQuery } from '@tanstack/react-query';
+import {IAthlete} from "../../internalTypes/interfaces";
+import {promises} from "dns";
 
 const ProfilePage: NextPage = () => {
-
+  const fetchAthlete = ():Promise<IAthlete> => {return pacebuddiesApi.get("bridge/athlete").then((result) => result.data)}
+  const athleteQuery = useQuery<IAthlete>({queryKey: ["userProfileAthlete"], queryFn: fetchAthlete})
 
   return (
     <>
@@ -20,11 +24,11 @@ const ProfilePage: NextPage = () => {
           {/*<span>Naglowek</span>*/}
           <img
             className="w-32 h-32 items-center border-pb-green border-2"
-            src={avatar.src}
+            src={athleteQuery.data?.profile}
             alt="user avatar"
           />
           <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
-            John Doe
+            {`${athleteQuery.data?.firstname} ${athleteQuery.data?.lastname}`}
           </span>
 
         </div>
