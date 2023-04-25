@@ -14,6 +14,7 @@ import Layout from '../../Layout';
 import LastNMonthsDistanceSumChart from "../../components/Charts/LastNMonthsDistanceSumChart";
 import LastNWeeksPaceAvgChart from "../../components/Charts/LastNWeeksPaceAvgChart";
 import ScrollToTop from "../../components/ScrollToTop";
+import Accordion from "../../components/Accordion";
 
 const StatisticsPage: NextPage = () => {
   const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
@@ -92,6 +93,19 @@ const StatisticsPage: NextPage = () => {
               <div className="flex shrink-0  flex-col">
                 {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
                 <WeekByDayDistanceSumChart />
+
+                {/*<div className="container mx-auto p-4">*/}
+                {/*  <Accordion title="Accordion Title 1">*/}
+                {/*    <p>*/}
+                {/*      Accordion content goes here. This is just an example of the content.*/}
+                {/*    </p>*/}
+                {/*  </Accordion>*/}
+                {/*  <Accordion title="Last N Weeks Distance Sum Chart">*/}
+                {/*    */}
+                {/*  </Accordion>*/}
+                {/*</div>*/}
+                {/*<div className="flex h-28 flex-col">*/}
+                {/*</div>*/}
                 <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
                 <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
                 <LastNMonthsDistanceSumChart selectedSport={selectedSport} />
