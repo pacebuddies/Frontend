@@ -1,11 +1,9 @@
 import { NextPage } from 'next';
 import { useState } from 'react';
-import MenuButton from '../../components/MenuButton';
-import RecommendationsButton from '../../components/Recommendations/RecommendationsButton';
 import AccountSettingTab from '../../components/Settings/AccountSettingTab';
 import HelpSettingsTab from '../../components/Settings/HelpSettingsTab';
 import RecommendationsPreferencesSettingsTab from '../../components/Settings/RecommendationsPreferencesSettingsTab';
-import TopNavBar from '../../components/TopNavBar';
+import Layout from '../../Layout';
 
 enum SettingsTabs {
   Account = 'Account',
@@ -35,46 +33,43 @@ const SettingsPage: NextPage = () => {
   );
   return (
     <>
-      <div className="h-screen flex-col">
-        <TopNavBar />
-        {/*TODO: Poprawić wyświetlanie tabów*/}
-        <div className="flex h-auto w-full">
-          {/*Options tabs*/}
-          <div className="flex h-[calc(100vh-71px)] w-72 flex-col overflow-y-auto  border-r-[1px] border-pb-gray">
-            <button
-              onClick={() => {
-                setSettingsTab(SettingsTabs.Account);
-              }}
-              className="flex h-20 items-center justify-center  border-b-[1px] border-pb-gray"
-            >
-              <span className="text-pb-dark-gray">Account</span>
-            </button>
-            <button
-              onClick={() => {
-                setSettingsTab(SettingsTabs.RecommendationsPreferences);
-              }}
-              className="flex h-20  items-center justify-center border-b-[1px] border-pb-gray"
-            >
-              <span className="text-pb-dark-gray">
-                Preferences
-              </span>
-            </button>
-            <button
-              onClick={() => {
-                setSettingsTab(SettingsTabs.Help);
-              }}
-              className="flex h-20  items-center justify-center border-b-[1px] border-pb-gray"
-            >
-              <span className="text-pb-dark-gray">Help</span>
-            </button>
-            <div className="flex-auto grow"></div>
+      <Layout>
+        <div className="h-screen flex-col">
+          {/*TODO: Poprawić wyświetlanie tabów*/}
+          <div className="flex h-auto w-full">
+            {/*Options tabs*/}
+            <div className="flex h-[calc(100vh-71px)] w-72 flex-col overflow-y-auto  border-r-[1px] border-pb-gray">
+              <button
+                onClick={() => {
+                  setSettingsTab(SettingsTabs.Account);
+                }}
+                className="flex h-20 items-center justify-center  border-b-[1px] border-pb-gray"
+              >
+                <span className="text-pb-dark-gray">Account</span>
+              </button>
+              <button
+                onClick={() => {
+                  setSettingsTab(SettingsTabs.RecommendationsPreferences);
+                }}
+                className="flex h-20  items-center justify-center border-b-[1px] border-pb-gray"
+              >
+                <span className="text-pb-dark-gray">Preferences</span>
+              </button>
+              <button
+                onClick={() => {
+                  setSettingsTab(SettingsTabs.Help);
+                }}
+                className="flex h-20 items-center justify-center border-b-[1px] border-pb-gray"
+              >
+                <span className="text-pb-dark-gray">Help</span>
+              </button>
+              <div className="flex-auto grow"></div>
+            </div>
+            {/*Settings tab content*/}
+            <div className="w-full">{selectSettingsTab(settingsTab)}</div>
           </div>
-          {/*Settings tab content*/}
-          <div className="w-full">{selectSettingsTab(settingsTab)}</div>
         </div>
-      </div>
-      <RecommendationsButton />
-      <MenuButton />
+      </Layout>
     </>
   );
 };
