@@ -23,14 +23,16 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-
-const WeekByDayDistanceChart = () => {
+interface IProps {
+  selectedSport: number | null;
+}
+const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
   const [currentWeek, setCurrentWeek] = useState<number>(0);
 
   const fetchDistanceSum = (): Promise<IWeekByDayDistanceSum[]> => {
     return pacebuddiesApi
       .get('bridge/chart/WeekByDayDistanceSum', {
-        params: { sport_type: 26 },
+        params: { sport_type: selectedSport },
       })
       .then((response) => response.data);
   };

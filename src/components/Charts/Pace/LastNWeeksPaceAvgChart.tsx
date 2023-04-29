@@ -15,6 +15,7 @@ import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 
+import { toast } from 'react-toastify';
 import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
 import { ILastNWeeksPaceAvg } from '../../../internalTypes/Interfaces/Pace/paceInterfaces';
 
@@ -44,7 +45,7 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
       .then((response) => response.data);
   };
 
-  const { data, isError } = useQuery<ILastNWeeksPaceAvg[]>(
+  const { data, isError, error } = useQuery<ILastNWeeksPaceAvg[]>(
     ['LastNWeeksPaceAvg', selectedSport, weekNumber],
     fetchData,
   );
@@ -78,12 +79,19 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
     },
     maintainAspectRatio: false,
   };
-
+  if (isError) {
+    toast.error((error as Error).toString());
+    return <div>Error loading data</div>;
+  }
   return (
     <div>
       <div className="flex w-full  flex-col md:flex-row">
         <div className="order-2 h-128 w-full md:order-1">
-          <Bar data={chartData} options={chartOptions} />
+          <Bar
+            data={chartData}
+            options={chartOptions}
+            className="overflow-hidden"
+          />
         </div>
         <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
           <span className="mr-2 w-auto whitespace-nowrap">
@@ -101,7 +109,6 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
           </Dropdown>
         </div>
       </div>
-      {isError && <div>Error loading data</div>}
     </div>
   );
 };

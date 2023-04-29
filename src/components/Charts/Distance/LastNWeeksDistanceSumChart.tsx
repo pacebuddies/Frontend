@@ -121,6 +121,7 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
             options={barChartOptions}
             // @ts-expect-error - chart.js types are not compatible with react-chartjs-2
             data={barChartData}
+            className="overflow-hidden"
           />
         </div>
         <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">

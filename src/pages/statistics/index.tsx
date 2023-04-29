@@ -14,6 +14,7 @@ import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
+import WeekByDayDistanceSumChart from "../../components/Charts/Distance/WeekByDayDistanceSumChart";
 
 const StatisticsPage: NextPage = () => {
   const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
@@ -91,21 +92,22 @@ const StatisticsPage: NextPage = () => {
               {/*Distance*/}
               <div className="flex w-full  shrink-0 flex-col">
                 {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
-                {/*<WeekByDayDistanceSumChart />*/}
+                <WeekByDayDistanceSumChart />
 
                 <div className="relative ">
-                  <Accordion title="Accordion Title 1">
-                    <p>
-                      Accordion content goes here. This is just an example of
-                      the content.
-                    </p>
-                  </Accordion>
+
                   <Accordion title="Distance">
                     <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
                     <LastNMonthsDistanceSumChart
                       selectedSport={selectedSport}
                     />
-                    <LastNActivitiesPaceAvgChart
+                    <LastNMonthsDistanceAvgChart
+                      selectedSport={selectedSport}
+                    />
+                  </Accordion>
+                  <Accordion title="Distance">
+                    <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
+                    <LastNMonthsDistanceSumChart
                       selectedSport={selectedSport}
                     />
                     <LastNMonthsDistanceAvgChart

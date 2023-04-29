@@ -33,9 +33,6 @@ interface IProps {
 const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
   const [monthsNumber, setMonthsNumber] = useState<number>(4);
 
-  const handleWeeksNumberChange = (value: number) => {
-    setMonthsNumber(value);
-  };
   const fetchWeekSummary = (): Promise<ILastNMonthsDistanceSum[]> => {
     return pacebuddiesApi
       .get('bridge/chart/LastNMonthsDistanceSum', {
@@ -44,9 +41,7 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
       .then((response) => response.data);
   };
 
-  const { data, isLoading, isError, error } = useQuery<
-    ILastNMonthsDistanceSum[]
-  >({
+  const { data, isError, error } = useQuery<ILastNMonthsDistanceSum[]>({
     queryKey: ['LastNMonthsDistanceSum', selectedSport, monthsNumber],
     queryFn: fetchWeekSummary,
   });
@@ -120,12 +115,13 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
 
   return (
     <>
-      <div className="flex w-full  flex-col md:flex-row">
+      <div className="flex w-full flex-col md:flex-row">
         <div className="order-2 h-128 w-full md:order-1">
           <Bar
             options={barChartOptions}
             // @ts-expect-error - chart.js types are not compatible with react-chartjs-2
             data={barChartData}
+            className="overflow-hidden"
           />
         </div>
         <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
@@ -138,13 +134,9 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
             pill={true}
             color={'success'}
           >
-            <Dropdown.Item onClick={() => handleWeeksNumberChange(3)}>
-              3
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleWeeksNumberChange(6)}>
-              6
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handleWeeksNumberChange(12)}>
+            <Dropdown.Item onClick={() => setMonthsNumber(3)}>3</Dropdown.Item>
+            <Dropdown.Item onClick={() => setMonthsNumber(6)}>6</Dropdown.Item>
+            <Dropdown.Item onClick={() => setMonthsNumber(12)}>
               12
             </Dropdown.Item>
           </Dropdown>

@@ -15,6 +15,7 @@ import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 
+import { toast } from 'react-toastify';
 import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
 import { ILastNMonthsDistanceAvg } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
 
@@ -44,9 +45,10 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
       .then((response) => response.data);
   };
 
-  const { data, isError, isLoading, isSuccess } = useQuery<
-    ILastNMonthsDistanceAvg[]
-  >(['LastNMonthsDistanceAvg', selectedSport, monthsNumber], fetchData);
+  const { data, isError, error } = useQuery<ILastNMonthsDistanceAvg[]>(
+    ['LastNMonthsDistanceAvg', selectedSport, monthsNumber],
+    fetchData,
+  );
 
   const sortedData = sortByDateDescending(data ?? []);
 
@@ -82,35 +84,39 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
     setMonthsNumber(value);
   };
 
+  if (isError) {
+    toast.error((error as Error).toString());
+    return <div>Error loading data</div>;
+  }
+
   return (
-    <div>
-      <div className="flex w-full  flex-col md:flex-row">
-        <div className="order-2 h-128 w-full md:order-1">
-          <Bar data={chartData} options={chartOptions} />
-        </div>
-        <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
-          <span className="mr-2 w-auto whitespace-nowrap">
-            Number of months:
-          </span>
-          <Dropdown
-            label={monthsNumber}
-            outline={true}
-            pill={true}
-            color={'success'}
-          >
-            <Dropdown.Item onClick={() => handeMonthsNumberChange(3)}>
-              3
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handeMonthsNumberChange(6)}>
-              6
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => handeMonthsNumberChange(12)}>
-              12
-            </Dropdown.Item>
-          </Dropdown>
-        </div>
+    <div className="flex w-full  flex-col md:flex-row">
+      <div className="order-2 h-128 w-full md:order-1">
+        <Bar
+          data={chartData}
+          options={chartOptions}
+          className="overflow-hidden"
+        />
       </div>
-      {isError && <div>Error loading data</div>}
+      <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
+        <span className="mr-2 w-auto whitespace-nowrap">Number of months:</span>
+        <Dropdown
+          label={monthsNumber}
+          outline={true}
+          pill={true}
+          color={'success'}
+        >
+          <Dropdown.Item onClick={() => handeMonthsNumberChange(3)}>
+            3
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handeMonthsNumberChange(6)}>
+            6
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => handeMonthsNumberChange(12)}>
+            12
+          </Dropdown.Item>
+        </Dropdown>
+      </div>
     </div>
   );
 };
