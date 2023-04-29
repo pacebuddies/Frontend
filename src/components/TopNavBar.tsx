@@ -1,12 +1,13 @@
 import { NextPage } from 'next';
-import Image from 'next/image';
 import { getSession, signOut } from 'next-auth/react';
+import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import pacebuddiesApi, { stravaOauthApi } from '../instances/axiosConfigured';
 import { useAthleteStore } from '../store/athleteStore';
-import ImageWithLoading from './ImageWithLoading';
-import avatar from '/src/img/avatar-example.jpg';
+
+import Link from 'next/link';
+import avatar_placeholder from '../img/avatar_placeholder.png';
 
 const TopNavBar: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,14 +48,17 @@ const TopNavBar: NextPage = () => {
       <nav className="top-0 flex h-auto w-full items-center justify-between border-gray-200 bg-pb-gray px-2 py-2.5">
         <div className="flex w-full flex-wrap items-center justify-between">
           {/*Name & Logo*/}
-          <div className="ml-3 flex flex-wrap items-center justify-between ">
+          <Link
+            href="/home"
+            className="ml-3 flex flex-wrap items-center justify-between "
+          >
             <span className="self-center whitespace-nowrap font-istok-web text-3xl text-pb-green">
               Pace
             </span>
             <span className="self-center whitespace-nowrap font-istok-web text-3xl text-white">
               Buddies
             </span>
-          </div>
+          </Link>
           {/*Right side icons*/}
           <div className="flex w-auto items-center justify-between">
             {/*Avatar*/}
@@ -65,11 +69,12 @@ const TopNavBar: NextPage = () => {
               >
                 <Image
                   className="h-12 w-12 shrink-0 rounded-full  border-2 border-solid border-pb-green bg-pb-green"
-                  src={athlete?.profile!}
+                  src={athlete?.profile ?? avatar_placeholder.src}
                   alt="user avatar"
                   width={48}
                   height={48}
                   title={athlete?.firstname! + ' ' + athlete?.lastname!}
+                  unoptimized={true}
                 />
               </button>
             </div>
@@ -106,9 +111,9 @@ const TopNavBar: NextPage = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="white"
-                  className={
-                    'h-8 w-8 rounded-full' + (isLoading ? ' animate-spin' : '')
-                  }
+                  className={`h-8 w-8 rounded-full ${
+                    isLoading ? 'animate-spin' : ''
+                  }`}
                 >
                   <path
                     fillRule="evenodd"
