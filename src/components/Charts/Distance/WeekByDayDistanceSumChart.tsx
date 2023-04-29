@@ -11,8 +11,9 @@ import {
 import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
-import pacebuddiesApi from '../../instances/axiosConfigured';
-import { IWeekByDayDistanceSum } from '../../internalTypes/interfaces';
+import pacebuddiesApi from '../../../instances/axiosConfigured';
+
+import { IWeekByDayDistanceSum } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
 
 ChartJS.register(
   CategoryScale,
@@ -22,17 +23,19 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-
-const fetchDistanceSum = async (): Promise<IWeekByDayDistanceSum[]> => {
-  const { data } = await pacebuddiesApi.get(
-    'http://devudevu.pacebuddies.club:8080/api/v1/chart/WeekByDayDistanceSum',
-    { params: { sport_type: 26 } },
-  );
-  return data;
-};
-
-const WeekByDayDistanceChart = () => {
+interface IProps {
+  selectedSport: number | null;
+}
+const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
   const [currentWeek, setCurrentWeek] = useState<number>(0);
+
+  const fetchDistanceSum = (): Promise<IWeekByDayDistanceSum[]> => {
+    return pacebuddiesApi
+      .get('bridge/chart/WeekByDayDistanceSum', {
+        params: { sport_type: selectedSport },
+      })
+      .then((response) => response.data);
+  };
 
   const {
     data: distanceSum,
@@ -40,7 +43,7 @@ const WeekByDayDistanceChart = () => {
     isError,
     error,
   } = useQuery<IWeekByDayDistanceSum[]>({
-    queryKey: ['distanceSum'],
+    queryKey: ['WeekByDayDistanceSum'],
     queryFn: fetchDistanceSum,
   });
 
@@ -85,12 +88,19 @@ const WeekByDayDistanceChart = () => {
   };
 
   const chartOptions = {
+    plugins: {
+      title: {
+        display: true,
+        text: 'Daily distance summary',
+      },
+    },
     scales: {
       y: {
         min: 0,
         max: getMaxValue(),
       },
     },
+    maintainAspectRatio: false,
   };
 
   const handlePrevWeek = () => {
@@ -106,13 +116,14 @@ const WeekByDayDistanceChart = () => {
   };
 
   return (
-    <div className="flex flex-row ">
+    <div className="flex w-full flex-row items-center justify-center">
       {currentWeek > 0 && <button onClick={handlePrevWeek}>Prev week</button>}
       <Bar
         data={chartData}
         options={chartOptions}
-        width={600}
-        height={400}
+        width={200}
+        height={200}
+        className="mx-10"
       ></Bar>
       {currentWeek < distanceSum!.length - 1 && (
         <button onClick={handleNextWeek}>Next week</button>

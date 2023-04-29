@@ -2,16 +2,23 @@ import { useQuery } from '@tanstack/react-query';
 import { Dropdown } from 'flowbite-react';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import LastNWeeksDistanceSumChart from '../../components/Charts/LastNWeeksDistanceSumChart';
-import WeekByDayDistanceSumChart from '../../components/Charts/WeekByDayDistanceSumChart';
+import Accordion from '../../components/Accordion';
+import LastNMonthsDistanceAvgChart from '../../components/Charts/Distance/LastNMonthsDistanceAvgChart';
+import LastNMonthsDistanceSumChart from '../../components/Charts/Distance/LastNMonthsDistanceSumChart';
+import LastNWeeksDistanceSumChart from '../../components/Charts/Distance/LastNWeeksDistanceSumChart';
+import LastNActivitiesPaceAvgChart from '../../components/Charts/Pace/LastNActivitiesPaceAvgChart';
+import LastNWeeksPaceAvgChart from '../../components/Charts/Pace/LastNWeeksPaceAvgChart';
+import ScrollToTop from '../../components/ScrollToTop';
+import YearSummaryContent from '../../components/Statistics/YearSummary/YearSummaryContent';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
+import WeekByDayDistanceSumChart from "../../components/Charts/Distance/WeekByDayDistanceSumChart";
 
 const StatisticsPage: NextPage = () => {
   const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
-    null,
+    SportTypeEnum.Run,
   );
   const fetchSports = (): Promise<string[]> => {
     return pacebuddiesApi
@@ -49,7 +56,7 @@ const StatisticsPage: NextPage = () => {
               STATISTICS
             </span>
           </div>
-          <div className="flex h-full w-full justify-center border-2 border-t-pb-green bg-pb-gray">
+          <div className="flex h-full min-h-screen w-full justify-center border-t-2 border-t-pb-green bg-pb-gray">
             {/*Central content*/}
             <div className="flex w-full flex-col items-center bg-white md:w-2/3">
               {/*Sport select*/}
@@ -80,55 +87,45 @@ const StatisticsPage: NextPage = () => {
               {/*Year summary*/}
               <div className="flex w-full shrink-0 flex-col border-b-2 border-b-pb-green p-4 ">
                 {/*Title and year dropdown*/}
-                <div className="flex w-full flex-row justify-between pt-4">
-                  <span className="font-bold text-pb-green">
-                    Year&apos;s summary
-                  </span>
-                  <Dropdown
-                    label={2021}
-                    outline={true}
-                    pill={true}
-                    color={'success'}
-                  >
-                    <Dropdown.Item>2021</Dropdown.Item>
-                    <Dropdown.Item>2020</Dropdown.Item>
-                    <Dropdown.Item>2019</Dropdown.Item>
-                  </Dropdown>
-                </div>
-                {/*List of summaries*/}
-                <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
-                  {/*Total Time*/}
-                  <div className="flex flex-row">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-pb-orange">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        className="h-8 w-8 "
-                        fill={'white'}
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <div className="flex flex-col pl-2">
-                      <span className=" text-pb-green">Total Time</span>
-                      <span className=" text-pb-dark-gray">00:00:00</span>
-                    </div>
-                  </div>
-                </div>
+                <YearSummaryContent selectedSport={selectedSport} />
               </div>
               {/*Distance*/}
-              <div className="flex shrink-0  flex-col">
-                <span>Distance</span>
+              <div className="flex w-full  shrink-0 flex-col">
+                {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
                 <WeekByDayDistanceSumChart />
-                <LastNWeeksDistanceSumChart />
+
+                <div className="relative ">
+
+                  <Accordion title="Distance">
+                    <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
+                    <LastNMonthsDistanceSumChart
+                      selectedSport={selectedSport}
+                    />
+                    <LastNMonthsDistanceAvgChart
+                      selectedSport={selectedSport}
+                    />
+                  </Accordion>
+                  <Accordion title="Distance">
+                    <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
+                    <LastNMonthsDistanceSumChart
+                      selectedSport={selectedSport}
+                    />
+                    <LastNMonthsDistanceAvgChart
+                      selectedSport={selectedSport}
+                    />
+                  </Accordion>
+                  <Accordion title="Pace">
+                    <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
+                    <LastNActivitiesPaceAvgChart
+                      selectedSport={selectedSport}
+                    />
+                  </Accordion>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <ScrollToTop />
       </Layout>
     </>
   );
