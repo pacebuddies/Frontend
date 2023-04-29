@@ -77,22 +77,12 @@ module.exports = {
         spin:{
           '0%': {transform: 'rotate(0deg)'},
           '100%': {transform: 'rotate(360deg)'},
-        },
-        widthSizeBig: {
-            '0%': {width: '4rem'},
-            '100%': {width: '48rem'},
-        },
-        widthSizeSmall: {
-          '0%': {width: '4rem'},
-          '100%': {width: '16rem'},
         }
       },
       animation: {
         expand: 'expand 0.3s ease-in 0s 1 normal forwards;',
         wobble: 'wobble 2s ease 0s 0.5 normal forwards',
         spin: 'spin 1s linear infinite',
-        widthExpandBig: 'widthSizeBig .5s ease-in-out 0s 1 normal forwards;',
-        widthExpandSmall: 'widthSizeSmall .5s ease-in-out 0s 1 normal forwards;',
       },
       fontFamily:{
         'istok-web': ['Istok Web', 'sans-serif'],

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import MenuBar from './MenuBar';
 
-const menuButton = () => {
+const MenuButton = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -29,4 +29,4 @@ const menuButton = () => {
   );
 };
 
-export default menuButton;
+export default MenuButton;
