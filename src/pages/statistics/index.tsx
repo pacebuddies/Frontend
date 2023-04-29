@@ -2,23 +2,22 @@ import { useQuery } from '@tanstack/react-query';
 import { Dropdown } from 'flowbite-react';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import LastNActivitiesPaceAvgChart from '../../components/Charts/LastNActivitiesPaceAvgChart';
-import LastNMonthsDistanceAvgChart from '../../components/Charts/LastNMonthsDistanceAvgChart';
-import LastNWeeksDistanceSumChart from '../../components/Charts/LastNWeeksDistanceSumChart';
-import WeekByDayDistanceSumChart from '../../components/Charts/WeekByDayDistanceSumChart';
+import Accordion from '../../components/Accordion';
+import LastNMonthsDistanceAvgChart from '../../components/Charts/Distance/LastNMonthsDistanceAvgChart';
+import LastNMonthsDistanceSumChart from '../../components/Charts/Distance/LastNMonthsDistanceSumChart';
+import LastNWeeksDistanceSumChart from '../../components/Charts/Distance/LastNWeeksDistanceSumChart';
+import LastNActivitiesPaceAvgChart from '../../components/Charts/Pace/LastNActivitiesPaceAvgChart';
+import LastNWeeksPaceAvgChart from '../../components/Charts/Pace/LastNWeeksPaceAvgChart';
+import ScrollToTop from '../../components/ScrollToTop';
 import YearSummaryContent from '../../components/Statistics/YearSummary/YearSummaryContent';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
-import LastNMonthsDistanceSumChart from "../../components/Charts/LastNMonthsDistanceSumChart";
-import LastNWeeksPaceAvgChart from "../../components/Charts/LastNWeeksPaceAvgChart";
-import ScrollToTop from "../../components/ScrollToTop";
-import Accordion from "../../components/Accordion";
 
 const StatisticsPage: NextPage = () => {
   const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
-    null,
+    SportTypeEnum.Run,
   );
   const fetchSports = (): Promise<string[]> => {
     return pacebuddiesApi
@@ -56,7 +55,7 @@ const StatisticsPage: NextPage = () => {
               STATISTICS
             </span>
           </div>
-          <div className="flex h-full w-full justify-center border-2 border-t-pb-green bg-pb-gray">
+          <div className="flex h-full min-h-screen w-full justify-center border-t-2 border-t-pb-green bg-pb-gray">
             {/*Central content*/}
             <div className="flex w-full flex-col items-center bg-white md:w-2/3">
               {/*Sport select*/}
@@ -90,27 +89,36 @@ const StatisticsPage: NextPage = () => {
                 <YearSummaryContent selectedSport={selectedSport} />
               </div>
               {/*Distance*/}
-              <div className="flex shrink-0  flex-col">
+              <div className="flex w-full  shrink-0 flex-col">
                 {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
-                <WeekByDayDistanceSumChart />
+                {/*<WeekByDayDistanceSumChart />*/}
 
-                {/*<div className="container mx-auto p-4">*/}
-                {/*  <Accordion title="Accordion Title 1">*/}
-                {/*    <p>*/}
-                {/*      Accordion content goes here. This is just an example of the content.*/}
-                {/*    </p>*/}
-                {/*  </Accordion>*/}
-                {/*  <Accordion title="Last N Weeks Distance Sum Chart">*/}
-                {/*    */}
-                {/*  </Accordion>*/}
-                {/*</div>*/}
-                {/*<div className="flex h-28 flex-col">*/}
-                {/*</div>*/}
-                <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
-                <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
-                <LastNMonthsDistanceSumChart selectedSport={selectedSport} />
-                <LastNMonthsDistanceAvgChart selectedSport={selectedSport} />
-                <LastNActivitiesPaceAvgChart selectedSport={selectedSport} />
+                <div className="relative ">
+                  <Accordion title="Accordion Title 1">
+                    <p>
+                      Accordion content goes here. This is just an example of
+                      the content.
+                    </p>
+                  </Accordion>
+                  <Accordion title="Distance">
+                    <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
+                    <LastNMonthsDistanceSumChart
+                      selectedSport={selectedSport}
+                    />
+                    <LastNActivitiesPaceAvgChart
+                      selectedSport={selectedSport}
+                    />
+                    <LastNMonthsDistanceAvgChart
+                      selectedSport={selectedSport}
+                    />
+                  </Accordion>
+                  <Accordion title="Pace">
+                    <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
+                    <LastNActivitiesPaceAvgChart
+                      selectedSport={selectedSport}
+                    />
+                  </Accordion>
+                </div>
               </div>
             </div>
           </div>

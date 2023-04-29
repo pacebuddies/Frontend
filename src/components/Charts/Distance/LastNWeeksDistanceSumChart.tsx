@@ -7,13 +7,16 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { Dropdown } from 'flowbite-react';
 import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
-import pacebuddiesApi from '../../instances/axiosConfigured';
-import { ILastNWeeksDistanceSum } from '../../internalTypes/interfaces';
+import pacebuddiesApi from '../../../instances/axiosConfigured';
+
+import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
+import { ILastNWeeksDistanceSum } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
 
 ChartJS.register(
   CategoryScale,
@@ -35,18 +38,13 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
   };
   const fetchWeekSummary = (): Promise<ILastNWeeksDistanceSum[]> => {
     return pacebuddiesApi
-      .get(
-        'bridge/chart/LastNWeeksDistanceSum',
-        {
-          params: { sport_type: selectedSport, weeks_number: weeksNumber },
-        },
-      )
+      .get('bridge/chart/LastNWeeksDistanceSum', {
+        params: { sport_type: selectedSport, weeks_number: weeksNumber },
+      })
       .then((response) => response.data);
   };
 
-  const { data, isLoading, isError, error } = useQuery<
-    ILastNWeeksDistanceSum[]
-  >({
+  const { data, isError, error } = useQuery<ILastNWeeksDistanceSum[]>({
     queryKey: ['LastNWeeksDistanceSum', selectedSport, weeksNumber],
     queryFn: fetchWeekSummary,
   });
@@ -57,19 +55,21 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
       : 0,
   );
 
+  const sortedData = sortByDateDescending(data ?? []);
+
   const barChartData = {
-    labels: data?.map((item) => `Week ${item.week_start_date}`) ?? [],
+    labels: sortedData.map((item) => `Week ${item.week_start_date}`),
     datasets: [
       {
-        label: 'Dystans',
-        data: data?.map((item) => item.total_distance) ?? [],
+        label: 'Distance',
+        data: sortedData.map((item) => item.total_distance),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
       },
       {
-        label: 'Mean Value',
-        data: Array(data?.length || 0).fill(meanValue),
+        label: 'Mean Distance',
+        data: Array(sortedData.length || 0).fill(meanValue),
         type: 'line',
         borderColor: 'red',
         borderWidth: 2,
@@ -86,12 +86,15 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
       },
       title: {
         display: true,
-        text: 'Podsumowanie aktywności',
+        text: 'Distance summary for last weeks',
       },
       tooltip: {
         enabled: true,
         intersect: false,
         mode: 'index' as const,
+        filter: (tooltipItem: TooltipItem<'bar'>) => {
+          return tooltipItem.raw !== 0;
+        },
       },
     },
     scales: {
@@ -102,9 +105,9 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
         beginAtZero: true,
       },
     },
+    maintainAspectRatio: false,
   };
 
-  if (isLoading) return <div>Loading...</div>;
   if (isError) {
     toast.error((error as Error).toString());
     return <div>Error loading data</div>;
@@ -112,34 +115,36 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
 
   return (
     <>
-      <div className="mb-4">
-        <span className="mr-2">
-          Number of weeks:
-        </span>
-        <Dropdown
-          label={weeksNumber}
-          outline={true}
-          pill={true}
-          color={'success'}
-        >
-          <Dropdown.Item onClick={() => handleWeeksNumberChange(3)}>
-            4
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleWeeksNumberChange(6)}>
-            8
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleWeeksNumberChange(12)}>
-            12
-          </Dropdown.Item>
-        </Dropdown>
+      <div className="flex w-full  flex-col md:flex-row">
+        <div className="order-2 h-128 w-full md:order-1">
+          <Bar
+            options={barChartOptions}
+            // @ts-expect-error - chart.js types are not compatible with react-chartjs-2
+            data={barChartData}
+          />
+        </div>
+        <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
+          <span className="mr-2 w-auto whitespace-nowrap">
+            Number of weeks:
+          </span>
+          <Dropdown
+            label={weeksNumber}
+            outline={true}
+            pill={true}
+            color={'success'}
+          >
+            <Dropdown.Item onClick={() => handleWeeksNumberChange(4)}>
+              4
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleWeeksNumberChange(8)}>
+              8
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleWeeksNumberChange(16)}>
+              16
+            </Dropdown.Item>
+          </Dropdown>
+        </div>
       </div>
-      <Bar
-        options={barChartOptions}
-        // @ts-expect-error - chart.js types are not compatible with react-chartjs-2
-        data={barChartData}
-        height={200}
-        width={200}
-      />
     </>
   );
 };

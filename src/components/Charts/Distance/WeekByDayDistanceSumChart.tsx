@@ -11,8 +11,9 @@ import {
 import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
-import pacebuddiesApi from '../../instances/axiosConfigured';
-import { IWeekByDayDistanceSum } from '../../internalTypes/interfaces';
+import pacebuddiesApi from '../../../instances/axiosConfigured';
+
+import { IWeekByDayDistanceSum } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
 
 ChartJS.register(
   CategoryScale,
@@ -85,12 +86,19 @@ const WeekByDayDistanceChart = () => {
   };
 
   const chartOptions = {
+    plugins: {
+      title: {
+        display: true,
+        text: 'Daily distance summary',
+      },
+    },
     scales: {
       y: {
         min: 0,
         max: getMaxValue(),
       },
     },
+    maintainAspectRatio: false,
   };
 
   const handlePrevWeek = () => {

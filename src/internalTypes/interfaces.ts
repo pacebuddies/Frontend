@@ -73,58 +73,17 @@ export interface IActivityWeekSummary {
   average_distance: number;
 }
 
-export interface ILastNActivitiesPaceAvg {
-  id: string;
-  avg_pace_per_km: number;
-}
-
-export interface ILastNMonthsDistanceSum {
-  month_name: string;
-  month_start: string;
-  distance: number;
-}
-
-export interface ILastNWeeksDistanceSum {
-  week_start_date: string;
-  total_distance: number;
-}
-
-export interface ILastNWeeksPaceAvg {
-  week_start: string;
-  avg_pace_per_km: number;
-}
-
-export interface ITimeIntervalSummary {
-  avg_distance: number;
-  total_distance: number;
-}
-
-export interface IWeekByDayDistanceSum {
-  weeks: string;
-  monday: number;
-  tuesday: number;
-  wednesday: number;
-  thursday: number;
-  friday: number;
-  saturday: number;
-  sunday: number;
-}
-
-export interface IYearSummary {
-  activity_count: number;
-  year: number;
-  avg_distance: number;
-  total_distance: number;
-  avg_moving_time: number;
-  total_moving_time: number;
-  avg_pace: number;
-  total_elev_high: number;
-  total_distance_downhill: number;
-  avg_activity_count_per_month: number;
-  median_distance: number;
-}
-export interface ILastNMonthsDistanceAvg {
-  distance: number;
-  month_name: string;
-  month_start: string;
+export enum MonthsNames {
+  'January'=1,
+  'February'=2,
+  'March'=3,
+  'April'=4,
+  'May'=5,
+  'June'=6,
+  'July'=7,
+  'August'=8,
+  'September'=9,
+  'October'=10,
+  'November'=11,
+  'December'=12,
 }

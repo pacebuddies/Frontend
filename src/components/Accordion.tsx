@@ -1,6 +1,6 @@
-// Accordion.tsx
-import React, { useState, useRef, ReactNode } from 'react';
-import { useSpring, animated } from 'react-spring';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid';
+import React, { ReactNode, useRef, useState } from 'react';
+import { animated, useSpring } from 'react-spring';
 
 interface AccordionProps {
   title: string;
@@ -14,7 +14,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
   const { height, opacity } = useSpring({
     from: { height: 0, opacity: 0 },
     to: {
-      height: isOpen ? (contentRef.current?.scrollHeight || 0) : 0,
+      height: isOpen ? contentRef.current?.scrollHeight ?? 0 : 0,
       opacity: isOpen ? 1 : 0,
     },
   });
@@ -24,12 +24,17 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden mb-4">
+    <div className="mb-4 w-full overflow-hidden">
       <button
-        className="w-full text-left py-3 px-4 bg-gray-200 text-gray-800 font-semibold focus:outline-none"
+        className=" flex w-full flex-row justify-between border-y border-pb-green px-4 py-3 text-left font-semibold text-gray-800 focus:outline-none"
         onClick={toggleAccordion}
       >
         {title}
+        {isOpen ? (
+          <ChevronDownIcon className="h-6 w-6" />
+        ) : (
+          <ChevronUpIcon className="h-6 w-6" />
+        )}
       </button>
       <animated.div
         style={{
@@ -39,7 +44,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
         }}
         ref={contentRef}
       >
-        <div className="p-4 text-gray-600 overflow-hidden">{children}</div>
+        <div className="overflow-hidden p-4 text-gray-600">{children}</div>
       </animated.div>
     </div>
   );

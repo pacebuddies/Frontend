@@ -5,8 +5,9 @@ import Image from 'next/image';
 import { useState } from 'react';
 import time_activity from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/time_activity.svg';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
-import { IYearSummary } from '../../../internalTypes/interfaces';
+import { IYearSummary } from '../../../internalTypes/Interfaces/statisticsChartInterfaces';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
+import { formatSecondsToHMS } from '../../../utils/formatSecoundToHMS';
 import YearSummaryElement from './YearSummaryElement';
 
 interface IProps {
@@ -16,7 +17,6 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear(),
   );
-  console.log(selectedSport);
   const fetchYearSummary = (): Promise<IYearSummary[]> => {
     return pacebuddiesApi
       .get('bridge/chart/yearsSummary', {
@@ -29,28 +29,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
     queryKey: ['year-summary', selectedSport, selectedYear],
     queryFn: fetchYearSummary,
   });
-  const formatSecondsToHMS = (time: number): string => {
-    // Convert the minutes to seconds
 
-    // Calculate the hours, minutes, and seconds
-    const hours = Math.floor(time / 3600);
-    const remainingSeconds = time % 3600;
-    const mins = Math.floor(remainingSeconds / 60);
-    const secs = Math.floor(remainingSeconds % 60);
-
-    // Format the result as hh:mm:ss
-    return [
-      hours.toString().padStart(2, '0'),
-      mins.toString().padStart(2, '0'),
-      secs.toString().padStart(2, '0'),
-    ].join(':');
-  };
-
-  if (isSuccess) {
-    console.log(data[0]);
-  }
-
-  // console.log(data[0]);
   return (
     <>
       <div className="flex w-full flex-row justify-between pt-4">

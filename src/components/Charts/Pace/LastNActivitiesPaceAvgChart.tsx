@@ -13,8 +13,9 @@ import {
 import { Dropdown } from 'flowbite-react';
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import pacebuddiesApi from '../../instances/axiosConfigured';
-import { ILastNActivitiesPaceAvg } from '../../internalTypes/interfaces';
+import pacebuddiesApi from '../../../instances/axiosConfigured';
+
+import { ILastNActivitiesPaceAvg } from '../../../internalTypes/Interfaces/Pace/paceInterfaces';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -39,9 +40,10 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
       .then((response) => response.data);
   };
 
-  const { data, isError, isLoading, isSuccess } = useQuery<
-    ILastNActivitiesPaceAvg[]
-  >(['LastNActivitiesPaceAvg', numActivities, selectedSport], fetchData);
+  const { data, isError } = useQuery<ILastNActivitiesPaceAvg[]>(
+    ['LastNActivitiesPaceAvg', numActivities, selectedSport],
+    fetchData,
+  );
 
   const chartData: ChartData<'line', number[], string> = {
     labels: data?.map((item) => '') ?? [],
@@ -58,42 +60,47 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
   };
 
   const chartOptions: ChartOptions<'line'> = {
+    plugins: {
+      title: {
+        display: true,
+        text: 'Average pace for last activities',
+      },
+    },
     scales: {
       y: {
         beginAtZero: true,
       },
     },
+    maintainAspectRatio: false,
   };
 
-  const handleNumActivitiesChange = (value: number) => {
-    setNumActivities(value);
-  };
   return (
     <div>
-      <div className="mb-4">
-        <span className="mr-2">
-          Number of activities:
-        </span>
-        <Dropdown
-          label={numActivities}
-          outline={true}
-          pill={true}
-          color={'success'}
-        >
-          <Dropdown.Item onClick={() => handleNumActivitiesChange(5)}>
-            5
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleNumActivitiesChange(25)}>
-            25
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => handleNumActivitiesChange(50)}>
-            50
-          </Dropdown.Item>
-        </Dropdown>
+      <div className="flex w-full  flex-col md:flex-row">
+        <div className="order-2 h-128 w-full md:order-1">
+          <Line data={chartData} options={chartOptions} />
+        </div>
+        <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
+          <span className="mr-2 w-auto whitespace-nowrap">
+            Number of activities:
+          </span>
+          <Dropdown
+            label={numActivities}
+            outline={true}
+            pill={true}
+            color={'success'}
+          >
+            <Dropdown.Item onClick={() => setNumActivities(5)}>5</Dropdown.Item>
+            <Dropdown.Item onClick={() => setNumActivities(25)}>
+              25
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => setNumActivities(50)}>
+              50
+            </Dropdown.Item>
+          </Dropdown>
+        </div>
       </div>
-      {isLoading && <div>Loading...</div>}
       {isError && <div>Error loading data</div>}
-      {isSuccess && <Line data={chartData} options={chartOptions} />}
     </div>
   );
 };
