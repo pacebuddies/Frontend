@@ -6,6 +6,7 @@ import Accordion from '../../components/Accordion';
 import LastNMonthsDistanceAvgChart from '../../components/Charts/Distance/LastNMonthsDistanceAvgChart';
 import LastNMonthsDistanceSumChart from '../../components/Charts/Distance/LastNMonthsDistanceSumChart';
 import LastNWeeksDistanceSumChart from '../../components/Charts/Distance/LastNWeeksDistanceSumChart';
+import WeekByDayDistanceSumChart from '../../components/Charts/Distance/WeekByDayDistanceSumChart';
 import LastNActivitiesPaceAvgChart from '../../components/Charts/Pace/LastNActivitiesPaceAvgChart';
 import LastNWeeksPaceAvgChart from '../../components/Charts/Pace/LastNWeeksPaceAvgChart';
 import ScrollToTop from '../../components/ScrollToTop';
@@ -14,7 +15,6 @@ import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
-import WeekByDayDistanceSumChart from "../../components/Charts/Distance/WeekByDayDistanceSumChart";
 
 const StatisticsPage: NextPage = () => {
   const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
@@ -92,10 +92,9 @@ const StatisticsPage: NextPage = () => {
               {/*Distance*/}
               <div className="flex w-full  shrink-0 flex-col">
                 {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
-                <WeekByDayDistanceSumChart />
+                <WeekByDayDistanceSumChart selectedSport={selectedSport} />
 
                 <div className="relative ">
-
                   <Accordion title="Distance">
                     <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
                     <LastNMonthsDistanceSumChart
