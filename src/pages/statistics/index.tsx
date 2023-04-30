@@ -94,16 +94,7 @@ const StatisticsPage: NextPage = () => {
                 {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
                 <WeekByDayDistanceSumChart selectedSport={selectedSport} />
 
-                <div className="relative ">
-                  <Accordion title="Distance">
-                    <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
-                    <LastNMonthsDistanceSumChart
-                      selectedSport={selectedSport}
-                    />
-                    <LastNMonthsDistanceAvgChart
-                      selectedSport={selectedSport}
-                    />
-                  </Accordion>
+                <div className="">
                   <Accordion title="Distance">
                     <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
                     <LastNMonthsDistanceSumChart
