@@ -47,6 +47,7 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
   const { data, isError, error } = useQuery<ILastNWeeksDistanceSum[]>({
     queryKey: ['LastNWeeksDistanceSum', selectedSport, weeksNumber],
     queryFn: fetchWeekSummary,
+    keepPreviousData: true,
   });
 
   const meanValue = Math.round(

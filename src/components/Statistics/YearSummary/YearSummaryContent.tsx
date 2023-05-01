@@ -28,6 +28,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
   const { data, isError, isLoading, isSuccess } = useQuery<IYearSummary[]>({
     queryKey: ['year-summary', selectedSport, selectedYear],
     queryFn: fetchYearSummary,
+    keepPreviousData: true,
   });
 
   return (

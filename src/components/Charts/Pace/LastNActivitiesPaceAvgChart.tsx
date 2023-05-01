@@ -41,10 +41,11 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
       .then((response) => response.data);
   };
 
-  const { data, isError, error } = useQuery<ILastNActivitiesPaceAvg[]>(
-    ['LastNActivitiesPaceAvg', numActivities, selectedSport],
-    fetchData,
-  );
+  const { data, isError, error } = useQuery<ILastNActivitiesPaceAvg[]>({
+    queryKey: ['LastNActivitiesPaceAvg', numActivities, selectedSport],
+    queryFn: fetchData,
+    keepPreviousData: true,
+  });
 
   const chartData: ChartData<'line', number[], string> = {
     labels: data?.map((item) => '') ?? [],

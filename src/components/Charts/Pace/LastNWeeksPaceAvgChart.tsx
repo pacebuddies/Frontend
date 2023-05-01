@@ -45,10 +45,11 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
       .then((response) => response.data);
   };
 
-  const { data, isError, error } = useQuery<ILastNWeeksPaceAvg[]>(
-    ['LastNWeeksPaceAvg', selectedSport, weekNumber],
-    fetchData,
-  );
+  const { data, isError, error } = useQuery<ILastNWeeksPaceAvg[]>({
+    queryKey: ['LastNWeeksPaceAvg', selectedSport, weekNumber],
+    queryFn: fetchData,
+    keepPreviousData: true,
+  });
 
   const sortedData = sortByDateDescending(data ?? []);
 

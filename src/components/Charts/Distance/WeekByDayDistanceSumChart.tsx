@@ -45,6 +45,7 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
   } = useQuery<IWeekByDayDistanceSum[]>({
     queryKey: ['WeekByDayDistanceSum'],
     queryFn: fetchDistanceSum,
+    keepPreviousData: true,
   });
 
   if (isLoading) return <div>Loading...</div>;

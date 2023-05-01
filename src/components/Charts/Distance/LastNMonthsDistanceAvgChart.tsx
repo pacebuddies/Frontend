@@ -45,10 +45,11 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
       .then((response) => response.data);
   };
 
-  const { data, isError, error } = useQuery<ILastNMonthsDistanceAvg[]>(
-    ['LastNMonthsDistanceAvg', selectedSport, monthsNumber],
-    fetchData,
-  );
+  const { data, isError, error } = useQuery<ILastNMonthsDistanceAvg[]>({
+    queryKey: ['LastNMonthsDistanceAvg', selectedSport, monthsNumber],
+    queryFn: fetchData,
+    keepPreviousData: true,
+  });
 
   const sortedData = sortByDateDescending(data ?? []);
 
