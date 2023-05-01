@@ -45,7 +45,9 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
       .then((response) => response.data);
   };
 
-  const { data, isError, error } = useQuery<ILastNWeeksPaceAvg[]>({
+  const { data, isError, error, isLoading, isFetching } = useQuery<
+    ILastNWeeksPaceAvg[]
+  >({
     queryKey: ['LastNWeeksPaceAvg', selectedSport, weekNumber],
     queryFn: fetchData,
     keepPreviousData: true,
@@ -103,6 +105,7 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
             outline={true}
             pill={true}
             color={'success'}
+            disabled={isLoading || isFetching}
           >
             <Dropdown.Item onClick={() => setWeekNumber(4)}>4</Dropdown.Item>
             <Dropdown.Item onClick={() => setWeekNumber(8)}>8</Dropdown.Item>

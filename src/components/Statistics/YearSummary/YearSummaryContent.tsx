@@ -25,7 +25,9 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
       .then((response) => response.data);
   };
 
-  const { data, isError, isLoading, isSuccess } = useQuery<IYearSummary[]>({
+  const { data, isError, isLoading, isFetching, isSuccess } = useQuery<
+    IYearSummary[]
+  >({
     queryKey: ['year-summary', selectedSport, selectedYear],
     queryFn: fetchYearSummary,
     keepPreviousData: true,
@@ -40,6 +42,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
           outline={true}
           pill={true}
           color={'success'}
+          disabled={isLoading || isFetching}
         >
           <Dropdown.Item onClick={() => setSelectedYear(2023)}>
             2023

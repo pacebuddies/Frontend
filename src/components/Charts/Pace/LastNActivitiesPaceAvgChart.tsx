@@ -41,7 +41,9 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
       .then((response) => response.data);
   };
 
-  const { data, isError, error } = useQuery<ILastNActivitiesPaceAvg[]>({
+  const { data, isError, error, isLoading, isFetching } = useQuery<
+    ILastNActivitiesPaceAvg[]
+  >({
     queryKey: ['LastNActivitiesPaceAvg', numActivities, selectedSport],
     queryFn: fetchData,
     keepPreviousData: true,
@@ -98,6 +100,7 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
             outline={true}
             pill={true}
             color={'success'}
+            disabled={isLoading || isFetching}
           >
             <Dropdown.Item onClick={() => setNumActivities(5)}>5</Dropdown.Item>
             <Dropdown.Item onClick={() => setNumActivities(25)}>

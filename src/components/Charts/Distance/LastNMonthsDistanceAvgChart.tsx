@@ -45,7 +45,9 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
       .then((response) => response.data);
   };
 
-  const { data, isError, error } = useQuery<ILastNMonthsDistanceAvg[]>({
+  const { data, isError, error, isLoading, isFetching } = useQuery<
+    ILastNMonthsDistanceAvg[]
+  >({
     queryKey: ['LastNMonthsDistanceAvg', selectedSport, monthsNumber],
     queryFn: fetchData,
     keepPreviousData: true,
@@ -106,6 +108,7 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
           outline={true}
           pill={true}
           color={'success'}
+          disabled={isLoading || isFetching}
         >
           <Dropdown.Item onClick={() => handeMonthsNumberChange(3)}>
             3

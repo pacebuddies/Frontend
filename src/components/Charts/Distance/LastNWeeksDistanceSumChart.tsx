@@ -44,7 +44,9 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
       .then((response) => response.data);
   };
 
-  const { data, isError, error } = useQuery<ILastNWeeksDistanceSum[]>({
+  const { data, isError, error, isLoading, isFetching } = useQuery<
+    ILastNWeeksDistanceSum[]
+  >({
     queryKey: ['LastNWeeksDistanceSum', selectedSport, weeksNumber],
     queryFn: fetchWeekSummary,
     keepPreviousData: true,
@@ -134,6 +136,7 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
             outline={true}
             pill={true}
             color={'success'}
+            disabled={isLoading || isFetching}
           >
             <Dropdown.Item onClick={() => handleWeeksNumberChange(4)}>
               4
