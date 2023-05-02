@@ -9,7 +9,7 @@ import { useAthleteStore } from '../store/athleteStore';
 import { ArrowPathIcon, BellIcon, PowerIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import avatar_placeholder from '../img/avatar_placeholder.png';
-import SynchronizePopup from "./Synchronize/SynchronizePopup";
+import SynchronizePopup from './Synchronize/SynchronizePopup';
 
 const TopNavBar: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,9 +35,7 @@ const TopNavBar: NextPage = () => {
     const session = await getSession();
     stravaOauthApi
       .post('/deauthorize', {
-        data: {
-          access_token: `${session?.accessToken}`,
-        },
+        access_token: `${session?.accessToken}`,
       })
       .catch((err) => {
         toast.error(err.message);
