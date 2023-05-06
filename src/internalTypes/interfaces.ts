@@ -56,7 +56,7 @@ export interface IAthlete {
   firstname: string;
   lastname: string;
   id: string;
-  measurement_preference: 'metric' | 'imperial' | null;
+  measurement_preference: UnitPreference | null;
   profile: string;
   sex: string;
   state: string;
@@ -72,6 +72,8 @@ export interface IActivityWeekSummary {
   week_start_date: string;
   average_distance: number;
 }
+
+export type UnitPreference = 'metric' | 'imperial';
 
 export enum MonthsNames {
   'January'=1,
