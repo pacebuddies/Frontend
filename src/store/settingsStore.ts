@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { UnitPreference } from '../internalTypes/interfaces';
 
 interface SettingsStates {
   settings: {
-    measurementUnits: 'metric' | 'imperial';
+    measurementUnits: UnitPreference;
   };
 }
 
@@ -12,8 +13,7 @@ interface SettingsActions {
   setSettings: (settings: SettingsStates) => void;
 }
 
-interface SettingsStore extends SettingsStates, SettingsActions {
-}
+interface SettingsStore extends SettingsStates, SettingsActions {}
 
 const initialSettingsStates: SettingsStates = {
   settings: {
