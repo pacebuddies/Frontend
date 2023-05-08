@@ -13,6 +13,7 @@ import { Bar } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 
+import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
 import { IWeekByDayDistanceSum } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
 
 ChartJS.register(
@@ -37,25 +38,22 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
       .then((response) => response.data);
   };
 
-  const {
-    data: distanceSum,
-    isLoading,
-    isError,
-    error,
-  } = useQuery<IWeekByDayDistanceSum[]>({
-    queryKey: ['WeekByDayDistanceSum'],
-    queryFn: fetchDistanceSum,
-    keepPreviousData: true,
-  });
-
+  const { data, isLoading, isError, error } = useQuery<IWeekByDayDistanceSum[]>(
+    {
+      queryKey: ['WeekByDayDistanceSum', selectedSport],
+      queryFn: fetchDistanceSum,
+      keepPreviousData: true,
+    },
+  );
+  console.log(data);
   if (isLoading) return <div>Loading...</div>;
   if (isError) {
     toast.error((error as Error).message);
     return <div>{(error as Error).message}</div>;
   }
-
+  const sortedData = sortByDateDescending(data ?? []);
   const getMaxValue = () => {
-    const values = distanceSum.flatMap((week) => [
+    const values = sortedData.flatMap((week) => [
       week.monday,
       week.tuesday,
       week.wednesday,
@@ -71,15 +69,15 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [
       {
-        label: `Week of ${distanceSum[currentWeek]?.weeks}`,
+        label: `Week of ${sortedData[currentWeek]?.weeks}`,
         data: [
-          distanceSum[currentWeek]?.monday ?? 0,
-          distanceSum[currentWeek]?.tuesday ?? 0,
-          distanceSum[currentWeek]?.wednesday ?? 0,
-          distanceSum[currentWeek]?.thursday ?? 0,
-          distanceSum[currentWeek]?.friday ?? 0,
-          distanceSum[currentWeek]?.saturday ?? 0,
-          distanceSum[currentWeek]?.sunday ?? 0,
+          sortedData[currentWeek]?.monday ?? 0,
+          sortedData[currentWeek]?.tuesday ?? 0,
+          sortedData[currentWeek]?.wednesday ?? 0,
+          sortedData[currentWeek]?.thursday ?? 0,
+          sortedData[currentWeek]?.friday ?? 0,
+          sortedData[currentWeek]?.saturday ?? 0,
+          sortedData[currentWeek]?.sunday ?? 0,
         ],
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
         borderColor: 'rgba(54, 162, 235, 1)',
@@ -99,6 +97,10 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
       y: {
         min: 0,
         max: getMaxValue(),
+        title: {
+          display: true,
+          text: 'Distance (m)',
+        },
       },
     },
     maintainAspectRatio: false,
@@ -111,7 +113,7 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
   };
 
   const handleNextWeek = () => {
-    if (currentWeek < distanceSum!.length - 1) {
+    if (currentWeek < data!.length - 1) {
       setCurrentWeek(currentWeek + 1);
     }
   };
@@ -126,7 +128,7 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
         height={200}
         className="mx-10"
       ></Bar>
-      {currentWeek < distanceSum!.length - 1 && (
+      {currentWeek < data!.length - 1 && (
         <button onClick={handleNextWeek}>Next week</button>
       )}
     </div>

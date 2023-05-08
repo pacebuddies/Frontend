@@ -17,6 +17,8 @@ import pacebuddiesApi from '../../../instances/axiosConfigured';
 
 import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
 import { ILastNWeeksDistanceSum } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
+import { unitChange } from '../../../utils/unitChange';
+import { useSettingsStore } from "../../../store/settingsStore";
 
 ChartJS.register(
   CategoryScale,
@@ -32,6 +34,8 @@ interface IProps {
 
 const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
   const [weeksNumber, setWeeksNumber] = useState<number>(4);
+
+  const measurementPreference = useSettingsStore(state => state.measurementUnits);
 
   const handleWeeksNumberChange = (value: number) => {
     setWeeksNumber(value);
@@ -65,14 +69,16 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
     datasets: [
       {
         label: 'Distance',
-        data: sortedData.map((item) => item.total_distance),
+        data: sortedData.map((item) =>
+          unitChange(item.total_distance, 'm', 'km'),
+        ),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
       },
       {
         label: 'Mean Distance',
-        data: Array(sortedData.length || 0).fill(meanValue),
+        data: Array(sortedData.length || 0).fill(unitChange(meanValue, 'm', 'km')),
         type: 'line',
         borderColor: 'red',
         borderWidth: 2,
@@ -103,9 +109,17 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
     scales: {
       x: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Weeks',
+        },
       },
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Distance (km)',
+        },
       },
     },
     maintainAspectRatio: false,
