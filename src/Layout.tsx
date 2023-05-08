@@ -9,7 +9,7 @@ interface Props {
 
 const Layout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="h-screen">
+    <div className="h-screen ">
       <TopNavBar />
       <RecommendationsButton />
       <MenuButton />

@@ -4,13 +4,13 @@ const nextConfig = {
     domains: ["flowbite.com"],
     remotePatterns: [{
       protocol: "https",
-      hostname: "dgalywyr863hv.cloudfront.net",
+      hostname: "**.cloudfront.net",
       port: '',
       pathname: "/**",
     },
     {
       protocol: "https",
-      hostname: 'lh3.googleusercontent.com',
+      hostname: '**.googleusercontent.com',
       pathname: "/**",
     }
   ]

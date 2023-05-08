@@ -1,18 +1,23 @@
 import Link from 'next/link';
+import { animated, useSpring } from 'react-spring';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 interface IProps {
   open: boolean;
 }
 
-const menuBar = ({ open }: IProps) => {
+const MenuBar = ({ open }: IProps) => {
+  const isMinWidth768 = useMediaQuery('(min-width: 768px)');
+  const containerSpring = useSpring({
+    width: open ? (isMinWidth768 ? '750px' : '250px') : '56px',
+    config: { tension: 600, friction: 60 },
+  });
+
   return (
     <>
-      {/*TODO: Make better animation for opening and closing menu bar. For now it is very stiff and has only opening animation*/}
-      <div
-        className={`fixed ${
-          open && 'animate-widthExpandSmall md:animate-widthExpandBig'
-        } 
-        max:w-full bottom-6 left-4 flex h-14 w-0 items-center justify-center space-x-3 overflow-hidden rounded-full bg-pb-gray`}
+      <animated.div
+        className={`max:w-full fixed bottom-6  left-4 flex h-14 w-0 items-center justify-center space-x-3 overflow-hidden rounded-full bg-pb-gray`}
+        style={containerSpring}
       >
         {/*Activities*/}
         <div className="ml-14 flex items-center">
@@ -114,9 +119,9 @@ const menuBar = ({ open }: IProps) => {
             </span>
           </Link>
         </div>
-      </div>
+      </animated.div>
     </>
   );
 };
 
-export default menuBar;
+export default MenuBar;

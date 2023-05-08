@@ -56,7 +56,7 @@ export interface IAthlete {
   firstname: string;
   lastname: string;
   id: string;
-  measurement_preference: 'metric' | 'imperial' | null;
+  measurement_preference: UnitPreference | null;
   profile: string;
   sex: string;
   state: string;
@@ -67,95 +67,25 @@ export interface IActivityDaySummary {
   summary: number;
 }
 
-export interface IActivityDaySummaryResult {
-  result: IActivityDaySummary[];
-}
-
 export interface IActivityWeekSummary {
   week: string;
   week_start_date: string;
   average_distance: number;
 }
 
-export interface IActivityWeekSummaryResult {
-  result: IActivityWeekSummary[];
-}
+export type UnitPreference = 'metric' | 'imperial';
 
-export interface ILastNActivitiesPaceAvg {
-  id: string;
-  avg_pace_per_km: number;
-}
-
-export interface ILastNActivitiesPaceAvgResult {
-  result: ILastNActivitiesPaceAvg;
-}
-
-export interface ILastNMonthsDistanceSum {
-  month_name: string;
-  month_start: string;
-  distance: number;
-}
-
-export interface ILastNMonthsDistanceSumResult {
-  result: ILastNMonthsDistanceSum[];
-}
-
-export interface ILastNWeeksDistanceSum {
-  week_start_date: string;
-  total_distance: number;
-}
-
-export interface ILastNWeeksDistanceSumResult {
-  result: ILastNWeeksDistanceSum[];
-}
-
-export interface ILastNWeeksPaceAvg {
-  week_start: string;
-  avg_pace_per_km: number;
-}
-
-export interface ILastNWeeksPaceAvgResult {
-  result: ILastNWeeksPaceAvg[];
-}
-
-export interface ITimeIntervalSummary {
-  avg_distance: number;
-  total_distance: number;
-}
-
-export interface ITimeIntervalSummaryResult {
-  result: ITimeIntervalSummary[];
-}
-
-export interface IWeekByDayDistanceSum {
-  weeks: string;
-  monday: number;
-  tuesday: number;
-  wednesday: number;
-  thursday: number;
-  friday: number;
-  saturday: number;
-  sunday: number;
-}
-
-export interface IWeekByDayDistanceSumResult {
-  result: IWeekByDayDistanceSum[];
-}
-
-export interface IYearSummary {
-  activity_count: number;
-  year: number;
-  avg_distance: number;
-  total_distance: number;
-  avg_moving_time: number;
-  total_moving_time: number;
-  avg_pace: number;
-  total_elev_high: number;
-  total_distance_downhill: number;
-  avg_activity_count_per_month: number;
-  median_distance: number;
-}
-
-export interface IYearSummaryResult {
-  result: IYearSummary[];
+export enum MonthsNames {
+  'January'=1,
+  'February'=2,
+  'March'=3,
+  'April'=4,
+  'May'=5,
+  'June'=6,
+  'July'=7,
+  'August'=8,
+  'September'=9,
+  'October'=10,
+  'November'=11,
+  'December'=12,
 }
