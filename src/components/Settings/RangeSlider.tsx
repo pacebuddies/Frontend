@@ -1,104 +1,262 @@
-import React, { useEffect, useState } from 'react';
+import Slider, { sliderClasses } from '@mui/base/Slider';
+import { alpha, Box, styled } from '@mui/system';
+import * as React from 'react';
 
-interface IProps {
-  step: number;
-  min: number;
-  max: number;
-  default_min?: number;
-  default_max?: number;
-  value?: { min: number; max: number };
-  onChange: (value: { min: number; max: number }) => void;
-}
+export default function RangeSlider() {
+  const [value, setValue] = React.useState<number[]>([20, 37]);
 
-const RangeSlider = ({
-  min,
-  max,
-  default_min,
-  default_max,
-  value,
-  step,
-  onChange,
-}: IProps) => {
-  const [minValue, setMinValue] = useState(value ? value.min : min);
-  const [maxValue, setMaxValue] = useState(value ? value.max : max);
-
-  useEffect(() => {
-    if (value) {
-      setMinValue(value.min);
-      setMaxValue(value.max);
-    }
-  }, [value]);
-
-  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const newMinVal = Math.min(+e.target.value, maxValue - step);
-    if (!value) setMinValue(newMinVal);
-    onChange({ min: newMinVal, max: maxValue });
+  const handleChange = (event: Event, newValue: number | number[]) => {
+    setValue(newValue as number[]);
   };
-
-  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const newMaxVal = Math.max(+e.target.value, minValue + step);
-    if (!value) setMaxValue(newMaxVal);
-    onChange({ min: minValue, max: newMaxVal });
-  };
-
-  const minPos = ((minValue - min) / (max - min)) * 100;
-  const maxPos = ((maxValue - min) / (max - min)) * 100;
-
-  if (default_min === undefined) default_min = min;
-  if (default_max === undefined) default_max = max;
-
-  let default_minPos = ((default_min - min) / (max - min)) * 100;
-  let default_maxPos = ((default_max - min) / (max - min)) * 100;
-
-  // console.log(default_minPos, default_maxPos)
-
-  if (default_min < minValue) {
-    default_minPos = minPos;
-  }
-  if (default_max > maxValue) {
-    default_maxPos = maxPos;
-  }
 
   return (
-    <div className="wrapper">
-      <div className="input-wrapper">
-        <input
-          className="input"
-          type="range"
-          value={minValue}
-          min={min}
-          max={max}
-          step={step}
-          onChange={handleMinChange}
+    <>
+      <Box sx={{ width: 300 }}>
+        {/* controlled: */}
+        <StyledSlider
+          value={value}
+          onChange={handleChange}
+          getAriaLabel={() => 'Temperature range'}
+          getAriaValueText={valuetext}
+          marks={marks}
+          step={null}
         />
-        <input
-          className="input"
-          type="range"
-          value={maxValue}
-          min={min}
-          max={max}
-          step={step}
-          onChange={handleMaxChange}
+        {/* uncontrolled: */}
+      </Box>
+      <Box sx={{ width: 300 }}>
+        <StyledSliderOne
+          aria-label="Temperature"
+          onChange={handleChange}
+          getAriaValueText={valuetext}
+          value={value}
+          step={null}
+          marks={marks}
         />
-      </div>
-
-      <div className="control-wrapper">
-        <div className="control" style={{ left: `${minPos}%` }} />
-        <div className="rail">
-          <div
-            className="inner-rail bg-pb-orange"
-            style={{ left: `${minPos}%`, right: `${100 - maxPos}%` }}
-          />
-          <div
-            className="inner-rail bg-pb-green"
-            style={{ left: `${default_minPos}%`, right: `${100 -default_maxPos}%` }}
-          />
-        </div>
-        <div className="control" style={{ left: `${maxPos}%` }} />
-      </div>
-    </div>
+      </Box>
+    </>
   );
+}
+const marks = [
+  {
+    value: 5,
+    label: '-5°C',
+  },
+  {
+    value: 20,
+    label: '20°C',
+  },
+  {
+    value: 37,
+    label: '37°C',
+  },
+  {
+    value: 100,
+    label: '100°C',
+  },
+];
+function valuetext(value: number) {
+  return `${value}°C`;
+}
+
+const blue = {
+  100: '#DAECFF',
+  200: '#99CCF3',
+  400: '#3399FF',
+  300: '#66B2FF',
+  500: '#007FFF',
+  600: '#0072E5',
+  900: '#003A75',
 };
-export default RangeSlider;
+
+const grey = {
+  50: '#f6f8fa',
+  100: '#eaeef2',
+  200: '#d0d7de',
+  300: '#afb8c1',
+  400: '#8c959f',
+  500: '#6e7781',
+  600: '#57606a',
+  700: '#424a53',
+  800: '#32383f',
+  900: '#24292f',
+};
+
+const StyledSliderOne = styled(Slider)(
+  ({ theme }) => `
+  color: ${theme.palette.mode === 'light' ? blue[500] : blue[300]};
+  height: 6px;
+  width: 100%;
+  padding: 16px 0;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.${sliderClasses.disabled} { 
+    pointer-events: none;
+    cursor: default;
+    color: ${theme.palette.mode === 'light' ? grey[300] : grey[600]};
+    opacity: 0.5;
+  }
+
+  & .${sliderClasses.rail} {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background-color: currentColor;
+    opacity: 0.4;
+  }
+
+  & .${sliderClasses.track} {
+    display: block;
+    position: absolute;
+    height: 4px;
+    border-radius: 2px;
+    background-color: currentColor;
+  }
+
+  & .${sliderClasses.thumb} {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin-left: -6px;
+    margin-top: -6px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    outline: 0;
+    border: 3px solid currentColor;
+    background-color: #fff;
+
+    :hover,
+    &.${sliderClasses.focusVisible} {
+      box-shadow: 0 0 0 0.25rem ${alpha(
+        theme.palette.mode === 'light' ? blue[400] : blue[300],
+        0.15,
+      )};
+    }
+
+    &.${sliderClasses.active} {
+      box-shadow: 0 0 0 0.25rem ${alpha(
+        theme.palette.mode === 'light' ? blue[200] : blue[300],
+        0.3,
+      )};
+    }
+  }
+
+  & .${sliderClasses.mark} {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: currentColor;
+    top: 50%;
+    opacity: 0.7;
+    transform: translateX(-50%);
+  }
+
+  & .${sliderClasses.markActive} {
+    background-color: #fff;
+  }
+
+  & .${sliderClasses.markLabel} {
+
+    font-size: 12px;
+    position: absolute;
+    top: 20px;
+    transform: translateX(-50%);
+    margin-top: 8px;
+  }
+`,
+);
+const StyledSlider = styled(Slider)(
+  ({ theme }) => `
+  color: ${theme.palette.mode === 'light' ? blue[500] : blue[300]};
+  height: 6px;
+  width: 100%;
+  padding: 16px 0;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.${sliderClasses.disabled} { 
+    pointer-events: none;
+    cursor: default;
+    color: ${theme.palette.mode === 'light' ? grey[300] : grey[600]};
+    opacity: 0.5;
+  }
+
+  & .${sliderClasses.rail} {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background-color: currentColor;
+    opacity: 0.4;
+  }
+
+  & .${sliderClasses.track} {
+    display: block;
+    position: absolute;
+    height: 4px;
+    border-radius: 2px;
+    background-color: currentColor;
+  }
+
+  & .${sliderClasses.thumb} {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin-left: -6px;
+    margin-top: -6px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    outline: 0;
+    border: 3px solid currentColor;
+    background-color: #fff;
+
+    :hover,
+    &.${sliderClasses.focusVisible} {
+      box-shadow: 0 0 0 0.25rem ${alpha(
+        theme.palette.mode === 'light' ? blue[400] : blue[300],
+        0.15,
+      )};
+    }
+
+    &.${sliderClasses.active} {
+      box-shadow: 0 0 0 0.25rem ${alpha(
+        theme.palette.mode === 'light' ? blue[200] : blue[300],
+        0.3,
+      )};
+    }
+  }
+
+  & .${sliderClasses.mark} {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: currentColor;
+    top: 50%;
+    opacity: 0.7;
+    transform: translateX(-50%);
+  }
+
+  & .${sliderClasses.markActive} {
+    background-color: #fff;
+  }
+`,
+);
