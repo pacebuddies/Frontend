@@ -7,13 +7,18 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 
+import { Dropdown } from 'flowbite-react';
+import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
 import { IWeekByDayDistanceSum } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { unitChange } from '../../../utils/unitChange';
 
 ChartJS.register(
   CategoryScale,
@@ -27,7 +32,12 @@ interface IProps {
   selectedSport: number | null;
 }
 const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
-  const [currentWeek, setCurrentWeek] = useState<number>(0);
+  const [weekNumber, setWeekNumber] = useState<number>(0);
+
+  const measurementPreference = useSettingsStore(
+    (state) => state.measurementUnits,
+  );
+  const toUnit = measurementPreference === 'metric' ? 'km' : 'mile';
 
   const fetchDistanceSum = (): Promise<IWeekByDayDistanceSum[]> => {
     return pacebuddiesApi
@@ -37,13 +47,10 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
       .then((response) => response.data);
   };
 
-  const {
-    data: distanceSum,
-    isLoading,
-    isError,
-    error,
-  } = useQuery<IWeekByDayDistanceSum[]>({
-    queryKey: ['WeekByDayDistanceSum'],
+  const { data, isLoading, isError, error, isFetching } = useQuery<
+    IWeekByDayDistanceSum[]
+  >({
+    queryKey: ['WeekByDayDistanceSum', selectedSport],
     queryFn: fetchDistanceSum,
     keepPreviousData: true,
   });
@@ -53,36 +60,48 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
     toast.error((error as Error).message);
     return <div>{(error as Error).message}</div>;
   }
-
+  const sortedData = sortByDateDescending(data ?? []);
+  const getDataForWeek = (weekData: any): number[] => {
+    if (!weekData) {
+      return daysOfWeek.map(() => 0);
+    }
+    const dd = daysOfWeek.map((day) =>
+      unitChange(weekData?.[day] ?? 0, 'm', toUnit),
+    );
+    return dd;
+  };
   const getMaxValue = () => {
-    const values = distanceSum.flatMap((week) => [
-      week.monday,
-      week.tuesday,
-      week.wednesday,
-      week.thursday,
-      week.friday,
-      week.saturday,
-      week.sunday,
-    ]);
-    return Math.round(Math.max(...values) / 100) * 100;
+    const values = sortedData.flatMap((x) => getDataForWeek(x));
+    return Math.max(...values).toFixed(2);
   };
 
+  const daysOfWeek = [
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ];
+
+
   const chartData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    labels: [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ],
     datasets: [
       {
-        label: `Week of ${distanceSum[currentWeek]?.weeks}`,
-        data: [
-          distanceSum[currentWeek]?.monday ?? 0,
-          distanceSum[currentWeek]?.tuesday ?? 0,
-          distanceSum[currentWeek]?.wednesday ?? 0,
-          distanceSum[currentWeek]?.thursday ?? 0,
-          distanceSum[currentWeek]?.friday ?? 0,
-          distanceSum[currentWeek]?.saturday ?? 0,
-          distanceSum[currentWeek]?.sunday ?? 0,
-        ],
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
+        label: `Week of ${sortedData[weekNumber]?.weeks}`,
+        data: getDataForWeek(sortedData[weekNumber]),
+        backgroundColor: 'rgba(239, 138, 23, 0.2)',
+        borderColor: 'rgb(239, 138, 23)',
         borderWidth: 1,
       },
     ],
@@ -94,41 +113,69 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
         display: true,
         text: 'Daily distance summary',
       },
+      tooltip: {
+        callbacks: {
+          label: function (context: TooltipItem<'bar'>) {
+            const value = context.parsed.y.toFixed(2);
+            return `${value} ${toUnit}`;
+          },
+        },
+      },
     },
     scales: {
+      x: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Weekday',
+        },
+      },
       y: {
-        min: 0,
+        beginAtZero: true,
         max: getMaxValue(),
+        title: {
+          display: true,
+          text: `Distance (${toUnit})`,
+        },
       },
     },
     maintainAspectRatio: false,
   };
 
-  const handlePrevWeek = () => {
-    if (currentWeek > 0) {
-      setCurrentWeek(currentWeek - 1);
-    }
-  };
-
-  const handleNextWeek = () => {
-    if (currentWeek < distanceSum!.length - 1) {
-      setCurrentWeek(currentWeek + 1);
-    }
-  };
-
   return (
-    <div className="flex w-full flex-row items-center justify-center">
-      {currentWeek > 0 && <button onClick={handlePrevWeek}>Prev week</button>}
-      <Bar
-        data={chartData}
-        options={chartOptions}
-        width={200}
-        height={200}
-        className="mx-10"
-      ></Bar>
-      {currentWeek < distanceSum!.length - 1 && (
-        <button onClick={handleNextWeek}>Next week</button>
-      )}
+    <div className="flex w-full  flex-col md:flex-row">
+      <div className="order-2 h-128 w-full md:order-1">
+        <Bar
+          data={chartData}
+          options={chartOptions}
+          className="overflow-hidden"
+        />
+      </div>
+      <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
+        <span className="mr-2 w-auto whitespace-nowrap">
+          Number of weeks ago:
+        </span>
+        <Dropdown
+          label={weekNumber}
+          outline={true}
+          pill={true}
+          color={'success'}
+          disabled={isFetching}
+        >
+          <Dropdown.Item onClick={() => setWeekNumber(0)}>
+            This week
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => setWeekNumber(1)}>
+            Last week
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => setWeekNumber(2)}>
+            2 weeks ago
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => setWeekNumber(3)}>
+            3 weeks ago
+          </Dropdown.Item>
+        </Dropdown>
+      </div>
     </div>
   );
 };

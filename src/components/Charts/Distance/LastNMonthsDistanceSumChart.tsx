@@ -7,6 +7,7 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { Dropdown } from 'flowbite-react';
 import { useState } from 'react';
@@ -14,9 +15,11 @@ import { Bar } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 
-import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
+import { sortByDateAscending } from '../../../Helpers/sortDataByDate';
 import { MonthsNames } from '../../../internalTypes/interfaces';
 import { ILastNMonthsDistanceSum } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { unitChange } from '../../../utils/unitChange';
 
 ChartJS.register(
   CategoryScale,
@@ -33,6 +36,10 @@ interface IProps {
 const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
   const [monthsNumber, setMonthsNumber] = useState<number>(4);
 
+  const measurementPreference = useSettingsStore(
+    (state) => state.measurementUnits,
+  );
+  const toUnit = measurementPreference === 'metric' ? 'km' : 'mile';
   const fetchWeekSummary = (): Promise<ILastNMonthsDistanceSum[]> => {
     return pacebuddiesApi
       .get('bridge/chart/LastNMonthsDistanceSum', {
@@ -54,7 +61,7 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
       ? data.reduce((acc, item) => acc + item.distance, 0) / data.length
       : 0,
   );
-  const sortedData = sortByDateDescending(data ?? []);
+  const sortedData = sortByDateAscending(data ?? []);
   const getMonthAndYearString = (date: string): string => {
     const [, month, year] = date.split('-').map(Number);
     const monthName = MonthsNames[month!];
@@ -68,14 +75,14 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
     datasets: [
       {
         label: 'Distance',
-        data: sortedData.map((item) => item.distance),
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        data: sortedData.map((item) => unitChange(item.distance, 'm', toUnit)),
+        backgroundColor: 'rgba(239, 138, 23, 0.2)',
+        borderColor: 'rgb(239, 138, 23)',
         borderWidth: 1,
       },
       {
         label: 'Mean Distance',
-        data: Array(sortedData.length).fill(meanValue),
+        data: Array(sortedData.length).fill(unitChange(meanValue, 'm', toUnit)),
         type: 'line',
         borderColor: 'red',
         borderWidth: 2,
@@ -98,14 +105,32 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
         enabled: true,
         intersect: false,
         mode: 'index' as const,
+        filter: (tooltipItem: TooltipItem<'bar'>) => {
+          return tooltipItem.raw !== 0;
+        },
+        callbacks: {
+          label: function (context: TooltipItem<'bar'>) {
+            const label = context.dataset.label ?? '';
+            const value = context.parsed.y.toFixed(2);
+            return `${label}: ${value} ${toUnit}`;
+          },
+        },
       },
     },
     scales: {
       x: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Month',
+        },
       },
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: `Distance (${toUnit})`,
+        },
       },
     },
     maintainAspectRatio: false,
