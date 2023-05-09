@@ -9,6 +9,7 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { Dropdown } from 'flowbite-react';
 import React, { useState } from 'react';
@@ -16,8 +17,11 @@ import { Bar } from 'react-chartjs-2';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 
 import { toast } from 'react-toastify';
-import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
+import { sortByDateAscending } from '../../../Helpers/sortDataByDate';
+import { MonthsNames } from '../../../internalTypes/interfaces';
 import { ILastNMonthsDistanceAvg } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { unitChange } from '../../../utils/unitChange';
 
 ChartJS.register(
   CategoryScale,
@@ -37,6 +41,11 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
 }: IProps) => {
   const [monthsNumber, setMonthsNumber] = useState<number>(3);
 
+  const measurementPreference = useSettingsStore(
+    (state) => state.measurementUnits,
+  );
+  const toUnit = measurementPreference === 'metric' ? 'km' : 'mile';
+
   const fetchData = (): Promise<ILastNMonthsDistanceAvg[]> => {
     return pacebuddiesApi
       .get('bridge/chart/LastNMonthsDistanceAvg', {
@@ -53,14 +62,22 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
     keepPreviousData: true,
   });
 
-  const sortedData = sortByDateDescending(data ?? []);
+  const sortedData = sortByDateAscending(data ?? []);
+
+  const getMonthAndYearString = (date: string): string => {
+    const [, month, year] = date.split('-').map(Number);
+    const monthName = MonthsNames[month!];
+    return `${monthName} ${year}`;
+  };
 
   const chartData: ChartData<'bar', number[], string> = {
-    labels: sortedData.map((item) => item.month_name.trim()),
+    labels: sortedData.map((item) => {
+      return getMonthAndYearString(item.month_start);
+    }),
     datasets: [
       {
         label: 'Distance',
-        data: sortedData.map((item) => item.distance),
+        data: sortedData.map((item) => unitChange(item.distance, 'm', toUnit)),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
@@ -70,14 +87,43 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
 
   const chartOptions: ChartOptions<'bar'> = {
     plugins: {
+      legend: {
+        position: 'top' as const,
+      },
       title: {
         display: true,
         text: 'Average distance for last months',
       },
+      tooltip: {
+        enabled: true,
+        intersect: false,
+        mode: 'index' as const,
+        filter: (tooltipItem: TooltipItem<'bar'>) => {
+          return tooltipItem.raw !== 0;
+        },
+        callbacks: {
+          label: function (context: TooltipItem<'bar'>) {
+            const label = context.dataset.label ?? '';
+            const value = context.parsed.y.toFixed(2);
+            return `${label}: ${value} ${toUnit}`;
+          },
+        },
+      },
     },
     scales: {
+      x: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Month',
+        },
+      },
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: `Distance (${toUnit})`,
+        },
       },
     },
     maintainAspectRatio: false,

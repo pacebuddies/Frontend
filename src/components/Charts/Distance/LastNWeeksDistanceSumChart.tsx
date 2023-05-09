@@ -17,8 +17,8 @@ import pacebuddiesApi from '../../../instances/axiosConfigured';
 
 import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
 import { ILastNWeeksDistanceSum } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
+import { useSettingsStore } from '../../../store/settingsStore';
 import { unitChange } from '../../../utils/unitChange';
-import { useSettingsStore } from "../../../store/settingsStore";
 
 ChartJS.register(
   CategoryScale,
@@ -35,8 +35,10 @@ interface IProps {
 const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
   const [weeksNumber, setWeeksNumber] = useState<number>(4);
 
-  const measurementPreference = useSettingsStore(state => state.measurementUnits);
-
+  const measurementPreference = useSettingsStore(
+    (state) => state.measurementUnits,
+  );
+  const toUnit = measurementPreference === 'metric' ? 'km' : 'mile';
   const handleWeeksNumberChange = (value: number) => {
     setWeeksNumber(value);
   };
@@ -70,7 +72,7 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
       {
         label: 'Distance',
         data: sortedData.map((item) =>
-          unitChange(item.total_distance, 'm', 'km'),
+          unitChange(item.total_distance, 'm', toUnit),
         ),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
@@ -78,7 +80,9 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
       },
       {
         label: 'Mean Distance',
-        data: Array(sortedData.length || 0).fill(unitChange(meanValue, 'm', 'km')),
+        data: Array(sortedData.length || 0).fill(
+          unitChange(meanValue, 'm', toUnit),
+        ),
         type: 'line',
         borderColor: 'red',
         borderWidth: 2,
@@ -104,6 +108,13 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
         filter: (tooltipItem: TooltipItem<'bar'>) => {
           return tooltipItem.raw !== 0;
         },
+        callbacks: {
+          label: function (context: TooltipItem<'bar'>) {
+            const label = context.dataset.label ?? '';
+            const value = context.parsed.y.toFixed(2);
+            return `${label}: ${value} ${toUnit}`;
+          },
+        },
       },
     },
     scales: {
@@ -111,14 +122,14 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Weeks',
+          text: 'Week',
         },
       },
       y: {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Distance (km)',
+          text: `Distance (${toUnit})`,
         },
       },
     },

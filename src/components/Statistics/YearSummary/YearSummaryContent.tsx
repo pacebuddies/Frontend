@@ -7,6 +7,7 @@ import time_activity from '../../../../src/components/Statistics/YearSummary/Yea
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { IYearSummary } from '../../../internalTypes/Interfaces/statisticsChartInterfaces';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
+import { SportTypeMap } from '../../../internalTypes/SportTypeMap';
 import { formatSecondsToHMS } from '../../../utils/formatSecoundToHMS';
 import YearSummaryElement from './YearSummaryElement';
 
@@ -33,10 +34,20 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
     keepPreviousData: true,
   });
 
+  const capitalizeFirstLetter = (string: string | undefined) => {
+    if (string === undefined) {
+      return '';
+    }
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   return (
     <>
       <div className="flex w-full flex-row justify-between pt-4">
-        <span className="font-bold text-pb-green">Year&apos;s summary</span>
+        <span className="font-bold text-pb-green">
+          Year&apos;s summary for{' '}
+          {capitalizeFirstLetter(SportTypeMap.getString(selectedSport!)?.toLowerCase())}
+        </span>
         <Dropdown
           label={selectedYear}
           outline={true}
