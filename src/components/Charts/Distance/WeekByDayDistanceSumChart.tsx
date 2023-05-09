@@ -100,8 +100,8 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
       {
         label: `Week of ${sortedData[weekNumber]?.weeks}`,
         data: getDataForWeek(sortedData[weekNumber]),
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(239, 138, 23, 0.2)',
+        borderColor: 'rgb(239, 138, 23)',
         borderWidth: 1,
       },
     ],

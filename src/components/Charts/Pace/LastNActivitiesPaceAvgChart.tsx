@@ -75,8 +75,8 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
           ) ?? [],
         fill: true,
         cubicInterpolationMode: 'monotone',
-        backgroundColor: 'rgb(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(239, 138, 23, 0.2)',
+        borderColor: 'rgb(239, 138, 23)',
       },
     ],
   };

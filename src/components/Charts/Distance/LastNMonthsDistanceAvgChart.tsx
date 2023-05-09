@@ -78,8 +78,8 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
       {
         label: 'Distance',
         data: sortedData.map((item) => unitChange(item.distance, 'm', toUnit)),
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(239, 138, 23, 0.2)',
+        borderColor: 'rgb(239, 138, 23)',
         borderWidth: 1,
       },
     ],
