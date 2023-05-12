@@ -2,9 +2,9 @@ import { NextPage } from 'next';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeFilterRanges } from '../../internalTypes/sportTypeFilterRanges';
+import PreferenceSlider from './PreferencesSlider';
+import RangeSlider from './RangeSlider';
 import RecommendationFilterRangeSlider from './RecommendationFilterRangeSlider';
-import PreferenceSlider from "./PreferencesSlider";
-import RangeSlider from "./RangeSlider";
 
 pacebuddiesApi
   .get('recommender/recommendations/getFilter', {
@@ -46,23 +46,34 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
       </div>
       <div className="w-full pt-4">
         <div className="flex flex-col pl-8">
-          <PreferenceSlider/>
-          <RangeSlider/>
+          {/*<PreferenceSlider />*/}
+        </div>
+      </div>
+      {/*<div className="w-full pt-4">*/}
+      <div className="flex flex-col pl-8">
+        {/*<RecommendationFilterRangeSlider*/}
+        {/*  text={'Avg Max Speed'}*/}
+        {/*  default_max={sportData.avg_max_speed_max}*/}
+        {/*  default_min={sportData.avg_max_speed_min}*/}
+        {/*  user_max={sportData.avg_max_speed_max}*/}
+        {/*  user_min={sportData.avg_max_speed_min}*/}
+        {/*/>*/}
+        <div className="w-72">
+          <RangeSlider
+            step={33.333333333333333}
+            min={-100}
+            max={100}
+            default_min={-50}
+            default_max={50}
+            onChange={(value: { min: number; max: number }) =>
+              console.log(value.min, value.max)
+            }
+          />
         </div>
       </div>
 
-
       {/*<div>*/}
-      {/*  <div className="w-full pt-4">*/}
-      {/*    <div className="flex flex-col pl-8">*/}
-      {/*      <RecommendationFilterRangeSlider*/}
-      {/*        text={'Avg Max Speed'}*/}
-      {/*        default_max={sportData.avg_max_speed_max}*/}
-      {/*        default_min={sportData.avg_max_speed_min}*/}
-      {/*        user_max={sportData.avg_max_speed_max}*/}
-      {/*        user_min={sportData.avg_max_speed_min}*/}
-      {/*      />*/}
-      {/*    </div>*/}
+      {/*
       {/*    <div className="flex flex-col pl-8">*/}
       {/*      <div className="w-1/3 border-[1px]"></div>*/}
       {/*      <RecommendationFilterRangeSlider*/}

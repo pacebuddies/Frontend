@@ -3,7 +3,7 @@ type SpeedUnit = 'm/s' | 'km/h' | 'mile/h';
 type PaceUnit = 'min/km' | 'min/mile' | 's/m';
 
 
-type Unit = DistanceUnit | SpeedUnit | PaceUnit;
+export type Unit = DistanceUnit | SpeedUnit | PaceUnit;
 
 const converter = {
   from: {
