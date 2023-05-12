@@ -28,7 +28,7 @@ const SynchronizePopup = ({ synchronize }: IProps) => {
 
   const animation = useSpring({
     from: { height: '0rem', opacity: 0 },
-    to: { height: '15rem', opacity: 1 },
+    to: { height: '13rem', opacity: 1 },
     config: { tension: 300, friction: 40 },
   });
 
@@ -62,27 +62,27 @@ const SynchronizePopup = ({ synchronize }: IProps) => {
       </svg>
       <animated.div
         style={animation}
-        className="absolute -right-12 top-4 h-60 w-80 overflow-hidden border-2 border-pb-green bg-white/80"
+        className="absolute -right-12 top-4 h-52 w-80 overflow-hidden border-2 border-pb-green bg-white/80"
       >
         <div className="flex h-full w-full flex-col items-center justify-between">
           <div className="flex flex-col items-center justify-center">
-            <span className="small-caps my-2 font-istok-web text-2xl capitalize text-pb-dark-gray">
-              Last Synchronization
+            <span className="small-caps my-1.5 font-istok-web text-2xl font-bold text-pb-dark-gray">
+              last synchronization
             </span>
-            <span className="small-caps my-2 font-istok-web text-2xl font-bold capitalize text-pb-green">
+            <span className="small-caps my-1.5 font-istok-web text-3xl font-bold  text-pb-green">
               {daysDifference} day(s) ago
             </span>
-            <span className="small-caps my-2 font-istok-web text-2xl capitalize text-pb-dark-gray">
+            <span className="small-caps mt-1.5 font-istok-web text-xl capitalize text-pb-dark-gray">
               {date === null
-                ? 'Not Synchronized'
-                : `On ${date.getDate()}/${
+                ? 'not synchronized'
+                : `on ${date.getDate()}/${
                     date.getMonth() + 1
                   }/${date.getFullYear()}`}
             </span>
           </div>
-          <div>
+          <div className="mt-4">
             <button
-              className="m-4 bg-pb-green px-4 py-2 text-2xl text-white"
+              className="small-caps mb-4 bg-pb-green px-4 py-2 text-2xl capitalize font-bold text-white"
               onClick={() => handleSynchronize()}
             >
               Synchronize
