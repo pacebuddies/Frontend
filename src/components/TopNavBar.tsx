@@ -63,20 +63,22 @@ const TopNavBar: NextPage = () => {
           <div className="flex w-auto items-center justify-between">
             {/*Avatar*/}
             <div className="flex  items-center">
-              <button
-                type="button"
-                className="mr-3 flex h-12 w-12  items-center justify-center rounded-full  "
-              >
-                <Image
-                  className="h-12 w-12 shrink-0 rounded-full border-2 border-solid border-pb-green bg-pb-green"
-                  src={athlete?.profile!}
-                  alt="user avatar"
-                  width={48}
-                  height={48}
-                  title={athlete?.firstname! + ' ' + athlete?.lastname!}
-                  unoptimized={true}
-                />
-              </button>
+              <Link href={'/profile'}>
+                <button
+                  type="button"
+                  className="mr-3 flex h-12 w-12  items-center justify-center rounded-full  "
+                >
+                  <Image
+                    className="h-12 w-12 shrink-0 rounded-full border-2 border-solid border-pb-green bg-pb-green"
+                    src={athlete?.profile!}
+                    alt="user avatar"
+                    width={48}
+                    height={48}
+                    title={athlete?.firstname! + ' ' + athlete?.lastname!}
+                    unoptimized={true}
+                  />
+                </button>
+              </Link>
             </div>
             {/*Notification*/}
             <div className="flex items-center">
