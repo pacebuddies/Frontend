@@ -89,3 +89,15 @@ export enum MonthsNames {
   'November'=11,
   'December'=12,
 }
+
+export interface INotification {
+  id: string;
+  athlete: IAthlete;
+  topic: string;
+  title: string;
+  photo: string;
+  content: string;
+  date_time: string;
+  seen: boolean;
+  action: string
+}

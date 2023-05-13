@@ -9,11 +9,23 @@ import { useAthleteStore } from '../store/athleteStore';
 import { ArrowPathIcon, BellIcon, PowerIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import SynchronizePopup from './Synchronize/SynchronizePopup';
+import NotificationPopup from './Notifications/NotificationPopup.tsx';
 
 const TopNavBar: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [popupOpen, setPopupOpen] = useState(false);
+  const [syncPopupOpen, setSyncPopupOpen] = useState(false);
+  const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
   const athlete = useAthleteStore((state) => state.athlete);
+
+  function FetchNotifications() {
+    return pacebuddiesApi
+      .get("/notification")
+      .then((res) => {
+        console.log(res.data)
+        return res.data
+      })
+      .catch((err) => console.error(err)) 
+  }
 
   function SynchronizeData() {
     setIsLoading(true);
@@ -81,20 +93,22 @@ const TopNavBar: NextPage = () => {
               </Link>
             </div>
             {/*Notification*/}
-            <div className="flex items-center">
+            <div className="flex flex-col">
               <button
                 type="button"
                 className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-sm"
+                onClick={() => setNotificationPopupOpen(!notificationPopupOpen)}
               >
                 <BellIcon className="h-8 w-8 rounded-full text-white hover:animate-wobble" />
               </button>
+              {notificationPopupOpen && <NotificationPopup fetchNotifications={FetchNotifications} />}
             </div>
             {/*Synchronize*/}
             <div className="flex flex-col">
               <button
                 type="button"
                 className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-sm"
-                onClick={() => setPopupOpen(!popupOpen)}
+                onClick={() => setSyncPopupOpen(!syncPopupOpen)}
               >
                 <ArrowPathIcon
                   className={`h-8 w-8 rounded-full text-white ${
@@ -102,7 +116,7 @@ const TopNavBar: NextPage = () => {
                   }`}
                 />
               </button>
-              {popupOpen && <SynchronizePopup synchronize={SynchronizeData} />}
+              {syncPopupOpen && <SynchronizePopup synchronize={SynchronizeData} />}
             </div>
             {/*Logout*/}
             <div className="flex items-center">
