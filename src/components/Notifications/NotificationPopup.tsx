@@ -5,6 +5,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import { INotification } from '../../internalTypes/interfaces.ts';
 import NotificationSegment from './NotificationSegment.tsx';
 import pacebuddiesApi from '../../instances/axiosConfigured.ts';
+import { useSetNotificationStore, useNotificationStore } from '../../store/notificationStore.ts';
 
 // import {
 //   useSetSynchronizationStore,
@@ -22,10 +23,17 @@ const NotificationPopup = ({ show }: IProps) => {
   //   // setNotificationStore(date);
   // };
 
+  const setNotificationStore = useSetNotificationStore((state) => state.setNotifications)
+  const updateNotificationsStore = useSetNotificationStore((state) => state.updateNotification)
+  const notificationStore = useNotificationStore(
+    (state) => state.notifications,
+  );
+
   function fetchNotifications(page: number) {
     return pacebuddiesApi
       .get(`/notification?page=${page}`)
       .then((res) => {
+        setNotificationStore(res.data)
         return res.data
       })
       .catch((err) => console.error(err)) 
@@ -34,8 +42,19 @@ const NotificationPopup = ({ show }: IProps) => {
   const clearNotifications = (): void => {
     pacebuddiesApi
       .delete("notification/all")
+      .then(() => setNotificationStore([]))
       .catch((err) => console.error(err))
+
   }
+
+  function markAsSeen(id: string) {
+    pacebuddiesApi
+        .get(`notification/${id}`)
+        .then(() => {
+          updateNotificationsStore(id)
+        })
+        .catch((err) => console.log(err))
+}
 
   const animation = useSpring({
     from: { height: '0rem', opacity: 0 },
@@ -57,21 +76,24 @@ const NotificationPopup = ({ show }: IProps) => {
     setPage(page + 5)
   }
 
-//   useEffect(() => {
-//     const storeDate: Date | null = getSynchronizationStore;
+  useEffect(() => {
+    const storeNotifications: INotification[] | null = notificationStore;
+    console.log("STORE", storeNotifications)
+  }, [notificationStore]);
 
-//     if (storeDate !== null) {
-//       const storeDateObj = new Date(storeDate);
+  useEffect(() => {
+    if(data != null) {
+      console.log("DATA",...data.pages)
+      setNotificationStore(data.pages)
+    }
+  }, [data])
 
-//       setDate(storeDateObj);
-//       setDaysDifference(
-//         Math.round(
-//           (new Date().getTime() - storeDateObj.getTime()) /
-//             (1000 * 60 * 60 * 24),
-//         ),
-//       );
-//     }
-//   }, [getSynchronizationStore]);
+  useEffect(() => {
+    if(notificationStore != null) {
+      console.log("hhh", notificationStore)
+      // setNotificationStore(data.pages)
+    }
+  }, [notificationStore])
 
 
 
@@ -110,11 +132,16 @@ const NotificationPopup = ({ show }: IProps) => {
                 )}
               {status == "success" && (
                 <div className="overflow-scroll scrollbar-hide h-96 mx-3">
-                    {data.length == 0 && (<div> There are no new notifications </div>)}
+                    {notificationStore.length == 0 && (<div> There are no new notifications </div>)}
                     {
-                      data.pages.map(page => 
-                         page.map((notification: INotification) => <NotificationSegment key={notification.id} data={notification}/>
-                         ))
+                      
+                      notificationStore.map((notification: INotification) => 
+                            <NotificationSegment 
+                              key={notification.id} 
+                              data={notification}
+                              markAsSeen={markAsSeen}
+                              />
+                        )
                     }
                 </div>
 
@@ -123,7 +150,7 @@ const NotificationPopup = ({ show }: IProps) => {
           </div>
           { status == "success" && data.pages.length > 0 && (
             <div>
-              { !hasNextPage && (
+              { hasNextPage && (
                 <div className="mt-4">
                     <button
                     className="small-caps mb-4 px-4 text-xl font-bold text-pb-green"

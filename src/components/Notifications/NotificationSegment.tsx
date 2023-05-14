@@ -2,30 +2,31 @@ import pacebuddiesApi from "../../instances/axiosConfigured.ts";
 import { INotification } from "../../internalTypes/interfaces.ts"
 import { UserPlusIcon, HandThumbUpIcon, ExclamationCircleIcon } from '@heroicons/react/24/solid';
 
-const NotificationSegment= ({ data }) => {
+interface IProps {
+    data: INotification,
+    markAsSeen: (string) => void
+}
+
+const NotificationSegment= ({ data, markAsSeen }) => {
 
     function parseDate(dateStr: string) {
         const date = new Date(dateStr)
-        const day = ("0"+date.getDay()).slice(-2)
-        const month = ("0"+date.getMonth()).slice(-2)
+        console.log(date.getDate())
+        const day = ("0"+date.getDate()).slice(-2)
+        const monthNum = date.getMonth() + 1
+        const month = ("0" + monthNum).slice(-2)
         const year = date.getFullYear()
         const hours = ("0"+date.getHours()).slice(-2)
         const minutes = ("0"+date.getMinutes()).slice(-2)
         return `${day}/${month}/${year} ${hours}:${minutes}`
     }
 
-    function markAsSeen(id: string) {
-        pacebuddiesApi
-            .get(`notification/${id}`)
-            .catch((err) => console.log(err))
-    }
-
     return (
         <div className="flex w-full border-pb-green border-2 px-2 py-2.5 my-1 relative"
             onMouseEnter={() => {
-                if(!data.seen) {
+                // if(!data.seen) {
                     markAsSeen(data.id)
-                }   
+                // }   
             }}    
             >
             {!data.seen && ( 
@@ -47,7 +48,7 @@ const NotificationSegment= ({ data }) => {
                     {data.content}
                 </div>
                 <div>
-                    {data.action == "REQUEST_MATCH" && (<div>XD</div>)}
+                    {/* {data.action == "REQUEST_MATCH" && (<div>XD</div>)} */}
                 </div>
             </div> 
         </div>
