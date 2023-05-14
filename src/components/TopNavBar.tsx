@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { getSession, signOut } from 'next-auth/react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import pacebuddiesApi, { stravaOauthApi } from '../instances/axiosConfigured';
 import { useAthleteStore } from '../store/athleteStore';
@@ -91,7 +91,9 @@ const TopNavBar: NextPage = () => {
               >
                 <BellIcon className="h-8 w-8 rounded-full text-white hover:animate-wobble" />
               </button>
-              <NotificationPopup show={notificationPopupOpen}/>
+              <NotificationPopup 
+                show={notificationPopupOpen}
+                />
             </div>
             {/*Synchronize*/}
             <div className="flex flex-col">

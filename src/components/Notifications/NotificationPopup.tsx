@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { animated, useSpring, useTransition } from 'react-spring';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
@@ -7,13 +7,10 @@ import NotificationSegment from './NotificationSegment.tsx';
 import pacebuddiesApi from '../../instances/axiosConfigured.ts';
 import { useSetNotificationStore, useNotificationStore } from '../../store/notificationStore.ts';
 
-// import {
-//   useSetSynchronizationStore,
-//   useSynchronizationStore,
-// } from '../../store/synchronizeStore';
-
 interface IProps {
-  show: boolean
+  show: boolean,
+  page: number,
+  setPage: any
 }
 const NotificationPopup = ({ show }: IProps) => {
   const setNotificationStore = useSetNotificationStore((state) => state.setNotifications)
@@ -58,25 +55,20 @@ const NotificationPopup = ({ show }: IProps) => {
     },
     config: { tension: 300, friction: 40 },
   });
-
+  useEffect(() => clearNotificationStore(), [])
   const [page, setPage] = useState<number>(0)
   const {data, status, isError, isLoading, isFetching, isFetchingNextPage, hasNextPage} = useInfiniteQuery<INotification>( {
     queryKey: ["fetchNotification", page],
     queryFn: () => fetchNotifications(page),
     getNextPageParam: (lastPage, allPages) => {
-      console.log("PAGE", lastPage[lastPage.length - 1].date_time)
       return lastPage.length == 5 ? lastPage[lastPage.length - 1].date_time : undefined
     },
     keepPreviousData: true
   })
 
-  const nextPage = (): void => {
+  const loadMore = (): void => {
     setPage(page + 1)
   }
-
-  useEffect(() => {
-    const storeNotifications: INotification[] | null = notificationStore;
-  }, [notificationStore]);
 
   useEffect(() => {
     if(data != null) {
@@ -84,14 +76,11 @@ const NotificationPopup = ({ show }: IProps) => {
     }
   }, [data])
 
-  useEffect(() => {
-    if(notificationStore != null) {
-      // console.log("hhh", notificationStore)
-      // setNotificationStore(data.pages)
-    }
-  }, [notificationStore])
+  const clearCallback = useCallback(() => clearNotificationStore())
 
-
+  // useEffect(() => {
+  //     clearCallback()
+  // }, [clearCallback])
 
   return (
     <div className="relative">
@@ -150,7 +139,7 @@ const NotificationPopup = ({ show }: IProps) => {
                 <div className="mt-4">
                     <button
                     className="small-caps mb-4 px-4 text-xl font-bold text-pb-green"
-                    onClick={() => nextPage()}
+                    onClick={() => loadMore()}
                     >
                     Show more
                   </button>
