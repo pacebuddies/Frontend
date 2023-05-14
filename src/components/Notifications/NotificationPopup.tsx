@@ -63,6 +63,10 @@ const NotificationPopup = ({ show }: IProps) => {
   const {data, status, isError, isLoading, isFetching, isFetchingNextPage, hasNextPage} = useInfiniteQuery<INotification>( {
     queryKey: ["fetchNotification", page],
     queryFn: () => fetchNotifications(page),
+    getNextPageParam: (lastPage, allPages) => {
+      console.log("PAGE", lastPage[lastPage.length - 1].date_time)
+      return lastPage.length == 5 ? lastPage[lastPage.length - 1].date_time : undefined
+    },
     keepPreviousData: true
   })
 
@@ -72,19 +76,17 @@ const NotificationPopup = ({ show }: IProps) => {
 
   useEffect(() => {
     const storeNotifications: INotification[] | null = notificationStore;
-    console.log("STORE", storeNotifications)
   }, [notificationStore]);
 
   useEffect(() => {
     if(data != null) {
-      console.log("DATA",...data.pages)
       setNotificationStore(data.pages)
     }
   }, [data])
 
   useEffect(() => {
     if(notificationStore != null) {
-      console.log("hhh", notificationStore)
+      // console.log("hhh", notificationStore)
       // setNotificationStore(data.pages)
     }
   }, [notificationStore])
@@ -125,7 +127,7 @@ const NotificationPopup = ({ show }: IProps) => {
                 
                 )}
               {status == "success" && (
-                <div className="overflow-scroll scrollbar-hide h-96 mx-3">
+                <div className="overflow-scroll scrollbar-hide h-[30rem] mx-3">
                     {notificationStore.length == 0 && (<div> There are no new notifications </div>)}
                     {
                       

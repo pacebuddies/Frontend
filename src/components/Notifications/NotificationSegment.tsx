@@ -11,7 +11,6 @@ const NotificationSegment= ({ data, markAsSeen }) => {
 
     function parseDate(dateStr: string) {
         const date = new Date(dateStr)
-        console.log(date.getDate())
         const day = ("0"+date.getDate()).slice(-2)
         const monthNum = date.getMonth() + 1
         const month = ("0" + monthNum).slice(-2)
@@ -24,9 +23,9 @@ const NotificationSegment= ({ data, markAsSeen }) => {
     return (
         <div className="flex w-full border-pb-green border-2 px-2 py-2.5 my-1 relative"
             onMouseEnter={() => {
-                // if(!data.seen) {
+                if(!data.seen) {
                     markAsSeen(data.id)
-                // }   
+                }   
             }}    
             >
             {!data.seen && ( 
