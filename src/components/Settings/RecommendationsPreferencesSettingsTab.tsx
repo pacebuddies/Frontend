@@ -1,25 +1,26 @@
+import { useQuery } from '@tanstack/react-query';
 import { NextPage } from 'next';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeFilterRanges } from '../../internalTypes/sportTypeFilterRanges';
-import PreferenceSlider from './PreferencesSlider';
-import RangeSlider from './RangeSlider';
-import RecommendationFilterRangeSlider from './RecommendationFilterRangeSlider';
-
-pacebuddiesApi
-  .get('recommender/recommendations/getFilter', {
-    params: {
-      sport_type: SportTypeEnum.Run,
-    },
-  })
-  .then((res) => {
-    console.log(res.data);
-  })
-  .catch((err) => {
-    console.log(err.response);
-  });
+import DoubleSlider from '../Slider/DoubleSlider';
 
 const RecommendationsPreferencesSettingsTab: NextPage = () => {
+  const fetchSportData = (): Promise<SportTypeFilterRanges> => {
+    return pacebuddiesApi
+      .get('recommender/recommendations/getFilter', {
+        params: {
+          sport_type: SportTypeEnum.Run,
+        },
+      })
+      .then((res) => res.data);
+  };
+
+  const filterQuery = useQuery({
+    queryKey: ['filterData'],
+    queryFn: fetchSportData,
+  });
+
   const sportData: SportTypeFilterRanges = {
     sport_type: 26,
     city: 'Toruń',
@@ -45,133 +46,22 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
         <span>Running</span>
       </div>
       <div className="w-full pt-4">
-        <div className="flex flex-col pl-8">
-          {/*<PreferenceSlider />*/}
-        </div>
+        <div className="flex flex-col pl-8">{/*<PreferenceSlider />*/}</div>
       </div>
       {/*<div className="w-full pt-4">*/}
-      <div className="flex flex-col pl-8">
-        {/*<RecommendationFilterRangeSlider*/}
-        {/*  text={'Avg Max Speed'}*/}
-        {/*  default_max={sportData.avg_max_speed_max}*/}
-        {/*  default_min={sportData.avg_max_speed_min}*/}
-        {/*  user_max={sportData.avg_max_speed_max}*/}
-        {/*  user_min={sportData.avg_max_speed_min}*/}
-        {/*/>*/}
-        <div className="w-72">
-          <RangeSlider
-            step={33.333333333333333}
-            min={-100}
-            max={100}
-            default_min={-50}
-            default_max={50}
-            onChange={(value: { min: number; max: number }) =>
-              console.log(value.min, value.max)
-            }
-          />
-        </div>
+      <div className="flex w-72 flex-col pl-8">
+        <DoubleSlider
+          step={1}
+          value={{ min: -5, max: 20 }}
+          minBracketValue={10}
+          maxBracketValue={60}
+          minSteps={[-20, -15, -10, -5, 0]}
+          maxSteps={[0, 5, 10, 15, 20]}
+          minStep={5}
+          maxStep={5}
+          onChange={(values) => console.log(values)}
+        />
       </div>
-
-      {/*<div>*/}
-      {/*
-      {/*    <div className="flex flex-col pl-8">*/}
-      {/*      <div className="w-1/3 border-[1px]"></div>*/}
-      {/*      <RecommendationFilterRangeSlider*/}
-      {/*        text={'Avg Speed'}*/}
-      {/*        default_max={sportData.avg_speed_max}*/}
-      {/*        default_min={sportData.avg_speed_min}*/}
-      {/*        user_max={sportData.avg_speed_max}*/}
-      {/*        user_min={sportData.avg_speed_min}*/}
-      {/*      />*/}
-      {/*    </div>*/}
-      {/*    <div className="flex flex-col pl-8">*/}
-      {/*      <div className="w-1/3 border-[1px]"></div>*/}
-      {/*      <RecommendationFilterRangeSlider*/}
-      {/*        text={'Avg Distance'}*/}
-      {/*        default_max={sportData.avg_distance_max}*/}
-      {/*        default_min={sportData.avg_distance_min}*/}
-      {/*        user_max={sportData.avg_distance_max}*/}
-      {/*        user_min={sportData.avg_distance_min}*/}
-      {/*      />*/}
-      {/*    </div>*/}
-      {/*    <div className="flex flex-col pl-8">*/}
-      {/*      <div className="w-1/3 border-[1px]"></div>*/}
-      {/*      <RecommendationFilterRangeSlider*/}
-      {/*        text={'Avg Moving Time'}*/}
-      {/*        default_max={sportData.avg_moving_time_max}*/}
-      {/*        default_min={sportData.avg_moving_time_min}*/}
-      {/*        user_max={sportData.avg_moving_time_max}*/}
-      {/*        user_min={sportData.avg_moving_time_min}*/}
-      {/*      />*/}
-      {/*    </div>*/}
-      {/*    <div className="flex flex-col pl-8">*/}
-      {/*      <div className="w-1/3 border-[1px]"></div>*/}
-      {/*      <RecommendationFilterRangeSlider*/}
-      {/*        text={'Avg Total Moving Time'}*/}
-      {/*        default_max={sportData.avg_total_moving_time_max}*/}
-      {/*        default_min={sportData.avg_total_moving_time_min}*/}
-      {/*        user_max={sportData.avg_total_moving_time_max}*/}
-      {/*        user_min={sportData.avg_total_moving_time_min}*/}
-      {/*        scale={'large'}*/}
-      {/*      />*/}
-      {/*    </div>*/}
-      {/*    <div className="flex flex-col pl-8">*/}
-      {/*      <div className="w-1/3 border-[1px]"></div>*/}
-      {/*      <RecommendationFilterRangeSlider*/}
-      {/*        text={'Avg Total Distance'}*/}
-      {/*        default_max={sportData.avg_total_distance_max}*/}
-      {/*        default_min={sportData.avg_total_distance_min}*/}
-      {/*        user_max={sportData.avg_total_distance_max}*/}
-      {/*        user_min={sportData.avg_total_distance_min}*/}
-      {/*      />*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*  <div className="pt-4">*/}
-      {/*    <span>Swimming</span>*/}
-      {/*  </div>*/}
-      {/*  <div className="pt-4">*/}
-      {/*    <div className="flex flex-col pl-8">*/}
-      {/*      <div className="w-1/3 border-[1px]"></div>*/}
-      {/*      <RecommendationFilterRangeSlider*/}
-      {/*        text={'Avg Total Distance'}*/}
-      {/*        default_max={sportData.avg_total_distance_max}*/}
-      {/*        default_min={sportData.avg_total_distance_min}*/}
-      {/*        user_max={sportData.avg_total_distance_max}*/}
-      {/*        user_min={sportData.avg_total_distance_min}*/}
-      {/*      />*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*  <div className="pt-4">*/}
-      {/*    <span>Riding</span>*/}
-      {/*  </div>*/}
-      {/*  <div className="pt-4">*/}
-      {/*    <div className="flex flex-col pl-8">*/}
-      {/*      <div className="w-1/3 border-[1px]"></div>*/}
-      {/*      <RecommendationFilterRangeSlider*/}
-      {/*        text={'Avg Total Distance'}*/}
-      {/*        default_max={sportData.avg_total_distance_max}*/}
-      {/*        default_min={sportData.avg_total_distance_min}*/}
-      {/*        user_max={sportData.avg_total_distance_max}*/}
-      {/*        user_min={sportData.avg_total_distance_min}*/}
-      {/*      />*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*  <div className="pt-4">*/}
-      {/*    <span>Rest</span>*/}
-      {/*  </div>*/}
-      {/*  <div className="pt-4">*/}
-      {/*    <div className="flex flex-col pl-8">*/}
-      {/*      <div className="w-1/3 border-[1px]"></div>*/}
-      {/*      <RecommendationFilterRangeSlider*/}
-      {/*        text={'Avg Total Distance'}*/}
-      {/*        default_max={sportData.avg_total_distance_max}*/}
-      {/*        default_min={sportData.avg_total_distance_min}*/}
-      {/*        user_max={sportData.avg_total_distance_max}*/}
-      {/*        user_min={sportData.avg_total_distance_min}*/}
-      {/*      />*/}
-      {/*    </div>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
     </>
   );
 };
