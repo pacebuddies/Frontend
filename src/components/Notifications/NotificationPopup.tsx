@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { animated, useSpring, useTransition } from 'react-spring';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import { INotification } from '../../internalTypes/interfaces.ts';
@@ -26,7 +26,6 @@ const NotificationPopup = ({ show }: IProps) => {
     return pacebuddiesApi
       .get(`/notification?page=${page}`)
       .then((res) => {
-        console.log(res.data)
         return res.data
       })
       .catch((err) => console.error(err)) 
@@ -48,9 +47,14 @@ const NotificationPopup = ({ show }: IProps) => {
   });
 
   const [page, setPage] = useState<number>(0)
-  const {data, status} = useQuery<INotification>( ["fetchNotification", page],() => fetchNotifications(page), {keepPreviousData: true})
+  const {data, status, isError, isLoading, isFetching, isFetchingNextPage, hasNextPage} = useInfiniteQuery<INotification>( {
+    queryKey: ["fetchNotification", page],
+    queryFn: () => fetchNotifications(page),
+    keepPreviousData: true,
+    enabled: show
+  })
 
-  const nextPage: (): void => {
+  const nextPage = (): void => {
     setPage(page + 5)
   }
 
@@ -95,8 +99,8 @@ const NotificationPopup = ({ show }: IProps) => {
             </span>
             <hr className="w-full border-pb-green"/>
             <span className="w-full mt-1.5 font-istok-web text-xl text-pb-dark-gray">
-              {status == "error" && <p>Something went wrong :(</p>}
-              {status == "loading" && ( 
+              {isError && <p>Something went wrong :(</p>}
+              {isLoading && ( 
                 <div>
                     <p>Fetching notifications....</p>
                      <ArrowPathIcon
@@ -108,15 +112,29 @@ const NotificationPopup = ({ show }: IProps) => {
               {status == "success" && (
                 <div className="overflow-scroll scrollbar-hide h-96 mx-3">
                     {data.length == 0 && (<div> There are no new notifications </div>)}
-                    {data.map((notification: INotification) => {
-                        return <NotificationSegment key={notification.id} data={notification}/>
-                    })}
+                    {
+                      data.pages.map(page => 
+                         page.map((notification: INotification) => <NotificationSegment key={notification.id} data={notification}/>
+                         ))
+                    }
                 </div>
 
               )}
             </span>
           </div>
-          { status == "success" && data.length > 0 && (
+          { status == "success" && data.pages.length > 0 && (
+            <div>
+              { hasNextPage && (
+                <div className="mt-4">
+                    <button
+                    className="small-caps mb-4 px-4 text-xl font-bold text-pb-green"
+                    onClick={() => nextPage()}
+                    >
+                    Show more
+                  </button>
+                </div>
+              )}
+            
             <div className="mt-4">
                 <button
                 className="small-caps mb-4 bg-pb-green px-4 py-2 text-2xl font-bold text-white"
@@ -124,6 +142,7 @@ const NotificationPopup = ({ show }: IProps) => {
                 >
                 Clear notifications
                 </button>
+            </div>
           </div>
           )}
           </div>
