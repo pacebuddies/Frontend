@@ -15,7 +15,7 @@ const NotificationSegment= ({ data }) => {
     }
 
     return (
-        <div className={`flex w-full border-pb-green border-2 px-2 py-2.5`}>
+        <div className="flex w-full border-pb-green border-2 px-2 py-2.5 my-1">
             {(data.action == "REQUEST_MATCH" || data.action == "ACCEPT_MATCH") && (
                 <UserPlusIcon className="h-8 w-8 px-1 mr-3 rounded-full text-white bg-gradient-to-r from-pb-green to-pb-dark-green"/>
             )}
@@ -33,7 +33,6 @@ const NotificationSegment= ({ data }) => {
                 </div>
                 <div>
                     {data.action == "REQUEST_MATCH" && (<div>XD</div>)}
-                    {data.action == "UPVOTE" && (<div>XD</div>)}
                 </div>
             </div> 
         </div>

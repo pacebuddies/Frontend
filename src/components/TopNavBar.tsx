@@ -17,16 +17,6 @@ const TopNavBar: NextPage = () => {
   const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
   const athlete = useAthleteStore((state) => state.athlete);
 
-  function FetchNotifications() {
-    return pacebuddiesApi
-      .get("/notification")
-      .then((res) => {
-        console.log(res.data)
-        return res.data
-      })
-      .catch((err) => console.error(err)) 
-  }
-
   function SynchronizeData() {
     setIsLoading(true);
     pacebuddiesApi
@@ -101,7 +91,7 @@ const TopNavBar: NextPage = () => {
               >
                 <BellIcon className="h-8 w-8 rounded-full text-white hover:animate-wobble" />
               </button>
-              {notificationPopupOpen && <NotificationPopup fetchNotifications={FetchNotifications} />}
+              <NotificationPopup show={notificationPopupOpen}/>
             </div>
             {/*Synchronize*/}
             <div className="flex flex-col">
