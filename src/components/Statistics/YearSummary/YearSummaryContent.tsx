@@ -43,10 +43,10 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
 
   return (
     <>
-      <div className="flex w-full flex-row justify-between pt-4">
-        <span className="font-bold text-pb-green">
+      <div className="flex w-full flex-row justify-between">
+        <span className="font-bold text-pb-green text-xl small-caps ">
           Year&apos;s summary for{' '}
-          {capitalizeFirstLetter(SportTypeMap.getString(selectedSport!)?.toLowerCase())}
+          {SportTypeMap.getString(selectedSport!)?.toLowerCase()}
         </span>
         <Dropdown
           label={selectedYear}
