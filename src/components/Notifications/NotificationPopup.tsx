@@ -50,8 +50,7 @@ const NotificationPopup = ({ show }: IProps) => {
   const {data, status, isError, isLoading, isFetching, isFetchingNextPage, hasNextPage} = useInfiniteQuery<INotification>( {
     queryKey: ["fetchNotification", page],
     queryFn: () => fetchNotifications(page),
-    keepPreviousData: true,
-    enabled: show
+    keepPreviousData: true
   })
 
   const nextPage = (): void => {
@@ -124,7 +123,7 @@ const NotificationPopup = ({ show }: IProps) => {
           </div>
           { status == "success" && data.pages.length > 0 && (
             <div>
-              { hasNextPage && (
+              { !hasNextPage && (
                 <div className="mt-4">
                     <button
                     className="small-caps mb-4 px-4 text-xl font-bold text-pb-green"
