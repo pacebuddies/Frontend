@@ -10,6 +10,7 @@ interface NotificationStates {
 interface NotificationActions {
   setNotifications: (notifications: INotification[]) => void;
   updateNotification: (notificationId: string) => void;
+  clear: () => void;
 }
 
 interface NotificationStore extends NotificationStates, NotificationActions {}
@@ -36,6 +37,9 @@ export const useSetNotificationStore = create<
             const notificationsCopy = get().notifications
             notificationsCopy[idx].seen = true
             set((state) => ({ notifications: notificationsCopy}))
+      },
+      clear: () => {
+        set((state) => ({ notifications: []}))
       }
     }),
     {

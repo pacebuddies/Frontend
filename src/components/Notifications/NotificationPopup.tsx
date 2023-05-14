@@ -16,15 +16,9 @@ interface IProps {
   show: boolean
 }
 const NotificationPopup = ({ show }: IProps) => {
-
-  // const handleFetch = () => {
-  //   return fetchNotifications();
-  //   // const date = new Date();
-  //   // setNotificationStore(date);
-  // };
-
   const setNotificationStore = useSetNotificationStore((state) => state.setNotifications)
   const updateNotificationsStore = useSetNotificationStore((state) => state.updateNotification)
+  const clearNotificationStore = useSetNotificationStore((state) => state.clear)
   const notificationStore = useNotificationStore(
     (state) => state.notifications,
   );
@@ -42,7 +36,7 @@ const NotificationPopup = ({ show }: IProps) => {
   const clearNotifications = (): void => {
     pacebuddiesApi
       .delete("notification/all")
-      .then(() => setNotificationStore([]))
+      .then(() => clearNotificationStore())
       .catch((err) => console.error(err))
 
   }
@@ -54,7 +48,7 @@ const NotificationPopup = ({ show }: IProps) => {
           updateNotificationsStore(id)
         })
         .catch((err) => console.log(err))
-}
+  }
 
   const animation = useSpring({
     from: { height: '0rem', opacity: 0 },
@@ -73,7 +67,7 @@ const NotificationPopup = ({ show }: IProps) => {
   })
 
   const nextPage = (): void => {
-    setPage(page + 5)
+    setPage(page + 1)
   }
 
   useEffect(() => {
@@ -113,7 +107,7 @@ const NotificationPopup = ({ show }: IProps) => {
       >
         <path d="M9 0L17.6603 15H0.339746L9 0Z" fill="#4CBD17" />
       </svg>
-        <div className="relative flex h-[43rem] w-full flex-col items-center justify-between top-3.5 overflow-hidden border-2 border-pb-green bg-white">
+        <div className={`relative flex h-[43rem] w-full flex-col items-center justify-between top-3.5 overflow-hidden border-2 border-pb-green bg-white`}>
           <div className="flex flex-col w-full items-center justify-center">
             <span className="small-caps my-1.5 font-istok-web text-2xl font-bold text-pb-dark-gray">
               Notifications
@@ -148,7 +142,7 @@ const NotificationPopup = ({ show }: IProps) => {
               )}
             </span>
           </div>
-          { status == "success" && data.pages.length > 0 && (
+          { status == "success" && notificationStore.length > 0 && (
             <div>
               { hasNextPage && (
                 <div className="mt-4">
