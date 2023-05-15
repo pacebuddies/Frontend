@@ -6,18 +6,18 @@ import {
 } from '../../store/settingsStore';
 
 const AccountSettingTab: NextPage = () => {
-  const settings = useSettingsStore((state) => state.settings);
+  const measurementUnits = useSettingsStore((state) => state.measurementUnits);
   const setSettings = useSetSettingsStore((state) => state.setSettings);
 
   const handleUnitsChange = (value: 'metric' | 'imperial') => {
-    setSettings({ settings: { measurementUnits: value } });
+    setSettings({ measurementUnits: value });
   };
 
   return (
     <div>
       Account settings panel
       <div>
-        <Dropdown label={settings.measurementUnits}>
+        <Dropdown label={measurementUnits}>
           <Dropdown.Item onClick={() => handleUnitsChange('metric')}>
             Metric
           </Dropdown.Item>

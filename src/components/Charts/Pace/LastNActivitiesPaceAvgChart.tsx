@@ -9,6 +9,7 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { Dropdown } from 'flowbite-react';
 import React, { useState } from 'react';
@@ -17,6 +18,8 @@ import pacebuddiesApi from '../../../instances/axiosConfigured';
 
 import { toast } from 'react-toastify';
 import { ILastNActivitiesPaceAvg } from '../../../internalTypes/Interfaces/Pace/paceInterfaces';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { unitChange } from '../../../utils/unitChange';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -33,6 +36,10 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
 }: IProps) => {
   const [numActivities, setNumActivities] = useState<number>(50);
 
+  const measurementPreference = useSettingsStore(
+    (state) => state.measurementUnits,
+  );
+  const toUnit = measurementPreference === 'metric' ? 'min/km' : 'min/mile';
   const fetchData = (): Promise<ILastNActivitiesPaceAvg[]> => {
     return pacebuddiesApi
       .get('bridge/chart/LastNActivitiesPaceAvg', {
@@ -49,16 +56,27 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
     keepPreviousData: true,
   });
 
+  function decimalToMinutesAndSeconds(decimalTime: string | number) {
+    const decimal =
+      typeof decimalTime === 'string' ? parseFloat(decimalTime) : decimalTime;
+    const minutes = Math.floor(decimal);
+    const seconds = Math.round((decimal - minutes) * 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
+
   const chartData: ChartData<'line', number[], string> = {
-    labels: data?.map((item) => '') ?? [],
+    labels: data?.map((item, index) => (index + 1).toString()) ?? [],
     datasets: [
       {
-        label: 'Average Pace per KM',
-        data: data?.map((item) => item.avg_pace_per_km) ?? [],
-        fill: false,
+        label: `Average Pace (${toUnit})`,
+        data:
+          data?.map((item) =>
+            unitChange(item.avg_pace_per_km, 'min/km', toUnit),
+          ) ?? [],
+        fill: true,
         cubicInterpolationMode: 'monotone',
-        backgroundColor: 'rgb(75, 192, 192)',
-        borderColor: 'rgba(75, 192, 192, 0.2)',
+        backgroundColor: 'rgba(239, 138, 23, 0.2)',
+        borderColor: 'rgb(239, 138, 23)',
       },
     ],
   };
@@ -69,14 +87,38 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
         display: true,
         text: 'Average pace for last activities',
       },
+      tooltip: {
+        callbacks: {
+          label: function (context: TooltipItem<'line'>) {
+            const label = context.dataset.label ?? '';
+            const value = decimalToMinutesAndSeconds(context.parsed.y);
+            return `${label}: ${value}`;
+          },
+        },
+      },
     },
     scales: {
+      x: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Activity',
+        },
+      },
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: `Pace (${toUnit})`,
+        },
+        ticks: {
+          callback: decimalToMinutesAndSeconds,
+        },
       },
     },
     maintainAspectRatio: false,
   };
+
   if (isError) {
     toast.error((error as Error).toString());
     return <div>Error loading data</div>;

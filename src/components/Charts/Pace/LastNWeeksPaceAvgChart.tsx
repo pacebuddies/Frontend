@@ -9,6 +9,7 @@ import {
   LinearScale,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { Dropdown } from 'flowbite-react';
 import React, { useState } from 'react';
@@ -16,8 +17,10 @@ import { Bar } from 'react-chartjs-2';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 
 import { toast } from 'react-toastify';
-import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
+import { sortByDateAscending } from '../../../Helpers/sortDataByDate';
 import { ILastNWeeksPaceAvg } from '../../../internalTypes/Interfaces/Pace/paceInterfaces';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { unitChange } from '../../../utils/unitChange';
 
 ChartJS.register(
   CategoryScale,
@@ -37,6 +40,10 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
 }: IProps) => {
   const [weekNumber, setWeekNumber] = useState<number>(3);
 
+  const measurementPreference = useSettingsStore(
+    (state) => state.measurementUnits,
+  );
+  const toUnit = measurementPreference === 'metric' ? 'min/km' : 'min/mile';
   const fetchData = (): Promise<ILastNWeeksPaceAvg[]> => {
     return pacebuddiesApi
       .get('bridge/chart/LastNWeeksPaceAvg', {
@@ -53,16 +60,28 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
     keepPreviousData: true,
   });
 
-  const sortedData = sortByDateDescending(data ?? []);
+  const sortedData = sortByDateAscending(data ?? []);
+
+  function decimalToMinutesAndSeconds(decimalTime: string | number) {
+    const decimal =
+      typeof decimalTime === 'string'
+        ? parseFloat(decimalTime) * 10
+        : decimalTime * 10;
+    const minutes = Math.floor(decimal);
+    const seconds = Math.round((decimal - minutes) * 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
 
   const chartData: ChartData<'bar', number[], string> = {
     labels: sortedData.map((item) => item.week_start),
     datasets: [
       {
-        label: 'Distance',
-        data: sortedData.map((item) => item.avg_pace_per_km),
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        label: `Average Pace (${toUnit})`,
+        data: sortedData.map((item) =>
+          unitChange(item.avg_pace_per_km / 10, 'min/km', toUnit),
+        ),
+        backgroundColor: 'rgba(239, 138, 23, 0.2)',
+        borderColor: 'rgb(239, 138, 23)',
         borderWidth: 1,
       },
     ],
@@ -72,12 +91,35 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
     plugins: {
       title: {
         display: true,
-        text: 'Distance summary for last weeks',
+        text: 'Average pace for last weeks',
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context: TooltipItem<'bar'>) {
+            const label = context.dataset.label ?? '';
+            const value = decimalToMinutesAndSeconds(context.parsed.y);
+            return `${label}: ${value}`;
+          },
+        },
       },
     },
     scales: {
+      x: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Week',
+        },
+      },
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: `Pace (${toUnit})`,
+        },
+        ticks: {
+          callback: decimalToMinutesAndSeconds,
+        },
       },
     },
     maintainAspectRatio: false,
@@ -87,31 +129,27 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
     return <div>Error loading data</div>;
   }
   return (
-    <div>
-      <div className="flex w-full  flex-col md:flex-row">
-        <div className="order-2 h-128 w-full md:order-1">
-          <Bar
-            data={chartData}
-            options={chartOptions}
-            className="overflow-hidden"
-          />
-        </div>
-        <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
-          <span className="mr-2 w-auto whitespace-nowrap">
-            Number of weeks:
-          </span>
-          <Dropdown
-            label={weekNumber}
-            outline={true}
-            pill={true}
-            color={'success'}
-            disabled={isLoading || isFetching}
-          >
-            <Dropdown.Item onClick={() => setWeekNumber(4)}>4</Dropdown.Item>
-            <Dropdown.Item onClick={() => setWeekNumber(8)}>8</Dropdown.Item>
-            <Dropdown.Item onClick={() => setWeekNumber(16)}>16</Dropdown.Item>
-          </Dropdown>
-        </div>
+    <div className="flex w-full  flex-col md:flex-row">
+      <div className="order-2 h-128 w-full md:order-1">
+        <Bar
+          data={chartData}
+          options={chartOptions}
+          className="overflow-hidden"
+        />
+      </div>
+      <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
+        <span className="mr-2 w-auto whitespace-nowrap">Number of weeks:</span>
+        <Dropdown
+          label={weekNumber}
+          outline={true}
+          pill={true}
+          color={'success'}
+          disabled={isLoading || isFetching}
+        >
+          <Dropdown.Item onClick={() => setWeekNumber(4)}>4</Dropdown.Item>
+          <Dropdown.Item onClick={() => setWeekNumber(8)}>8</Dropdown.Item>
+          <Dropdown.Item onClick={() => setWeekNumber(16)}>16</Dropdown.Item>
+        </Dropdown>
       </div>
     </div>
   );

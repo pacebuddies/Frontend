@@ -4,9 +4,7 @@ import { persist } from 'zustand/middleware';
 import { UnitPreference } from '../internalTypes/interfaces';
 
 interface SettingsStates {
-  settings: {
-    measurementUnits: UnitPreference;
-  };
+  measurementUnits: UnitPreference;
 }
 
 interface SettingsActions {
@@ -16,11 +14,12 @@ interface SettingsActions {
 interface SettingsStore extends SettingsStates, SettingsActions {}
 
 const initialSettingsStates: SettingsStates = {
-  settings: {
-    measurementUnits: 'metric',
-  },
+  measurementUnits: 'metric',
 };
-export const useSetSettingsStore = create<SettingsStore>()(
+export const useSetSettingsStore = create<
+  SettingsStore,
+  [['zustand/persist', SettingsStore]]
+>(
   persist(
     (set, get) => ({
       ...initialSettingsStates,

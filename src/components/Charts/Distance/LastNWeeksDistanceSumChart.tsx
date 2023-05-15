@@ -17,6 +17,8 @@ import pacebuddiesApi from '../../../instances/axiosConfigured';
 
 import { sortByDateDescending } from '../../../Helpers/sortDataByDate';
 import { ILastNWeeksDistanceSum } from '../../../internalTypes/Interfaces/Distance/distanceInterfaces';
+import { useSettingsStore } from '../../../store/settingsStore';
+import { unitChange } from '../../../utils/unitChange';
 
 ChartJS.register(
   CategoryScale,
@@ -33,6 +35,10 @@ interface IProps {
 const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
   const [weeksNumber, setWeeksNumber] = useState<number>(4);
 
+  const measurementPreference = useSettingsStore(
+    (state) => state.measurementUnits,
+  );
+  const toUnit = measurementPreference === 'metric' ? 'km' : 'mile';
   const handleWeeksNumberChange = (value: number) => {
     setWeeksNumber(value);
   };
@@ -65,14 +71,18 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
     datasets: [
       {
         label: 'Distance',
-        data: sortedData.map((item) => item.total_distance),
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        data: sortedData.map((item) =>
+          unitChange(item.total_distance, 'm', toUnit),
+        ),
+        backgroundColor: 'rgba(239, 138, 23, 0.2)',
+        borderColor: 'rgb(239, 138, 23)',
         borderWidth: 1,
       },
       {
         label: 'Mean Distance',
-        data: Array(sortedData.length || 0).fill(meanValue),
+        data: Array(sortedData.length || 0).fill(
+          unitChange(meanValue, 'm', toUnit),
+        ),
         type: 'line',
         borderColor: 'red',
         borderWidth: 2,
@@ -98,14 +108,29 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
         filter: (tooltipItem: TooltipItem<'bar'>) => {
           return tooltipItem.raw !== 0;
         },
+        callbacks: {
+          label: function (context: TooltipItem<'bar'>) {
+            const label = context.dataset.label ?? '';
+            const value = context.parsed.y.toFixed(2);
+            return `${label}: ${value} ${toUnit}`;
+          },
+        },
       },
     },
     scales: {
       x: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Week',
+        },
       },
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: `Distance (${toUnit})`,
+        },
       },
     },
     maintainAspectRatio: false,
