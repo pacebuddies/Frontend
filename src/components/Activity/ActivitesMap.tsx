@@ -2,6 +2,7 @@ import { IActivity, UnitPreference } from '../../internalTypes/interfaces';
 import { formatSecondsToHMS } from '../../utils/formatSecoundToHMS';
 import { unitChange } from '../../utils/unitChange';
 import MapComponent from './MapComponent';
+import PhotoOrMapComponent from "./PhotoOrMapComponent";
 
 interface IProps {
   activity: IActivity;
@@ -14,14 +15,18 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
 
   return (
     <div className="flex h-128 w-full flex-col items-center justify-center px-20">
-      <div>{activity.name}</div>
+      <span>
+        <a
+          href={`https://www.strava.com/activities/${activity.id}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {activity.name}
+        </a>
+      </span>
       {/*Map*/}
-      {activity.map.summary_polyline != '' && (
-        <div className="h-full w-full bg-gray-400">
-          <MapComponent activity={activity} pathOptions={{ color: 'red' }} />
-        </div>
-      )}
-      <div className="w-full">
+      <PhotoOrMapComponent activity={activity} className="h-96 w-full" />
+      <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
         {/*Distance*/}
         <div>
           <span className="small-caps text-pb-dark-gray">Distance </span>
@@ -55,6 +60,7 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
             {formatSecondsToHMS(activity.moving_time)}
           </span>
         </div>
+
         {/*Average Speed*/}
         <div>
           <span className="small-caps text-pb-dark-gray">Average Speed </span>

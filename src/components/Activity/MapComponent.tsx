@@ -13,9 +13,10 @@ interface IMapComponentProps {
 
 const MapComponent = ({ activity, pathOptions }: IMapComponentProps) => {
   const poly = getCoordinatesFromPolyline(activity.map.summary_polyline);
+  const startingPoint: [number, number] = activity.start_latlng as [number, number];
   return (
     <MapContainer
-      center={poly[0]}
+      center={startingPoint}
       zoom={13}
       scrollWheelZoom={true}
       style={{ height: '100%', width: '100%' }}

@@ -8,11 +8,11 @@ import ActivitesMap from './ActivitesMap';
 // To FIX marker if needed : https://stackoverflow.com/a/67133111
 
 const ClientOnlyActivities = () => {
-  const settingStore = useSettingsStore((store) => store.settings);
+  const settingStore = useSettingsStore((store) => store.measurementUnits);
 
   const fetchActivities = () => {
     return pacebuddiesApi
-      .get('bridge/athlete/activities')
+      .get('bridge/athlete/activities', { params: { count: 20 } })
       .then((res) => res.data);
   };
 
@@ -29,7 +29,7 @@ const ClientOnlyActivities = () => {
               <ActivitesMap
                 key={activity.id}
                 activity={activity}
-                unitPreference={settingStore.measurementUnits}
+                unitPreference={settingStore}
               />
             ) : null,
           )

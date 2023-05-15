@@ -25,6 +25,7 @@ export interface IActivity {
   average_speed: number;
   description: string | null;
   distance: number;
+  photos: IPhoto[];
   elev_high: number;
   elev_low: number;
   start_latlng: number[];
@@ -42,6 +43,17 @@ export interface IActivity {
   timezone: string;
   total_elevation_gain: number;
 }
+
+export interface IPhoto{
+  unique_id: string
+  uploaded_at: string
+  created_at: string
+  created_at_local: string
+  urls: {
+    2048: string
+  }
+}
+
 export interface ILap {
   id: string;
   // TODO: wypełnić resztę pól
