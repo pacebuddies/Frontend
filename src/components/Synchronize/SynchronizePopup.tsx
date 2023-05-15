@@ -62,7 +62,7 @@ const SynchronizePopup = ({ synchronize }: IProps) => {
       </svg>
       <animated.div
         style={animation}
-        className="absolute -right-12 top-4 h-52 w-80 overflow-hidden border-2 border-pb-green bg-white/80"
+        className="absolute -right-12 top-4 h-52 w-80 overflow-hidden border-2 border-pb-green bg-white/95"
       >
         <div className="flex h-full w-full flex-col items-center justify-between">
           <div className="flex flex-col items-center justify-center">

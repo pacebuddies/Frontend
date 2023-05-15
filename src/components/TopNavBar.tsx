@@ -91,9 +91,9 @@ const TopNavBar: NextPage = () => {
               >
                 <BellIcon className="h-8 w-8 rounded-full text-white hover:animate-wobble" />
               </button>
-              <NotificationPopup 
+              {notificationPopupOpen && <NotificationPopup
                 show={notificationPopupOpen}
-                />
+              />}
             </div>
             {/*Synchronize*/}
             <div className="flex flex-col">

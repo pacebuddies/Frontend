@@ -50,12 +50,12 @@ const NotificationPopup = ({ show }: IProps) => {
   const animation = useSpring({
     from: { height: '0rem', opacity: 0 },
     to: { 
-      height: show ? '45rem' : '0rem', 
+      height: show ? '32rem' : '0rem',
       opacity: show ? 1 : 0
     },
     config: { tension: 300, friction: 40 },
   });
-  useEffect(() => clearNotificationStore(), [])
+  // useEffect(() => clearNotificationStore(), [])
   const [page, setPage] = useState<number>(0)
   const {data, status, isError, isLoading, isFetching, isFetchingNextPage, hasNextPage} = useInfiniteQuery<INotification>( {
     queryKey: ["fetchNotification", page],
@@ -83,22 +83,22 @@ const NotificationPopup = ({ show }: IProps) => {
   // }, [clearCallback])
 
   return (
-    <div className="relative">
-      <animated.div
-        style={animation}
-        className="absolute -right-12 top-0 w-96 overflow-hidden"
-      >
+    <div className="relative z-50">
       <svg
         width="18"
         height="15"
         viewBox="0 0 18 15"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute right-[4.7rem] top-0"
+        className="absolute right-[1.7rem] top-[2px]"
       >
         <path d="M9 0L17.6603 15H0.339746L9 0Z" fill="#4CBD17" />
       </svg>
-        <div className={`relative flex h-[43rem] w-full flex-col items-center justify-between top-3.5 overflow-hidden border-2 border-pb-green bg-white`}>
+      <animated.div
+        style={animation}
+        className="absolute -right-12 top-4 h-[32rem] w-96 overflow-hidden border-2 border-pb-green bg-white/95"
+      >
+        <div className="flex flex-col items-center justify-between">
           <div className="flex flex-col w-full items-center justify-center">
             <span className="small-caps my-1.5 font-istok-web text-2xl font-bold text-pb-dark-gray">
               Notifications
@@ -116,17 +116,14 @@ const NotificationPopup = ({ show }: IProps) => {
                 
                 )}
               {status == "success" && (
-                <div className="overflow-scroll scrollbar-hide h-[30rem] mx-3">
-                    {notificationStore.length == 0 && (<div> There are no new notifications </div>)}
-                    {
-                      
-                      notificationStore.map((notification: INotification) => 
-                            <NotificationSegment 
-                              key={notification.id} 
-                              data={notification}
-                              markAsSeen={markAsSeen}
-                              />
-                        )
+                <div className="overflow-scroll scrollbar-hide max-h-[24rem] mx-3">
+                    {notificationStore.length == 0 && (<div className="flex items-center justify-center"> There are no new notifications </div>)}
+                    {notificationStore.map((notification: INotification) =>
+                        <NotificationSegment
+                          key={notification.id}
+                          data={notification}
+                          markAsSeen={markAsSeen}
+                        />)
                     }
                 </div>
 
@@ -136,27 +133,51 @@ const NotificationPopup = ({ show }: IProps) => {
           { status == "success" && notificationStore.length > 0 && (
             <div>
               { hasNextPage && (
-                <div className="mt-4">
+                <div className="flex flex-row mt-2 items-center justify-center">
                     <button
-                    className="small-caps mb-4 px-4 text-xl font-bold text-pb-green"
+                    className="flex small-caps px-4 text-xl font-bold text-pb-green items-center justify-center space-x-2"
                     onClick={() => loadMore()}
                     >
-                    Show more
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-7 h-7">
+                        <path
+                          fillRule="evenodd"
+                          d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z"
+                          clipRule="evenodd"/>
+                      </svg>
+                      <span>
+                        Show more
+                      </span>
                   </button>
                 </div>
               )}
             
-            <div className="mt-4">
+            <div className="mt-2">
                 <button
-                className="small-caps mb-4 bg-pb-green px-4 py-2 text-2xl font-bold text-white"
+                className="flex small-caps mb-2 bg-pb-green px-4 py-2 text-2xl font-bold text-white items-center justify-center space-x-2"
                 onClick={() => clearNotifications()}
                 >
-                Clear notifications
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="w-8 h-8">
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                      clipRule="evenodd"/>
+                  </svg>
+                  <span>
+                    Clear notifications
+                  </span>
                 </button>
             </div>
           </div>
           )}
-          </div>
+        </div>
       </animated.div>
     </div>
   );
