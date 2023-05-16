@@ -116,7 +116,7 @@ const NotificationPopup = ({ show }: IProps) => {
                 
                 )}
               {status == "success" && (
-                <div className="overflow-scroll scrollbar-hide max-h-[24rem] mx-3">
+                <div className="overflow-scroll scrollbar-hide max-h-[21.25rem] mx-3">
                     {notificationStore.length == 0 && (<div className="flex items-center justify-center"> There are no new notifications </div>)}
                     {notificationStore.map((notification: INotification) =>
                         <NotificationSegment
@@ -155,7 +155,7 @@ const NotificationPopup = ({ show }: IProps) => {
                 </div>
               )}
             
-            <div className="mt-2">
+            <div className="mt-3">
                 <button
                 className="flex small-caps mb-2 bg-pb-green px-4 py-2 text-2xl font-bold text-white items-center justify-center space-x-2"
                 onClick={() => clearNotifications()}
