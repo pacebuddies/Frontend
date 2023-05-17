@@ -1,8 +1,7 @@
 import { IActivity, UnitPreference } from '../../internalTypes/interfaces';
 import { formatSecondsToHMS } from '../../utils/formatSecoundToHMS';
 import { unitChange } from '../../utils/unitChange';
-import MapComponent from './MapComponent';
-import PhotoOrMapComponent from "./PhotoOrMapComponent";
+import PhotoOrMapComponent from './PhotoOrMapComponent';
 
 interface IProps {
   activity: IActivity;
@@ -25,7 +24,7 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
         </a>
       </span>
       {/*Map*/}
-      <PhotoOrMapComponent activity={activity} className="h-96 w-full" />
+      <PhotoOrMapComponent activity={activity} className="h-96 w-full px-20" />
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
         {/*Distance*/}
         <div>
