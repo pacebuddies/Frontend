@@ -58,7 +58,6 @@ function PushNotificationLayout({ children }) {
 
   return (
     <>
-      <ToastContainer />
       {children}
     </>
   );
