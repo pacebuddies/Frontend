@@ -1,8 +1,8 @@
 import { PathOptions } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Polyline, TileLayer } from 'react-leaflet';
-import { IActivity } from '../../internalTypes/interfaces';
-import getCoordinatesFromPolyline from '../../utils/getCoordinatesFromPolyline';
+import { IActivity } from '../../../internalTypes/interfaces';
+import getCoordinatesFromPolyline from '../../../utils/getCoordinatesFromPolyline';
 
 // To FIX marker if needed : https://stackoverflow.com/a/67133111
 

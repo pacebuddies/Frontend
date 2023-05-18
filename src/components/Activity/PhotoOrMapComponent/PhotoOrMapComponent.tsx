@@ -1,6 +1,6 @@
 import { MapIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
-import { IActivity } from '../../internalTypes/interfaces';
+import { IActivity } from '../../../internalTypes/interfaces';
 import MapComponent from './MapComponent';
 import Slider from './Slider';
 

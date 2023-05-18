@@ -1,6 +1,6 @@
 import { Carousel } from 'flowbite-react';
 import { useState } from 'react';
-import { IPhoto } from '../../internalTypes/interfaces';
+import { IPhoto } from '../../../internalTypes/interfaces';
 interface SliderProps {
   photos: IPhoto[];
 }
@@ -21,7 +21,7 @@ const Slider = ({ photos }: SliderProps) => {
 
   return (
     <>
-      <Carousel slide={false} className="border-[1px] border-pb-green">
+      <Carousel slide={false} className="">
         {photos.map((photo, index) => (
           <div
             key={photo.urls['2048']}
@@ -52,9 +52,9 @@ const Slider = ({ photos }: SliderProps) => {
 
             <img
               src={photo.urls['2048']}
-              // height={2048}
-              // width={2048}
-              className={`h-full ${isLoading[index] && 'absolute opacity-0'}`}
+              className={`h-full object-cover ${
+                isLoading[index] && 'absolute opacity-0'
+              }`}
               alt={`Slide ${index}`}
               loading={'lazy'}
               onLoad={() => handleImageLoad(index)}
