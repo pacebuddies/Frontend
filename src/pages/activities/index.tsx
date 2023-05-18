@@ -8,6 +8,7 @@ const ClientOnlyActivities = dynamic(
 
 const Activities = () => {
   return <ClientOnlyActivities />;
+
 };
 
 export default Activities;
