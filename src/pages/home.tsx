@@ -5,8 +5,10 @@ import pacebuddiesApi from '../instances/axiosConfigured';
 import { IAthlete } from '../internalTypes/interfaces';
 import Layout from '../Layout';
 import { useSetAthleteStore } from '../store/athleteStore';
+import { useEffect } from 'react';
 
 const Home: NextPage = () => {
+
   const fetchAthleteHandler = (): Promise<IAthlete> => {
     return pacebuddiesApi
       .get('bridge/athlete')
@@ -19,9 +21,9 @@ const Home: NextPage = () => {
   });
 
   const setAthleteStore = useSetAthleteStore((state) => state.setAthlete);
-  if (athleteQuery.isSuccess) {
+  useEffect(() => {
     setAthleteStore({ athlete: athleteQuery.data });
-  }
+  }, [athleteQuery.data])
 
   return (
     <>
