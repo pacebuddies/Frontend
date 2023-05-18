@@ -15,10 +15,14 @@ interface IProps {
 const NotificationPopup = ({ show }: IProps) => {
   const setNotificationStore = useSetNotificationStore((state) => state.setNotifications)
   const updateNotificationsStore = useSetNotificationStore((state) => state.updateNotification)
+  const setStorePage = useSetNotificationStore((state) => state.setPage)
+  const setStoreHasNextPage = useSetNotificationStore((state) => state.setStoreHasNextPage)
   const clearNotificationStore = useSetNotificationStore((state) => state.clear)
   const notificationStore = useNotificationStore(
     (state) => state.notifications,
   );
+
+  const pageNotificationStore = useNotificationStore((state) => state.page)
 
   function fetchNotifications(page: number) {
     return pacebuddiesApi
@@ -55,9 +59,9 @@ const NotificationPopup = ({ show }: IProps) => {
     },
     config: { tension: 300, friction: 40 },
   });
-  // useEffect(() => clearNotificationStore(), [])
+
   const [page, setPage] = useState<number>(0)
-  const {data, status, isError, isLoading, isFetching, isFetchingNextPage, hasNextPage} = useInfiniteQuery<INotification>( {
+  const {data, status, refetch, isError, isLoading, isFetching, isFetchingNextPage, hasNextPage} = useInfiniteQuery<INotification>( {
     queryKey: ["fetchNotification", page],
     queryFn: () => fetchNotifications(page),
     getNextPageParam: (lastPage, allPages) => {
@@ -67,8 +71,15 @@ const NotificationPopup = ({ show }: IProps) => {
   })
 
   const loadMore = (): void => {
+    setStorePage(page + 1)
     setPage(page + 1)
   }
+
+  useEffect(() => {
+    if(pageNotificationStore != null) {
+        setPage(pageNotificationStore)
+    }
+  }, [pageNotificationStore])
 
   useEffect(() => {
     if(data != null) {
@@ -76,11 +87,14 @@ const NotificationPopup = ({ show }: IProps) => {
     }
   }, [data])
 
-  const clearCallback = useCallback(() => clearNotificationStore())
+  useEffect(() => {
+    if(show) {
+      clearNotificationStore()
+      setPage(0)
+      refetch()
+    }
 
-  // useEffect(() => {
-  //     clearCallback()
-  // }, [clearCallback])
+  }, [show])
 
   return (
     <div className="relative z-50">

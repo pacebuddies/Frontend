@@ -5,11 +5,13 @@ import { INotification } from '../internalTypes/interfaces';
 
 interface NotificationStates {
   notifications: INotification[] | null;
+  page: number | null;
 }
 
 interface NotificationActions {
   setNotifications: (notifications: INotification[]) => void;
   updateNotification: (notificationId: string) => void;
+  setPage: (page: number) => void;
   clear: () => void;
 }
 
@@ -38,8 +40,11 @@ export const useSetNotificationStore = create<
             notificationsCopy[idx].seen = true
             set((state) => ({ notifications: notificationsCopy}))
       },
+      setPage: (new_page: number) => {
+        set((state) => ({page: new_page }))
+      },
       clear: () => {
-        set((state) => ({ notifications: []}))
+        set((state) => ({ notifications: [], page: 0}))
       }
     }),
     {
