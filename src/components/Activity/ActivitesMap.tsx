@@ -1,7 +1,7 @@
 import { IActivity, UnitPreference } from '../../internalTypes/interfaces';
 import { formatSecondsToHMS } from '../../utils/formatSecoundToHMS';
 import { unitChange } from '../../utils/unitChange';
-import PhotoOrMapComponent from './PhotoOrMapComponent';
+import PhotoOrMapComponent from './PhotoOrMapComponent/PhotoOrMapComponent';
 
 interface IProps {
   activity: IActivity;
