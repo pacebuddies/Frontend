@@ -28,7 +28,7 @@ const Activities = () => {
     <Layout>
       <div className="flex shrink-0 flex-col">
         <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
-          <span className="small-caps self-center whitespace-nowrap font-istok-web text-2xl font-bold text-pb-green">
+          <span className="small-caps self-center whitespace-nowrap font-istok-web font-bold text-7xl capitalize text-transparent bg-clip-text bg-gradient-to-r from-pb-green to-pb-orange ">
             Activities
           </span>
         </div>
