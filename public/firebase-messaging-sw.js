@@ -1,5 +1,7 @@
-importScripts('https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.10.0/firebase-messaging-compat.js');
+// Import the Firebase service worker modules
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js');
+// Import any other necessary Firebase service worker modules
 
 
 // Google mówi, że można spokojnie upubliczniać takie rzeczy bo zabezpieczenia stoją po stronie Firebase
@@ -17,13 +19,25 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+// Retrieve the messaging instance
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
-  console.log('Received background message: ', payload);
 
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = { body: payload.notification.body };
+
+// const app       = initializeApp(firebaseConfig);
+// const messaging = getMessaging(app);
+
+messaging.onBackgroundMessage((payload) => {
+  console.log(
+    '[firebase-messaging-sw.js] Received background message ',
+    payload
+  );
+  // Customize notification here
+  const notificationTitle = 'Background Message Title';
+  const notificationOptions = {
+    body: 'Background Message body.',
+    icon: '/firebase-logo.png'
+  };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });

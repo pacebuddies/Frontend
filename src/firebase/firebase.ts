@@ -27,7 +27,26 @@ const firebaseCloudMessaging = {
 
 
         // Request the push notification permission from browser
-        const status = await Notification.requestPermission();
+        Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            console.log('Notification permission granted.');
+            messaging.getToken({ vapidKey: process.env['NEXT_PUBLIC_FIREBASE_VAPID_KEY'] }).then((currentToken) => {
+                  if (currentToken) {
+                    console.log("token", currentToken)
+                    setFCMToken(currentToken)
+                    return currentToken;
+                  } else {
+                    // Show permission request UI
+                    console.log('No registration token available. Request permission to generate one.');
+                    return null;
+                  }
+                }).catch((err) => {
+                  console.log('An error occurred while retrieving token. ', err);
+                  return null
+                });
+          }
+        }).catch((err) => console.log(err))
+
         if (status && status === "granted") {
         // Get new token from Firebase
           const new_fcm_token = await messaging.getToken({
@@ -36,6 +55,7 @@ const firebaseCloudMessaging = {
 
           // Set token in our local storage
           if (new_fcm_token) {
+            console.log("token", new_fcm_token)
             setFCMToken(new_fcm_token)
             return new_fcm_token;
           }
