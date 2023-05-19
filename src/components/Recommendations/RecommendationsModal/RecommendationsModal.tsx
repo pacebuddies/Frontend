@@ -1,6 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/solid';
 import React, { useEffect, useState } from 'react';
-import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { RecommendationData } from '../../../internalTypes/recommendationData';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 import AcceptButton from './AcceptButton';
@@ -11,67 +14,19 @@ import RecommendationsSportSelector from './RecommendationsSportSelector';
 //import svg
 
 interface IProps {
-  opened: boolean;
+  data: RecommendationData[];
   onOpenedChange: (opened: boolean) => void;
 }
 
-// const data1: RecommendationData[] = [
-//   {
-//     id: '001',
-//     country: 'France',
-//     city: 'Paris',
-//     profile:
-//       'https://dgalywyr863hv.cloudfront.net/pictures/athletes/25373655/10192907/8/large.jpg',
-//     firstname: 'John',
-//     lastname: 'Doe',
-//     sex: 'Male',
-//     compatibility: 80,
-//   },
-//   {
-//     id: '002',
-//     country: 'Italy',
-//     city: 'Rome',
-//     profile:
-//       'https://dgalywyr863hv.cloudfront.net/pictures/athletes/15118564/22631426/1/large.jpg',
-//     firstname: 'Jane',
-//     lastname: 'Smith',
-//     sex: 'Female',
-//     compatibility: 90,
-//   },
-//   {
-//     id: '003',
-//     country: 'Japan',
-//     city: 'Tokyo',
-//     profile:
-//       'https://dgalywyr863hv.cloudfront.net/pictures/athletes/9189599/3097105/1/large.jpg',
-//     firstname: 'Taro',
-//     lastname: 'Yamada',
-//     sex: 'Male',
-//     compatibility: 70,
-//   },
-// ];
-
-const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
+const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
   const [recommendationNumber, setRecommendationNumber] = useState(0);
   const [reRender, setReRender] = useState(0);
-
-  const fetchRecommendations = (): Promise<RecommendationData[]> => {
-    return pacebuddiesApi
-      .get('recommender/recommendations/list', {
-        params: {
-          sportType: SportTypeEnum.RUN,
-        },
-      })
-      .then((response) => response.data);
-  };
-  const recommendationQuery = useQuery<RecommendationData[]>({
-    queryKey: ['recommendations'],
-    queryFn: fetchRecommendations,
-    initialData: [],
-  });
-
+  const [selectedSports, setSelectedSports] = useState<SportTypeEnum[]>([]);
+  const [filteredData, setFilteredData] = useState<RecommendationData[]>(
+    data ?? [],
+  );
   const nextRecommendation = () => {
-    if (recommendationNumber < recommendationQuery.data.length - 1) {
+    if (recommendationNumber < filteredData.length - 1) {
       setRecommendationNumber(recommendationNumber + 1);
     }
   };
@@ -86,6 +41,29 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
     console.log(event.key);
     if (event.key === 'Escape') {
       onOpenedChange(false);
+    }
+  };
+
+  const handleFilteredSportChange = (sport: SportTypeEnum[]) => {
+    console.log(sport);
+    setSelectedSports([...sport]);
+    setRecommendationNumber(0);
+    if (sport.length === 0) {
+      setFilteredData([...data]);
+    } else {
+      setFilteredData([
+        ...data.filter((item) => {
+          const sport_types = item.sport_types.map(
+            (sport) => sport as SportTypeEnum,
+          );
+          for (const user_sport of sport_types) {
+            if (sport.includes(user_sport)) {
+              return item;
+            }
+          }
+          return;
+        }),
+      ]);
     }
   };
 
@@ -111,13 +89,13 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
 
   const recommendationDecisionHandler = (id: string) => {
     // remove recommendation from list
-    const index = recommendationQuery.data.findIndex((item) => item.id === id);
+    const index = filteredData.findIndex((item) => item.id === id);
     if (index === -1) {
       return;
     }
-    recommendationQuery.data.splice(index, 1);
+    setFilteredData([...filteredData.splice(index, 1)]);
     const newRecommendationNumber = findNextRecommendation(
-      recommendationQuery.data,
+      filteredData,
       recommendationNumber,
     );
     if (newRecommendationNumber === recommendationNumber) {
@@ -140,134 +118,94 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
     };
   }, [onOpenedChange]);
 
-  console.log(recommendationQuery.data)
+  console.log(data);
 
   return (
     <>
-      {opened ? (
-        <>
-          <div className="fixed inset-0 z-50 flex flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-            <div className="relative mx-auto my-6 flex h-auto max-h-[80rem] w-auto max-w-7xl flex-col items-center justify-center">
-              <div className="flex w-11/12 flex-row items-center justify-center rounded-t-3xl bg-pb-green">
-                <RecommendationsSportSelector
-                  onSportChange={(sport) => {
-                    console.log(sport);
-                  }}
-                />
+      <div className="fixed inset-0 z-1050 flex flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
+        <div className="relative m-6  flex h-180 w-384 flex-col items-center justify-center">
+          <div className="flex w-9/12 flex-row items-center justify-center rounded-t-3xl bg-pb-green">
+            <RecommendationsSportSelector
+              onSportChange={handleFilteredSportChange}
+            />
+          </div>
+          <div className="relative mx-auto flex w-full h-full flex-row items-center justify-center">
+            {/*Content*/}
+            <div className="flex flex-col items-center justify-center w-full h-full">
+              {/*Upper content*/}
+              <div className="flex w-full h-full flex-row items-center justify-center">
+                <div className="w-20 shrink-0">
+                  {/*Previous button*/}
+
+                  <button
+                    className={`relative left-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray ${
+                      recommendationNumber === 0 &&
+                      'pointer-events-none opacity-0'
+                    }`}
+                    onClick={() => previousRecommendation()}
+                  >
+                    <ChevronLeftIcon className="h-6 w-6" />
+                  </button>
+                </div>
+                <div className="flex w-full h-full flex-row rounded-full border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
+                  {/*UWAGA! Poniższa linia styli ustala szerokość modalu na różnych urządzeniach*/}
+                  <div
+                    className={
+                      'relative flex-auto rounded-3xl bg-white p-6 w-full h-full'
+                    }
+                  >
+                    <RecommendationsModalContent
+                      num={recommendationNumber}
+                      data={filteredData}
+                      reRender={reRender}
+                      selectedSports={selectedSports}
+                    />
+                  </div>
+                </div>
+                {/*Next button*/}
+                <button
+                  className={`relative left-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray ${
+                    recommendationNumber ==
+                      (filteredData.length > 0 ? filteredData.length - 1 : 0) &&
+                    'pointer-events-none opacity-0'
+                  }`}
+                  onClick={() => nextRecommendation()}
+                >
+                  <ChevronRightIcon className="h-6 w-6" />
+                </button>
+                {/*Close button*/}
+                <button
+                  className="relative right-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray bottom-[20.5rem]"
+                  onClick={() => onOpenedChange(false)}
+                  onKeyDown={(event) => handleEscKeyDown(event)}
+                >
+                  <XMarkIcon className="h-6 w-6" />
+                </button>
               </div>
-              <div className="relative mx-auto  flex h-auto max-h-[80rem] w-auto max-w-7xl flex-row items-center justify-center">
-                {/*Content*/}
-                <div className="flex flex-col items-center justify-center">
-                  {/*Upper content*/}
-                  <div className="flex flex-row items-center justify-center">
-                    <div className="w-20 shrink-0">
-                      {/*Previous button*/}
-                      <button
-                        className="relative left-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray"
-                        onClick={() => previousRecommendation()}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="h-6 w-6"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                    <div className="flex w-full flex-row rounded-full border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
-                      {/*UWAGA! Poniższa linia styli ustala szerokość modalu na różnych urządzeniach*/}
-                      <div
-                        className={
-                          'relative h-64 w-128 flex-auto rounded-3xl bg-white p-6 md:h-96 md:w-160 lg:h-128 lg:w-224 xl:h-160 xl:w-288 2xl:h-160 2xl:w-320'
-                        }
-                      >
-                        {recommendationQuery.isSuccess && (
-                          <RecommendationsModalContent
-                            num={recommendationNumber}
-                            data={recommendationQuery.data}
-                            reRender={reRender}
-                          />
-                        )}
-                      </div>
-                    </div>
-                    {/*Next button*/}
-                    <button
-                      className="relative left-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray"
-                      onClick={() => nextRecommendation()}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="h-6 w-6"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.28 11.47a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 01-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 011.06-1.06l7.5 7.5z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </button>
-                    {/*Close button*/}
-                    <button
-                      className="relative bottom-28 right-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray md:bottom-28 lg:bottom-44 xl:bottom-60 2xl:bottom-72"
-                      onClick={() => onOpenedChange(false)}
-                      onKeyDown={(event) => handleEscKeyDown(event)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="h-6 w-6"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  {/*Accept Decline Buttons*/}
-                  <div>
-                    <div className="flex w-128 flex-auto items-center justify-center pt-6 md:w-128 lg:w-192  xl:w-256">
-                      {/*Accept Button*/}
-                      {recommendationQuery.data.length > 0 && (
-                        <AcceptButton
-                          userId={
-                            recommendationQuery.data[recommendationNumber]
-                              ?.id ?? '0'
-                          }
-                          sportType={SportTypeEnum.RUN}
-                          onAccepted={recommendationDecisionHandler}
-                        />
-                      )}
-                      {/*Decline Button*/}
-                      {recommendationQuery.data.length > 0 && (
-                        <DeclineButton
-                          userId={
-                            recommendationQuery.data[recommendationNumber]
-                              ?.id ?? '0'
-                          }
-                          sportType={SportTypeEnum.RUN}
-                          onDeclined={recommendationDecisionHandler}
-                        />
-                      )}
-                    </div>
-                  </div>
+              {/*Accept Decline Buttons*/}
+              <div>
+                <div className="flex w-128 flex-auto items-center justify-center pt-6 md:w-128 lg:w-192  xl:w-256">
+                  {/*Accept Button*/}
+                  <AcceptButton
+                    userId={filteredData[recommendationNumber]?.id ?? '0'}
+                    sportType={SportTypeEnum.RUN}
+                    onAccepted={recommendationDecisionHandler}
+                    showed={filteredData.length > 0}
+                  />
+                  {/*Decline Button*/}
+                  <DeclineButton
+                    userId={filteredData[recommendationNumber]?.id ?? '0'}
+                    sportType={SportTypeEnum.RUN}
+                    onDeclined={recommendationDecisionHandler}
+                    showed={filteredData.length > 0}
+                  />
                 </div>
               </div>
             </div>
           </div>
-          <div className="fixed inset-0 z-40 bg-gray-500/50 backdrop-blur-sm"></div>
-        </>
-      ) : null}
+        </div>
+      </div>
+      <div className="fixed inset-0 z-1040 bg-gray-500/50 backdrop-blur-sm"></div>
     </>
   );
 };

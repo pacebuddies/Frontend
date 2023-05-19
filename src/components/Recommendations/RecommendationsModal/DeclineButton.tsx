@@ -5,9 +5,10 @@ interface IProps {
   userId: string;
   sportType: SportTypeEnum;
   onDeclined: (id: string) => void;
+  showed: boolean;
 }
 
-const DeclineButton = ({ userId, sportType, onDeclined }: IProps) => {
+const DeclineButton = ({ userId, sportType, onDeclined, showed }: IProps) => {
   const declineRecommendation = () => {
     pacebuddiesApi
       .post(`recommender/recommendations/match/decline`, {
@@ -24,7 +25,7 @@ const DeclineButton = ({ userId, sportType, onDeclined }: IProps) => {
   };
 
   return (
-    <div className="ml-20 flex h-10 w-32 items-center justify-center rounded-full bg-pb-gray">
+    <div className={`ml-20 flex h-10 w-32 items-center justify-center rounded-full bg-pb-gray ${!showed && 'opacity-0 pointer-events-none'}`}>
       <button onClick={() => declineRecommendation()}>
         <div className="flex items-center justify-center">
           <svg

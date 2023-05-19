@@ -38,7 +38,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
     if (string === undefined) {
       return '';
     }
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
   };
 
   return (
@@ -46,7 +46,9 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
       <div className="flex w-full flex-row justify-between pt-4">
         <span className="font-bold text-pb-green">
           Year&apos;s summary for{' '}
-          {capitalizeFirstLetter(SportTypeMap.getString(selectedSport!)?.toLowerCase())}
+          {capitalizeFirstLetter(
+            SportTypeMap.getString(selectedSport!)?.toLowerCase(),
+          )}
         </span>
         <Dropdown
           label={selectedYear}

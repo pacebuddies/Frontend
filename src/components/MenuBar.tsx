@@ -16,7 +16,7 @@ const MenuBar = ({ open }: IProps) => {
   return (
     <>
       <animated.div
-        className={`max:w-full fixed bottom-6  left-4 flex h-14 w-0 items-center justify-center space-x-3 overflow-hidden rounded-full bg-pb-gray`}
+        className={`max:w-full fixed bottom-6 z-1010 left-4 flex h-14 w-0 items-center justify-center space-x-3 overflow-hidden rounded-full bg-pb-gray`}
         style={containerSpring}
       >
         {/*Activities*/}
