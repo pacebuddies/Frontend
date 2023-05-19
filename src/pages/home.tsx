@@ -22,7 +22,7 @@ const Home: NextPage = () => {
 
   const setAthleteStore = useSetAthleteStore((state) => state.setAthlete);
   useEffect(() => {
-    setAthleteStore({ athlete: athleteQuery.data });
+    setAthleteStore({ athlete: athleteQuery.data ?? null });
   }, [athleteQuery.data])
 
   return (

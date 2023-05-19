@@ -1,12 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, ReactNode } from "react";
 import * as firebase from "firebase/app";
 import  { onMessage, getMessaging } from "firebase/messaging";
 import { firebaseCloudMessaging } from "../firebase/firebase";
 import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { useSetFCMStore, useFCMStore } from '../store/firebaseStore.ts';
+import { useSetFCMStore, useFCMStore } from '../store/firebaseStore';
 
-function PushNotificationLayout({ children }) {
+interface Props {
+  children: ReactNode;
+}
+
+const PushNotificationLayout: React.FC<Props> = ({ children }: Props) => {
   const router = useRouter();
 
   const setFCMToken = useSetFCMStore((state) => state.setFCMToken);
@@ -36,7 +40,7 @@ function PushNotificationLayout({ children }) {
   });
 
   // Handles the click function on the toast showing push notification
-  const handleClickPushNotification = (url) => {
+  const handleClickPushNotification = (url: string = '') => {
     router.push(url);
   };
 
@@ -46,7 +50,7 @@ function PushNotificationLayout({ children }) {
     onMessage(messaging, (message) => {
       console.log("onMessage", message)
       toast(
-        <div onClick={() => handleClickPushNotification(message?.data?.url)}>
+        <div onClick={() => handleClickPushNotification(message?.data?.['url'])}>
           <h5>{message?.notification?.title}</h5>
           <h6>{message?.notification?.body}</h6>
         </div>,

@@ -1,7 +1,9 @@
 import  { getMessaging, getToken } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 
+// @ts-ignore
 const firebaseCloudMessaging = {
+  // @ts-ignore
   init: async (setFCMToken, fcm_token) => {
     // if (!firebase?.apps?.length) {
       // console.log(process.env['NEXT_PUBLIC_FIREBASE_API_KEY'])
@@ -19,12 +21,10 @@ const firebaseCloudMessaging = {
       try {
         const messaging = getMessaging(app);
 
-
          // Return the token if it is alredy in our local storage
         if (fcm_token !== null) {
           return fcm_token;
         }
-
 
         // Request the push notification permission from browser
         Notification.requestPermission().then((permission) => {

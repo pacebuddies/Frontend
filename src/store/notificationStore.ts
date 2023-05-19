@@ -4,14 +4,12 @@ import { persist } from 'zustand/middleware';
 import { INotification } from '../internalTypes/interfaces';
 
 interface NotificationStates {
-  notifications: INotification[] | null;
-  page: number | null;
+  notifications: INotification[];
 }
 
 interface NotificationActions {
   setNotifications: (notifications: INotification[]) => void;
   updateNotification: (notificationId: string) => void;
-  setPage: (page: number) => void;
   clear: () => void;
 }
 
@@ -29,23 +27,28 @@ export const useSetNotificationStore = create<
     (set, get) => ({
       ...initialNotificationStates,
       setNotifications: (new_notifications: INotification[]) => {
-            set((state) => ({ notifications: [...state.notifications.concat(...new_notifications)
-                                                        .filter((v,i,a) => a.findIndex(v2=>(v2.id===v.id))===i)]
-                                                        .sort((n1,n2) => new Date(n2.date_time) - new Date(n1.date_time))
-                                                     })) // Usuwanie duplikatów i sortowanie po dacie (pain)
+            set((state) => ({ notifications:[
+                                    ...(state?.notifications ?? []),
+                                    ...new_notifications
+                                      .filter((v, i, a) => a.findIndex(v2 => v2.id === v.id) === i)
+                                      .sort((n1, n2) => (new Date(n2.date_time)).getTime() - (new Date(n1.date_time)).getTime()),
+                                    ],
+        })) // Usuwanie duplikatów i sortowanie po dacie (pain)
       },
       updateNotification: (notificationId: string) => {
-            const idx = get().notifications.findIndex(n => n.id === notificationId)
-            const notificationsCopy = get().notifications
-            notificationsCopy[idx].seen = true
-            set((state) => ({ notifications: notificationsCopy}))
-      },
-      setPage: (new_page: number) => {
-        set((state) => ({page: new_page }))
+            const currentState = get();
+            if (currentState && currentState.notifications) {
+              const idx = currentState.notifications.findIndex(n => n.id === notificationId);
+              const notificationsCopy = currentState.notifications.slice();
+              if (notificationsCopy && idx !== -1 && notificationsCopy[idx]) {
+                notificationsCopy[idx]!.seen = true;
+                set({ notifications: notificationsCopy });
+              }
+            }
       },
       clear: () => {
-        set((state) => ({ notifications: [], page: 0}))
-      }
+        set((state) => ({ notifications: []}))
+      },
     }),
     {
       name: 'notification-store',

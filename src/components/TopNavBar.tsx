@@ -9,7 +9,7 @@ import { useAthleteStore } from '../store/athleteStore';
 import { ArrowPathIcon, BellIcon, PowerIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import SynchronizePopup from './Synchronize/SynchronizePopup';
-import NotificationPopup from './Notifications/NotificationPopup.tsx';
+import NotificationPopup from './Notifications/NotificationPopup';
 
 const TopNavBar: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);

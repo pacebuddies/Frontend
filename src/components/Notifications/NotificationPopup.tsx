@@ -2,27 +2,24 @@ import { useEffect, useState, useCallback } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { animated, useSpring, useTransition } from 'react-spring';
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
-import { INotification } from '../../internalTypes/interfaces.ts';
-import NotificationSegment from './NotificationSegment.tsx';
-import pacebuddiesApi from '../../instances/axiosConfigured.ts';
-import { useSetNotificationStore, useNotificationStore } from '../../store/notificationStore.ts';
+import { INotification } from '../../internalTypes/interfaces';
+import NotificationSegment from './NotificationSegment';
+import pacebuddiesApi from '../../instances/axiosConfigured';
+import { useSetNotificationStore, useNotificationStore } from '../../store/notificationStore';
 
 interface IProps {
-  show: boolean,
-  page: number,
-  setPage: any
+  show: boolean
 }
 const NotificationPopup = ({ show }: IProps) => {
   const setNotificationStore = useSetNotificationStore((state) => state.setNotifications)
   const updateNotificationsStore = useSetNotificationStore((state) => state.updateNotification)
-  const setStorePage = useSetNotificationStore((state) => state.setPage)
-  const setStoreHasNextPage = useSetNotificationStore((state) => state.setStoreHasNextPage)
+  // const setStorePage = useSetNotificationStore((state) => state.setPage)
   const clearNotificationStore = useSetNotificationStore((state) => state.clear)
-  const notificationStore = useNotificationStore(
+  const notificationStore = useNotificationStore<'notifications'>(
     (state) => state.notifications,
-  );
+  ) ?? [];
 
-  const pageNotificationStore = useNotificationStore((state) => state.page)
+//   const pageNotificationStore = useNotificationStore((state) => state.page)
 
   function fetchNotifications(page: number) {
     return pacebuddiesApi
@@ -61,29 +58,32 @@ const NotificationPopup = ({ show }: IProps) => {
   });
 
   const [page, setPage] = useState<number>(0)
-  const {data, status, refetch, isError, isLoading, isFetching, isFetchingNextPage, hasNextPage} = useInfiniteQuery<INotification>( {
+  const {data, status, refetch, isError, isLoading, isFetching, isFetchingNextPage, hasNextPage} = useInfiniteQuery<INotification[]>( {
     queryKey: ["fetchNotification", page],
     queryFn: () => fetchNotifications(page),
     getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length == 5 ? lastPage[lastPage.length - 1].date_time : undefined
+      if(lastPage && lastPage.length == 5) {
+        return lastPage[lastPage.length - 1]?.date_time;
+      }
+      return null;
     },
     keepPreviousData: true
   })
 
   const loadMore = (): void => {
-    setStorePage(page + 1)
+//     setStorePage(page + 1)
     setPage(page + 1)
   }
 
-  useEffect(() => {
-    if(pageNotificationStore != null) {
-        setPage(pageNotificationStore)
-    }
-  }, [pageNotificationStore])
+//   useEffect(() => {
+//     if(pageNotificationStore != null) {
+//         setPage(pageNotificationStore as number)
+//     }
+//   }, [pageNotificationStore])
 
   useEffect(() => {
     if(data != null) {
-      setNotificationStore(data.pages)
+      setNotificationStore(data.pages.flat())
     }
   }, [data])
 
@@ -131,8 +131,8 @@ const NotificationPopup = ({ show }: IProps) => {
                 )}
               {status == "success" && (
                 <div className="overflow-scroll scrollbar-hide max-h-[21.25rem] mx-3">
-                    {notificationStore.length == 0 && (<div className="flex items-center justify-center"> There are no new notifications </div>)}
-                    {notificationStore.map((notification: INotification) =>
+                    {notificationStore?.length == 0 && (<div className="flex items-center justify-center"> There are no new notifications </div>)}
+                    {notificationStore?.map((notification: INotification) =>
                         <NotificationSegment
                           key={notification.id}
                           data={notification}
@@ -144,7 +144,7 @@ const NotificationPopup = ({ show }: IProps) => {
               )}
             </span>
           </div>
-          { status == "success" && notificationStore.length > 0 && (
+          { status == "success" && notificationStore?.length > 0 && (
             <div>
               { hasNextPage && (
                 <div className="flex flex-row mt-2 items-center justify-center">

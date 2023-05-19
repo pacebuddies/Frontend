@@ -1,13 +1,13 @@
-import pacebuddiesApi from "../../instances/axiosConfigured.ts";
-import { INotification } from "../../internalTypes/interfaces.ts"
+import pacebuddiesApi from "../../instances/axiosConfigured";
+import { INotification } from "../../internalTypes/interfaces"
 import { UserPlusIcon, HandThumbUpIcon, ExclamationCircleIcon } from '@heroicons/react/24/solid';
 
 interface IProps {
     data: INotification,
-    markAsSeen: (string) => void
+    markAsSeen: (arg: string) => void
 }
 
-const NotificationSegment= ({ data, markAsSeen }) => {
+const NotificationSegment= ({ data, markAsSeen }: IProps) => {
 
     function parseDate(dateStr: string) {
         const date = new Date(dateStr)
