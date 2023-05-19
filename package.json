@@ -29,7 +29,7 @@
     "axios": "^1.2.1",
     "chart.js": "^4.1.1",
     "faker": "^6.6.6",
-    "firebase": "8.10.0",
+    "firebase": "9.10.0",
     "flowbite": "^1.5.4",
     "flowbite-react": "^0.3.5",
     "leaflet": "^1.9.3",
