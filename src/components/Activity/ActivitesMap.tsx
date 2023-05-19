@@ -1,6 +1,7 @@
 import { IActivity, UnitPreference } from '../../internalTypes/interfaces';
 import { formatSecondsToHMS } from '../../utils/formatSecoundToHMS';
 import { unitChange } from '../../utils/unitChange';
+import DataTextSpan from './PhotoOrMapComponent/DataTextSpan';
 import PhotoOrMapComponent from './PhotoOrMapComponent/PhotoOrMapComponent';
 
 interface IProps {
@@ -9,9 +10,6 @@ interface IProps {
 }
 
 const ActivitesMap = ({ activity, unitPreference }: IProps) => {
-  // const activity_start_date = new Date(activity.start_date);
-  console.log();
-
   return (
     <div className="flex h-128 w-full flex-col items-center justify-center px-20">
       <span>
@@ -27,56 +25,49 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
       <PhotoOrMapComponent activity={activity} className="h-96 w-full px-20" />
       <div className="grid w-full grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
         {/*Distance*/}
-        <div>
-          <span className="small-caps text-pb-dark-gray">Distance </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric'
+        <DataTextSpan
+          valueName="Distance"
+          value={
+            unitPreference == 'metric'
               ? unitChange(activity.distance, 'm', 'km').toFixed(2)
-              : unitChange(activity.distance, 'm', 'mile').toFixed(2)}
-          </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric' ? ' km' : ' miles'}
-          </span>
-        </div>
+              : unitChange(activity.distance, 'm', 'mile').toFixed(2)
+          }
+          valueUnit={unitPreference == 'metric' ? ' km' : ' miles'}
+        />
         {/*Elevation*/}
-        <div>
-          <span className="small-caps text-pb-dark-gray">Elevation </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric'
-              ? activity.total_elevation_gain
+        <DataTextSpan
+          valueName="Elevation"
+          value={
+            unitPreference == 'metric'
+              ? activity.total_elevation_gain.toString()
               : unitChange(activity.total_elevation_gain, 'm', 'feet').toFixed(
                   2,
-                )}
-          </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric' ? ' m' : ' feet'}
-          </span>
-        </div>
+                )
+          }
+          valueUnit={unitPreference == 'metric' ? ' m' : ' feet'}
+        />
         {/*Time*/}
-        <div>
-          <span className="small-caps text-pb-dark-gray">Time </span>
-          <span className="small-caps text-pb-dark-gray">
-            {formatSecondsToHMS(activity.moving_time)}
-          </span>
-        </div>
+        <DataTextSpan
+          valueName="Time"
+          value={formatSecondsToHMS(activity.moving_time)}
+          valueUnit=""
+        />
 
         {/*Average Speed*/}
-        <div>
-          <span className="small-caps text-pb-dark-gray">Average Speed </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric'
+        <DataTextSpan
+          valueName="Average Speed"
+          value={
+            unitPreference == 'metric'
               ? unitChange(activity.average_speed, 'm/s', 'km/h').toFixed(2)
-              : unitChange(activity.average_speed, 'm/s', 'mile/h').toFixed(2)}
-          </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric' ? ' km/h' : ' mile/h'}
-          </span>
-        </div>
+              : unitChange(activity.average_speed, 'm/s', 'mile/h').toFixed(2)
+          }
+          valueUnit={unitPreference == 'metric' ? ' km/h' : ' mile/h'}
+        />
         {/*Average Pace*/}
-        <div>
-          <span className="small-caps text-pb-dark-gray">Average Pace </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric'
+        <DataTextSpan
+          valueName="Average Pace"
+          value={
+            unitPreference == 'metric'
               ? unitChange(
                   activity.moving_time / activity.distance,
                   's/m',
@@ -86,36 +77,31 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
                   activity.moving_time / activity.distance,
                   's/m',
                   'min/mile',
-                ).toFixed(2)}
-          </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric' ? ' min/km' : ' min/mile'}
-          </span>
-        </div>
+                ).toFixed(2)
+          }
+          valueUnit={unitPreference == 'metric' ? ' min/km' : ' min/mile'}
+        />
         {/*Elapsed time*/}
-        <div>
-          <span className="small-caps text-pb-dark-gray">Elapsed time </span>
-          <span className="small-caps text-pb-dark-gray">
-            {formatSecondsToHMS(activity.elapsed_time)}
-          </span>
-        </div>
+        <DataTextSpan
+          valueName="Elapsed time"
+          value={formatSecondsToHMS(activity.elapsed_time)}
+          valueUnit=""
+        />
         {/*Max Speed*/}
-        <div>
-          <span className="small-caps text-pb-dark-gray">Max Speed </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric'
+        <DataTextSpan
+          valueName="Max Speed"
+          value={
+            unitPreference == 'metric'
               ? unitChange(activity.max_speed, 'm/s', 'km/h').toFixed(2)
-              : unitChange(activity.max_speed, 'm/s', 'mile/h').toFixed(2)}
-          </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric' ? ' km/h' : ' mile/h'}
-          </span>
-        </div>
+              : unitChange(activity.max_speed, 'm/s', 'mile/h').toFixed(2)
+          }
+          valueUnit={unitPreference == 'metric' ? ' km/h' : ' mile/h'}
+        />
         {/*Max Pace*/}
-        <div>
-          <span className="small-caps text-pb-dark-gray">Max Pace </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric'
+        <DataTextSpan
+          valueName="Max Pace"
+          value={
+            unitPreference == 'metric'
               ? unitChange(
                   activity.elapsed_time / activity.distance,
                   's/m',
@@ -125,60 +111,46 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
                   activity.elapsed_time / activity.distance,
                   's/m',
                   'min/mile',
-                ).toFixed(2)}
-          </span>
-          <span className="small-caps text-pb-dark-gray">
-            {unitPreference == 'metric' ? ' min/km' : ' min/mile'}
-          </span>
-        </div>
+                ).toFixed(2)
+          }
+          valueUnit={unitPreference == 'metric' ? ' min/km' : ' min/mile'}
+        />
       </div>
       {activity.sport_type == 'RIDE' ? (
         <>
           <div className="flex w-full flex-col">
-            <span>
+            <span className="small-caps text-pb-dark-gray">
               Ride only {activity.device_watts ? '(measured)' : '(estimated)'}
             </span>
             {/*Kilojoules*/}
             <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
-              <div>
-                <span className="small-caps text-pb-dark-gray">
-                  Kilojoules{' '}
-                </span>
-                <span className="small-caps text-pb-dark-gray">
-                  {activity.kilojoules} kJ
-                </span>
-              </div>
+              <DataTextSpan
+                valueName="Kilojoules"
+                value={activity.kilojoules.toString()}
+                valueUnit=" kJ"
+              />
               {/*Average Watts*/}
-              <div>
-                <span className="small-caps text-pb-dark-gray">
-                  Average Watts{' '}
-                </span>
-                <span className="small-caps text-pb-dark-gray">
-                  {activity.average_watts} W
-                </span>
-              </div>
+              <DataTextSpan
+                valueName="Average Watts"
+                value={activity.average_watts.toString()}
+                valueUnit=" W"
+              />
 
               {/*If activity was measured on dedicated device show to more fields*/}
               {activity.device_watts && (
                 <>
                   {/*Max Wats*/}
-                  <div>
-                    <span className="small-caps text-pb-dark-gray">
-                      Max Watts{' '}
-                    </span>
-                    <span className="small-caps text-pb-dark-gray">
-                      {activity.max_watts} W
-                    </span>
-                  </div>
+                  <DataTextSpan
+                    valueName="Max Watts"
+                    value={activity.max_watts.toString()}
+                    valueUnit=" W"
+                  />
                   {/*Weighted_average_watts*/}
-                  <div>
-                    <span className="small-caps text-pb-dark-gray">
-                      Weighted Average Watts{' '}
-                    </span>
-                    <span className="small-caps text-pb-dark-gray">
-                      {activity.weighted_average_watts} W
-                    </span>
-                  </div>
+                  <DataTextSpan
+                    valueName="Weighted Average Watts"
+                    value={activity.weighted_average_watts.toString()}
+                    valueUnit=" W"
+                  />
                 </>
               )}
             </div>
