@@ -22,7 +22,7 @@ const NotificationSegment= ({ data, markAsSeen }: IProps) => {
 
     return (
         <div className="flex w-full border-pb-green border-2 px-2 py-2.5 my-1 relative items-center justify-center"
-            onMouseEnter={() => {
+            onClick={() => {
                 if(!data.seen) {
                     markAsSeen(data.id)
                 }   
