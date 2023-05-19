@@ -1,39 +1,26 @@
-import { useQuery } from '@tanstack/react-query';
 import 'leaflet/dist/leaflet.css';
-import pacebuddiesApi from '../../instances/axiosConfigured';
-import { IActivity } from '../../internalTypes/interfaces';
-import { useSettingsStore } from '../../store/settingsStore';
+import { IActivity, UnitPreference } from '../../internalTypes/interfaces';
 import ActivitesMap from './ActivitesMap';
 
 // To FIX marker if needed : https://stackoverflow.com/a/67133111
 
-const ClientOnlyActivities = () => {
-  const settingStore = useSettingsStore((store) => store.measurementUnits);
+interface IProps {
+  activities: IActivity[];
+  unitPreference: UnitPreference;
+}
 
-  const fetchActivities = () => {
-    return pacebuddiesApi
-      .get('bridge/athlete/activities', { params: { count: 20 } })
-      .then((res) => res.data);
-  };
-
-  const { data, isSuccess } = useQuery<IActivity[]>({
-    queryKey: ['activities'],
-    queryFn: fetchActivities,
-  });
-  console.log(data);
+const ClientOnlyActivities = ({ activities, unitPreference }: IProps) => {
   return (
     <>
-      {isSuccess
-        ? data.map((activity) =>
-            !activity.is_private ? (
-              <ActivitesMap
-                key={activity.id}
-                activity={activity}
-                unitPreference={settingStore}
-              />
-            ) : null,
-          )
-        : null}
+      {activities.map((activity) =>
+        !activity.is_private ? (
+          <ActivitesMap
+            key={activity.id}
+            activity={activity}
+            unitPreference={unitPreference}
+          />
+        ) : null,
+      )}
     </>
   );
 };

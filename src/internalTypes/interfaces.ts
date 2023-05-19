@@ -23,6 +23,7 @@ export interface IPolylineMap {
 }
 export interface IActivity {
   average_speed: number;
+  sport_type: string;
   description: string | null;
   distance: number;
   photos: IPhoto[];
@@ -42,6 +43,12 @@ export interface IActivity {
   start_date_local: number[];
   timezone: string;
   total_elevation_gain: number;
+  elapsed_time: number;
+  kilojoules: number;
+  average_watts: number;
+  device_watts: boolean;
+  max_watts: number;
+  weighted_average_watts: number;
 }
 
 export interface IPhoto{
