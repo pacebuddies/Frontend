@@ -148,7 +148,7 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
   return (
     <div className="flex w-full flex-col">
       {/*Opis+wybór zakresu*/}
-      <div className="flex w-full flex-row justify-between px-2">
+      <div className="flex w-full flex-row justify-between px-2 space-x-1">
         {/*Opis*/}
         <div className="flex w-full flex-col md:pl-10">
           <div className="flex w-2/3 md:w-1/2 border-t-2 border-t-pb-green mb-1"/>

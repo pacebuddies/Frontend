@@ -104,7 +104,7 @@ const StatisticsPage: NextPage = () => {
               </div>
               {/*Pace*/}
               <div className=" flex w-full shrink-0 flex-col border-t-2 border-t-pb-green space-y-4">
-                <span className="mt-4 mb-2 small-caps self-center whitespace-nowrap font-istok-web font-bold text-3xl capitalize text-pb-green">
+                <span className="mt-4 small-caps self-center whitespace-nowrap font-istok-web font-bold text-3xl capitalize text-pb-green">
                   Pace
                 </span>
                 <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
