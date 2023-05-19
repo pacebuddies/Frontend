@@ -12,15 +12,18 @@ interface IProps {
 const ActivitesMap = ({ activity, unitPreference }: IProps) => {
   return (
     <div className="flex h-128 w-full flex-col items-center justify-center px-20">
-      <span>
-        <a
-          href={`https://www.strava.com/activities/${activity.id}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {activity.name}
-        </a>
-      </span>
+      {/*Name*/}
+      <div className="flex">
+        <span className="text-pb-green text-xl">
+          <a
+            href={`https://www.strava.com/activities/${activity.id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {activity.name}
+          </a>
+        </span>
+      </div>
       {/*Map*/}
       <PhotoOrMapComponent activity={activity} className="h-96 w-full px-20" />
       <div className="grid w-full grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
