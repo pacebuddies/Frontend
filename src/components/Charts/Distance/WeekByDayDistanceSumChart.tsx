@@ -150,12 +150,13 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
       {/*Opis+wybór zakresu*/}
       <div className="flex w-full flex-row justify-between px-2">
         {/*Opis*/}
-        <div className="flex w-full flex-col  md:pl-10">
+        <div className="flex w-full flex-col md:pl-10">
+          <div className="flex w-2/3 md:w-1/2 border-t-2 border-t-pb-green mb-1"/>
           <span className="flex text-xl text-pb-green">
             Daily distance summary
           </span>
           <span className="flex text-pb-dark-gray">
-            Total distance traveled daily in selected week from last month
+            Total distance traveled daily in selected week from last 4 weeks
           </span>
         </div>
         {/*Wybór zakresu*/}

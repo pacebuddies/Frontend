@@ -98,7 +98,7 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
         position: 'top' as const,
       },
       title: {
-        display: true,
+        display: false,
         text: 'Distance summary for last weeks',
       },
       tooltip: {
@@ -130,6 +130,10 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
         title: {
           display: true,
           text: `Distance (${toUnit})`,
+
+        },
+        ticks: {
+          padding: 0,
         },
       },
     },
@@ -142,26 +146,32 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
   }
 
   return (
-    <>
-      <div className="flex w-full  flex-col md:flex-row">
-        <div className="order-2 h-128 w-full md:order-1">
-          <Bar
-            options={barChartOptions}
-            // @ts-expect-error - chart.js types are not compatible with react-chartjs-2
-            data={barChartData}
-            className="overflow-hidden"
-          />
-        </div>
-        <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
-          <span className="mr-2 w-auto whitespace-nowrap">
-            Number of weeks:
+    <div className="flex w-full flex-col">
+      {/*Opis+wybór zakresu*/}
+      <div className="flex w-full flex-row justify-between px-2">
+        {/*Opis*/}
+        <div className="flex w-full flex-col  md:pl-10">
+          <div className="flex w-2/3 md:w-1/2 border-t-2 border-t-pb-green mb-1 "/>
+          <span className="flex text-xl text-pb-green">
+            Distance summary for last weeks
           </span>
+          <span className="flex text-pb-dark-gray">
+            Total distance traveled weekly for selected number of last weeks
+          </span>
+        </div>
+        {/*Wybór zakresu*/}
+        <div className=" mb-4 flex flex-row items-center justify-center space-x-2  md:pr-10">
+          <div className="flex w-auto text-pb-dark-gray flex-col whitespace-nowrap">
+            <span className="flex flex-row ">Number of</span>
+            <span className="flex flex-row">weeks:</span>
+          </div>
           <Dropdown
-            label={weeksNumber}
-            outline={true}
-            pill={true}
-            color={'success'}
-            disabled={isLoading || isFetching}
+              label={weeksNumber}
+              outline={true}
+              pill={true}
+              color={'success'}
+              disabled={isLoading || isFetching}
+              className="flex shrink-0"
           >
             <Dropdown.Item onClick={() => handleWeeksNumberChange(4)}>
               4
@@ -175,7 +185,16 @@ const LastNWeeksDistanceSumChart = ({ selectedSport }: IProps) => {
           </Dropdown>
         </div>
       </div>
-    </>
+      {/*Wykres*/}
+      <div className="h-128 w-full px-2">
+        <Bar
+            options={barChartOptions}
+            // @ts-expect-error - chart.js types are not compatible with react-chartjs-2
+            data={barChartData}
+            className="overflow-hidden"
+        />
+      </div>
+    </div>
   );
 };
 
