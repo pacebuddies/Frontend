@@ -18,7 +18,7 @@ const MapComponent = ({ activity, pathOptions }: IMapComponentProps) => {
     <MapContainer
       center={startingPoint}
       zoom={13}
-      scrollWheelZoom={true}
+      scrollWheelZoom={false}
       style={{ height: '100%', width: '100%' }}
     >
       <TileLayer
