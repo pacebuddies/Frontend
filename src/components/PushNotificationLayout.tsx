@@ -20,7 +20,7 @@ const PushNotificationLayout: React.FC<Props> = ({ children }: Props) => {
   useEffect(() => {
     if (FCMTokenStore) {
       pacebuddiesApi
-        .put("notification/register", {
+        .put("notification/register", {}, {
           headers: {
            "X-FCM": FCMTokenStore
           }
@@ -33,7 +33,7 @@ const PushNotificationLayout: React.FC<Props> = ({ children }: Props) => {
 
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.addEventListener("message", (event) => {
-        console.log("event for the service worker", event);
+//         console.log("event for the service worker", event);
       });
     }
 
