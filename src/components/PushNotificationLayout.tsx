@@ -48,7 +48,6 @@ const PushNotificationLayout: React.FC<Props> = ({ children }: Props) => {
   function getMessage() {
     const messaging = getMessaging();
     onMessage(messaging, (message) => {
-      console.log("onMessage", message)
       toast(
         <div onClick={() => handleClickPushNotification(message?.data?.['url'])}>
           <h5>{message?.notification?.title}</h5>

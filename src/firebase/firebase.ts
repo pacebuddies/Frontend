@@ -5,9 +5,6 @@ import { initializeApp } from "firebase/app";
 const firebaseCloudMessaging = {
   // @ts-ignore
   init: async (setFCMToken, fcm_token) => {
-    // if (!firebase?.apps?.length) {
-      // console.log(process.env['NEXT_PUBLIC_FIREBASE_API_KEY'])
-      // Initialize the Firebase app with the credentials
       const app = initializeApp({
         apiKey: process.env['NEXT_PUBLIC_FIREBASE_API_KEY'],
         authDomain: process.env['NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN'],
@@ -20,8 +17,6 @@ const firebaseCloudMessaging = {
 
       try {
         const messaging = getMessaging(app);
-
-         // Return the token if it is alredy in our local storage
         if (fcm_token !== null) {
           return fcm_token;
         }
@@ -32,7 +27,6 @@ const firebaseCloudMessaging = {
             console.log('Notification permission granted.');
             getToken(messaging, { vapidKey: process.env['NEXT_PUBLIC_FIREBASE_VAPID_KEY'] }).then((currentToken) => {
                   if (currentToken) {
-                    // console.log("token", currentToken)
                     setFCMToken(currentToken)
                     return currentToken;
                   } else {
@@ -46,20 +40,6 @@ const firebaseCloudMessaging = {
                 });
           }
         }).catch((err) => console.log(err))
-
-        // if (status && status === "granted") {
-        // // Get new token from Firebase
-        //   const new_fcm_token = await messaging.getToken({
-        //     vapidKey: process.env['NEXT_PUBLIC_FIREBASE_VAPID_KEY'],
-        //   });
-        //
-        //   // Set token in our local storage
-        //   if (new_fcm_token) {
-        //     console.log("token", new_fcm_token)
-        //     setFCMToken(new_fcm_token)
-        //     return new_fcm_token;
-        //   }
-        // }
       } catch (error) {
         console.error(error);
         return null;
