@@ -92,24 +92,23 @@ const StatisticsPage: NextPage = () => {
                 <YearSummaryContent selectedSport={selectedSport} />
               </div>
               {/*Distance*/}
-              <div className=" flex w-full  shrink-0 flex-col">
+              <div className=" flex w-full shrink-0 flex-col mb-4 space-y-4">
                 <span className="mt-4 small-caps self-center whitespace-nowrap font-istok-web font-bold text-3xl capitalize text-pb-green">
                   Distance
                 </span>
-                <div className="">
                 {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
-                  <WeekByDayDistanceSumChart selectedSport={selectedSport} />
-                  <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
-                  <LastNMonthsDistanceSumChart selectedSport={selectedSport}/>
-                  <LastNMonthsDistanceAvgChart selectedSport={selectedSport}/>
-                  <span className="mt-4 small-caps self-center whitespace-nowrap font-istok-web font-bold text-3xl capitalize text-pb-green">
-                    Pace
-                  </span>
-                  <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
-                  <LastNActivitiesPaceAvgChart
-                      selectedSport={selectedSport}
-                    />
-                </div>
+                <WeekByDayDistanceSumChart selectedSport={selectedSport} />
+                <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
+                <LastNMonthsDistanceSumChart selectedSport={selectedSport} />
+                <LastNMonthsDistanceAvgChart selectedSport={selectedSport} />
+              </div>
+              {/*Pace*/}
+              <div className=" flex w-full shrink-0 flex-col border-t-2 border-t-pb-green space-y-4">
+                <span className="mt-4 mb-2 small-caps self-center whitespace-nowrap font-istok-web font-bold text-3xl capitalize text-pb-green">
+                  Pace
+                </span>
+                <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
+                <LastNActivitiesPaceAvgChart selectedSport={selectedSport} />
               </div>
             </div>
           </div>

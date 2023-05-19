@@ -110,7 +110,7 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
   const chartOptions = {
     plugins: {
       title: {
-        display: true,
+        display: false,
         text: 'Daily distance summary',
       },
       tooltip: {
@@ -137,44 +137,63 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
           display: true,
           text: `Distance (${toUnit})`,
         },
+        ticks: {
+          padding: -75,
+        },
       },
     },
     maintainAspectRatio: false,
   };
 
   return (
-    <div className="flex w-full  flex-col md:flex-row">
-      <div className="order-2 h-128 w-full md:order-1">
-        <Bar
-          data={chartData}
-          options={chartOptions}
-          className="overflow-hidden"
-        />
+    <div className="flex w-full flex-col">
+      {/*Opis+wybór zakresu*/}
+      <div className="flex w-full flex-row justify-between px-2">
+        {/*Opis*/}
+        <div className="flex w-full flex-col  md:pl-10">
+          <span className="flex text-xl text-pb-green">
+            Daily distance summary
+          </span>
+          <span className="flex text-pb-dark-gray">
+            Total distance traveled daily in selected week from last month
+          </span>
+        </div>
+        {/*Wybór zakresu*/}
+        <div className=" mb-4 flex flex-row items-center justify-center space-x-2  md:pr-10">
+          <div className="flex w-auto text-pb-dark-gray flex-col whitespace-nowrap">
+            <span className="flex flex-row ">Number of</span>
+            <span className="flex flex-row">weeks ago:</span>
+          </div>
+          <Dropdown
+              label={weekNumber}
+              outline={true}
+              pill={true}
+              color={'success'}
+              disabled={isFetching}
+              className="flex shrink-0"
+          >
+            <Dropdown.Item onClick={() => setWeekNumber(0)}>
+              This week
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => setWeekNumber(1)}>
+              Last week
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => setWeekNumber(2)}>
+              2 weeks ago
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => setWeekNumber(3)}>
+              3 weeks ago
+            </Dropdown.Item>
+          </Dropdown>
+        </div>
       </div>
-      <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
-        <span className="mr-2 w-auto whitespace-nowrap">
-          Number of weeks ago:
-        </span>
-        <Dropdown
-          label={weekNumber}
-          outline={true}
-          pill={true}
-          color={'success'}
-          disabled={isFetching}
-        >
-          <Dropdown.Item onClick={() => setWeekNumber(0)}>
-            This week
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setWeekNumber(1)}>
-            Last week
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setWeekNumber(2)}>
-            2 weeks ago
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setWeekNumber(3)}>
-            3 weeks ago
-          </Dropdown.Item>
-        </Dropdown>
+      {/*Wykres*/}
+      <div className="h-128 w-full px-2">
+        <Bar
+            data={chartData}
+            options={chartOptions}
+            className="overflow-hidden"
+        />
       </div>
     </div>
   );
