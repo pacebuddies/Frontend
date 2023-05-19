@@ -68,20 +68,22 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
       </div>
       {/*List of summaries*/}
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
-        {/*Total Time*/}
         {isSuccess && (
           <>
             {/*TODO Add more elements*/}
+            {/*Total Time*/}
             <YearSummaryElement
               icon={<ClockIcon className="h-10 w-10 text-white" />}
               label={'Total time'}
               value={formatSecondsToHMS(data[0]?.total_moving_time ?? 0)}
             />
+            {/*Activities*/}
             <YearSummaryElement
               icon={<MapIcon className="h-10 w-10 text-white" />}
               label={'Activities'}
               value={data[0]?.activity_count?.toString() ?? '0'}
             />
+            {/*Time/Activity*/}
             <YearSummaryElement
               icon={
                 <Image
@@ -97,6 +99,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
                   (data[0]?.activity_count ?? 1),
               )}
             />
+            {/*next element*/}
           </>
         )}
         {isError && (
