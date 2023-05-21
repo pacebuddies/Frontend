@@ -13,13 +13,10 @@ interface IProps {
 const NotificationPopup = ({ show }: IProps) => {
   const setNotificationStore = useSetNotificationStore((state) => state.setNotifications)
   const updateNotificationsStore = useSetNotificationStore((state) => state.updateNotification)
-  // const setStorePage = useSetNotificationStore((state) => state.setPage)
   const clearNotificationStore = useSetNotificationStore((state) => state.clear)
   const notificationStore = useNotificationStore<'notifications'>(
     (state) => state.notifications,
   ) ?? [];
-
-//   const pageNotificationStore = useNotificationStore((state) => state.page)
 
   function fetchNotifications(page: number) {
     return pacebuddiesApi
@@ -71,15 +68,8 @@ const NotificationPopup = ({ show }: IProps) => {
   })
 
   const loadMore = (): void => {
-//     setStorePage(page + 1)
     setPage(page + 1)
   }
-
-//   useEffect(() => {
-//     if(pageNotificationStore != null) {
-//         setPage(pageNotificationStore as number)
-//     }
-//   }, [pageNotificationStore])
 
   useEffect(() => {
     if(data != null) {
