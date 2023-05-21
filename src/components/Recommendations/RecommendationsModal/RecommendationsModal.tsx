@@ -133,13 +133,13 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     <>
       <div className="scrollbar-hide fixed inset-0 z-1050 flex snap-x flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
         <button
-          className="fixed right-2 top-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray lg:hidden"
+          className="fixed right-2 top-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray lg:hidden z-[2000]"
           onClick={() => onOpenedChange(false)}
           onKeyDown={(event) => handleEscKeyDown(event)}
         >
           <XMarkIcon className="h-6 w-6" />
         </button>
-        <div className="relative flex h-[90%] h-full max-h-screen w-full flex-col items-center justify-center lg:m-6 lg:w-384">
+        <div className="relative flex h-[80%] h-full max-h-screen w-full flex-col items-center justify-center lg:m-6 lg:w-384">
           <div className="flex w-9/12 flex-row items-center justify-center rounded-t-3xl bg-pb-green">
             <RecommendationsSportSelector
               onSportChange={handleFilteredSportChange}
