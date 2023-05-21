@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { IActivity, UnitPreference } from '../../internalTypes/interfaces';
 import { formatSecondsToHMS } from '../../utils/formatSecoundToHMS';
 import { unitChange } from '../../utils/unitChange';
 import DataTextSpan from './PhotoOrMapComponent/DataTextSpan';
+import PhotoOrMapButton from './PhotoOrMapComponent/PhotoOrMapButton';
 import PhotoOrMapComponent from './PhotoOrMapComponent/PhotoOrMapComponent';
+import { SportTypeMap } from "../../internalTypes/SportTypeMap";
 
 interface IProps {
   activity: IActivity;
@@ -10,12 +13,27 @@ interface IProps {
 }
 
 const ActivitesMap = ({ activity, unitPreference }: IProps) => {
+  const [showMap, setShowMap] = useState<boolean>(activity.map.summary_polyline != '');
+  const isMap = activity.map.summary_polyline != '';
+  const isPhotos = activity.photos.length > 0;
+  const handlePhotoOrMapButtonClick = () => {
+    if (isMap && isPhotos) {
+      setShowMap((prevState) => !prevState);
+    }
+  };
+  const capitalizeFirstLetter = (string: string | undefined) => {
+    if (string === undefined) {
+      return '';
+    }
+    return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
+  };
   return (
-    <div className="flex h-128 w-full flex-col items-center justify-center px-20 mt-2">
+    <div className="mt-2 flex h-128 w-full flex-col items-center justify-center px-20">
       {/*Name*/}
       <div className="flex w-full items-start">
         {/*TODO:Add type of sport*/}
-        <span className="text-pb-green text-xl">
+        {capitalizeFirstLetter(activity.sport_type.toLowerCase())}
+        <span className="text-xl text-pb-green">
           <a
             href={`https://www.strava.com/activities/${activity.id}`}
             target="_blank"
@@ -25,11 +43,21 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
           </a>
         </span>
       </div>
-      {/*TODO: place here showPhotoOrMapButton*/}
+      <PhotoOrMapButton
+        isMap={isMap}
+        isPhotos={isPhotos}
+        onClick={handlePhotoOrMapButtonClick}
+      />
       {/*Map*/}
-      <PhotoOrMapComponent activity={activity} className="h-96 w-full " />
-      <div className="flex w-full md:w-3/4 border-b border-b-pb-green pt-1 mb-1"/>
-      <div className="grid md:w-3/4 grid-cols-2 gap-2 xl:grid-cols-3 2xl:grid-cols-4 ">
+      {(isMap || isPhotos) && (
+        <PhotoOrMapComponent
+          showMap={showMap}
+          activity={activity}
+          className="h-96 w-full"
+        />
+      )}
+      <div className="mb-1 flex w-full border-b border-b-pb-green pt-1 md:w-3/4" />
+      <div className="grid grid-cols-2 gap-2 md:w-3/4 xl:grid-cols-3 2xl:grid-cols-4 ">
         {/*Distance*/}
         <DataTextSpan
           valueName="distance"
@@ -125,12 +153,12 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
       {activity.sport_type == 'RIDE' ? (
         <>
           <div className="flex w-full flex-col items-center justify-center">
-            <div className="flex w-full md:w-3/4 border-b border-b-pb-green pt-1 mb-1"/>
+            <div className="mb-1 flex w-full border-b border-b-pb-green pt-1 md:w-3/4" />
             <span className="small-caps font-bold text-pb-green">
               ride only {activity.device_watts ? '(measured)' : '(estimated)'}
             </span>
             {/*Kilojoules*/}
-            <div className="grid md:w-3/4 grid-cols-2 gap-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 md:w-3/4 xl:grid-cols-3 2xl:grid-cols-4">
               <DataTextSpan
                 valueName="kilojoules"
                 value={activity.kilojoules.toString()}
@@ -164,7 +192,7 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
           </div>
         </>
       ) : null}
-      <div className="flex w-full border-b-2 border-b-pb-green mt-2"/>
+      <div className="mt-2 flex w-full border-b-2 border-b-pb-green" />
     </div>
   );
 };
