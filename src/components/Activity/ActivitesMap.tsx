@@ -11,9 +11,10 @@ interface IProps {
 
 const ActivitesMap = ({ activity, unitPreference }: IProps) => {
   return (
-    <div className="flex h-128 w-full flex-col items-center justify-center px-20">
+    <div className="flex h-128 w-full flex-col items-center justify-center px-20 mt-2">
       {/*Name*/}
-      <div className="flex">
+      <div className="flex w-full items-start">
+        {/*TODO:Add type of sport*/}
         <span className="text-pb-green text-xl">
           <a
             href={`https://www.strava.com/activities/${activity.id}`}
@@ -24,12 +25,14 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
           </a>
         </span>
       </div>
+      {/*TODO: place here showPhotoOrMapButton*/}
       {/*Map*/}
-      <PhotoOrMapComponent activity={activity} className="h-96 w-full px-20" />
-      <div className="grid w-full grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
+      <PhotoOrMapComponent activity={activity} className="h-96 w-full " />
+      <div className="flex w-full md:w-3/4 border-b border-b-pb-green pt-1 mb-1"/>
+      <div className="grid md:w-3/4 grid-cols-2 gap-2 xl:grid-cols-3 2xl:grid-cols-4 ">
         {/*Distance*/}
         <DataTextSpan
-          valueName="Distance"
+          valueName="distance"
           value={
             unitPreference == 'metric'
               ? unitChange(activity.distance, 'm', 'km').toFixed(2)
@@ -39,7 +42,7 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
         />
         {/*Elevation*/}
         <DataTextSpan
-          valueName="Elevation"
+          valueName="elevation"
           value={
             unitPreference == 'metric'
               ? activity.total_elevation_gain.toString()
@@ -51,14 +54,14 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
         />
         {/*Time*/}
         <DataTextSpan
-          valueName="Time"
+          valueName="time"
           value={formatSecondsToHMS(activity.moving_time)}
           valueUnit=""
         />
 
         {/*Average Speed*/}
         <DataTextSpan
-          valueName="Average Speed"
+          valueName="average speed"
           value={
             unitPreference == 'metric'
               ? unitChange(activity.average_speed, 'm/s', 'km/h').toFixed(2)
@@ -68,7 +71,7 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
         />
         {/*Average Pace*/}
         <DataTextSpan
-          valueName="Average Pace"
+          valueName="average pace"
           value={
             unitPreference == 'metric'
               ? unitChange(
@@ -86,13 +89,13 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
         />
         {/*Elapsed time*/}
         <DataTextSpan
-          valueName="Elapsed time"
+          valueName="elapsed time"
           value={formatSecondsToHMS(activity.elapsed_time)}
           valueUnit=""
         />
         {/*Max Speed*/}
         <DataTextSpan
-          valueName="Max Speed"
+          valueName="max speed"
           value={
             unitPreference == 'metric'
               ? unitChange(activity.max_speed, 'm/s', 'km/h').toFixed(2)
@@ -102,7 +105,7 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
         />
         {/*Max Pace*/}
         <DataTextSpan
-          valueName="Max Pace"
+          valueName="max pace"
           value={
             unitPreference == 'metric'
               ? unitChange(
@@ -121,22 +124,23 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
       </div>
       {activity.sport_type == 'RIDE' ? (
         <>
-          <div className="flex w-full flex-col">
-            <span className="small-caps text-pb-dark-gray">
-              Ride only {activity.device_watts ? '(measured)' : '(estimated)'}
+          <div className="flex w-full flex-col items-center justify-center">
+            <div className="flex w-full md:w-3/4 border-b border-b-pb-green pt-1 mb-1"/>
+            <span className="small-caps font-bold text-pb-green">
+              ride only {activity.device_watts ? '(measured)' : '(estimated)'}
             </span>
             {/*Kilojoules*/}
-            <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
+            <div className="grid md:w-3/4 grid-cols-2 gap-2 xl:grid-cols-3 2xl:grid-cols-4">
               <DataTextSpan
-                valueName="Kilojoules"
+                valueName="kilojoules"
                 value={activity.kilojoules.toString()}
-                valueUnit=" kJ"
+                valueUnit=" kj"
               />
               {/*Average Watts*/}
               <DataTextSpan
-                valueName="Average Watts"
+                valueName="average watts"
                 value={activity.average_watts.toString()}
-                valueUnit=" W"
+                valueUnit=" w"
               />
 
               {/*If activity was measured on dedicated device show to more fields*/}
@@ -144,15 +148,15 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
                 <>
                   {/*Max Wats*/}
                   <DataTextSpan
-                    valueName="Max Watts"
+                    valueName="max watts"
                     value={activity.max_watts.toString()}
-                    valueUnit=" W"
+                    valueUnit=" w"
                   />
                   {/*Weighted_average_watts*/}
                   <DataTextSpan
-                    valueName="Weighted Average Watts"
+                    valueName="weighted average watts"
                     value={activity.weighted_average_watts.toString()}
-                    valueUnit=" W"
+                    valueUnit=" w"
                   />
                 </>
               )}
@@ -160,6 +164,7 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
           </div>
         </>
       ) : null}
+      <div className="flex w-full border-b-2 border-b-pb-green mt-2"/>
     </div>
   );
 };

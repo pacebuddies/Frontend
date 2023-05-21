@@ -9,9 +9,9 @@ interface IProps extends React.HTMLAttributes<HTMLSpanElement> {
 const DataTextSpan = ({ valueName, value, valueUnit }: IProps) => {
   return (
     <div>
-      <span className="small-caps text-pb-dark-gray">{valueName} </span>
-      <span className="small-caps text-pb-dark-gray">{value}</span>
-      <span className="small-caps text-pb-dark-gray">{valueUnit}</span>
+      <span className="small-caps font-bold text-pb-dark-gray">{valueName} </span>
+      <span className="small-caps font-bold text-sm text-pb-dark-gray">{value}</span>
+      <span className="small-caps font-bold text-pb-dark-gray">{valueUnit}</span>
     </div>
   );
 };
