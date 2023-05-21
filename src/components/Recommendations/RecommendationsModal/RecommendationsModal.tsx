@@ -4,6 +4,8 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/solid';
 import React, { useEffect, useState } from 'react';
+import { useSwipeable } from 'react-swipeable';
+import { useMediaQuery } from '../../../hooks/useMediaQuery';
 import { RecommendationData } from '../../../internalTypes/recommendationData';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 import AcceptButton from './AcceptButton';
@@ -120,39 +122,55 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
 
   console.log(data);
 
+  const isMobile = useMediaQuery('(max-width: 1024px)');
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => nextRecommendation(),
+    onSwipedRight: () => previousRecommendation(),
+    trackMouse: true,
+  });
   return (
     <>
-      <div className="fixed inset-0 z-1050 flex flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
-        <div className="relative m-6  flex h-180 w-384 flex-col items-center justify-center">
+      <div className="scrollbar-hide fixed inset-0 z-1050 flex snap-x flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
+        <button
+          className="fixed right-2 top-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray lg:hidden"
+          onClick={() => onOpenedChange(false)}
+          onKeyDown={(event) => handleEscKeyDown(event)}
+        >
+          <XMarkIcon className="h-6 w-6" />
+        </button>
+        <div className="relative flex h-[90%] h-full max-h-screen w-full flex-col items-center justify-center lg:m-6 lg:w-384">
           <div className="flex w-9/12 flex-row items-center justify-center rounded-t-3xl bg-pb-green">
             <RecommendationsSportSelector
               onSportChange={handleFilteredSportChange}
             />
           </div>
-          <div className="relative mx-auto flex w-full h-full flex-row items-center justify-center">
+          <div className="relative mx-auto flex h-full w-full flex-row items-center justify-center">
             {/*Content*/}
-            <div className="flex flex-col items-center justify-center w-full h-full">
+            <div className="flex h-full w-full flex-col items-center justify-center">
               {/*Upper content*/}
-              <div className="flex w-full h-full flex-row items-center justify-center">
-                <div className="w-20 shrink-0">
-                  {/*Previous button*/}
-
-                  <button
-                    className={`relative left-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray ${
-                      recommendationNumber === 0 &&
-                      'pointer-events-none opacity-0'
-                    }`}
-                    onClick={() => previousRecommendation()}
-                  >
-                    <ChevronLeftIcon className="h-6 w-6" />
-                  </button>
-                </div>
-                <div className="flex w-full h-full flex-row rounded-full border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
+              <div className="flex h-full w-full flex-row items-center justify-center">
+                {!isMobile && (
+                  <div className="shrink-0 lg:w-20">
+                    {/*Previous button*/}
+                    <button
+                      className={`relative left-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray ${
+                        recommendationNumber === 0 &&
+                        'pointer-events-none opacity-0'
+                      }`}
+                      onClick={() => previousRecommendation()}
+                    >
+                      <ChevronLeftIcon className="h-6 w-6" />
+                    </button>
+                  </div>
+                )}
+                <div className="flex h-full w-full flex-row rounded-full border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
                   {/*UWAGA! Poniższa linia styli ustala szerokość modalu na różnych urządzeniach*/}
                   <div
                     className={
-                      'relative flex-auto rounded-3xl bg-white p-6 w-full h-full'
+                      'relative h-full w-full flex-auto rounded-3xl bg-white p-3 lg:p-6'
                     }
+                    {...handlers}
                   >
                     <RecommendationsModalContent
                       num={recommendationNumber}
@@ -163,19 +181,22 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
                   </div>
                 </div>
                 {/*Next button*/}
-                <button
-                  className={`relative left-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray ${
-                    recommendationNumber ==
-                      (filteredData.length > 0 ? filteredData.length - 1 : 0) &&
-                    'pointer-events-none opacity-0'
-                  }`}
-                  onClick={() => nextRecommendation()}
-                >
-                  <ChevronRightIcon className="h-6 w-6" />
-                </button>
+                {!isMobile && (
+                  <button
+                    className={`left-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray lg:relative ${
+                      recommendationNumber ==
+                        (filteredData.length > 0
+                          ? filteredData.length - 1
+                          : 0) && 'pointer-events-none opacity-0'
+                    }`}
+                    onClick={() => nextRecommendation()}
+                  >
+                    <ChevronRightIcon className="h-6 w-6" />
+                  </button>
+                )}
                 {/*Close button*/}
                 <button
-                  className="relative right-7 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray bottom-[20.5rem]"
+                  className="relative bottom-[20.5rem] right-7 hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray lg:flex"
                   onClick={() => onOpenedChange(false)}
                   onKeyDown={(event) => handleEscKeyDown(event)}
                 >
@@ -184,7 +205,7 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
               </div>
               {/*Accept Decline Buttons*/}
               <div>
-                <div className="flex w-128 flex-auto items-center justify-center pt-6 md:w-128 lg:w-192  xl:w-256">
+                <div className="flex w-full flex-auto items-center justify-center pt-6">
                   {/*Accept Button*/}
                   <AcceptButton
                     userId={filteredData[recommendationNumber]?.id ?? '0'}

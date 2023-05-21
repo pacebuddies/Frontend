@@ -5243,6 +5243,11 @@ react-spring@^9.7.1:
     "@react-spring/web" "~9.7.1"
     "@react-spring/zdog" "~9.7.1"
 
+react-swipeable@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/react-swipeable/-/react-swipeable-7.0.0.tgz#7a12570ee435d35ac700511de338384aa78d12cd"
+  integrity sha512-NI7KGfQ6gwNFN0Hor3vytYW3iRfMMaivGEuxcADOOfBCx/kqwXE8IfHFxEcxSUkxCYf38COLKYd9EMYZghqaUA==
+
 react-toastify@^9.1.1:
   version "9.1.2"
   resolved "https://registry.npmjs.org/react-toastify/-/react-toastify-9.1.2.tgz"
