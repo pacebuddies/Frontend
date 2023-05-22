@@ -52,7 +52,9 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
       <div className="flex w-full flex-row justify-between">
         <span className="small-caps text-xl font-bold text-pb-green ">
           Year&apos;s summary for{' '}
-          {SportTypeMap.getString(selectedSport!)?.toLowerCase()}
+          {SportTypeMap.getString(selectedSport!)
+            ?.toLowerCase()
+            .replace(/_/g, ' ')}
         </span>
         <Dropdown
           label={selectedYear}
