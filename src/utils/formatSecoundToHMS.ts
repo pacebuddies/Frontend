@@ -3,6 +3,7 @@
  * @param time seconds to format
  */
 export const formatSecondsToHMS = (time: number): string => {
+  if (isNaN(time)) return '00:00:00';
   // Calculate the hours, minutes, and seconds
   const hours = Math.floor(time / 3600);
   const remainingSeconds = time % 3600;
