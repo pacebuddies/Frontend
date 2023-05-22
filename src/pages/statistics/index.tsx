@@ -18,7 +18,7 @@ import Layout from '../../Layout';
 
 const StatisticsPage: NextPage = () => {
   const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
-    SportTypeEnum.Run,
+    SportTypeEnum.RUN,
   );
   const fetchSports = (): Promise<string[]> => {
     return pacebuddiesApi
@@ -33,7 +33,7 @@ const StatisticsPage: NextPage = () => {
     if (string === undefined) {
       return '';
     }
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
   };
   useEffect(() => {
     if (sportsQuery.isSuccess) {
