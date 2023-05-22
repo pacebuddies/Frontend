@@ -56,11 +56,14 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
     keepPreviousData: true,
   });
 
+  const nonZeroActivities = data?.filter((item) => item.distance !== 0);
+
   const meanValue = Math.round(
-    data?.length
-      ? data.reduce((acc, item) => acc + item.distance, 0) / data.length
+    nonZeroActivities?.length
+      ? nonZeroActivities.reduce((acc, item) => acc + item.distance, 0) / nonZeroActivities.length
       : 0,
   );
+
   const sortedData = sortByDateAscending(data ?? []);
   const getMonthAndYearString = (date: string): string => {
     const [, month, year] = date.split('-').map(Number);

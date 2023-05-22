@@ -47,7 +47,7 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
       .then((response) => response.data);
   };
 
-  const { data, isLoading, isError, error, isFetching } = useQuery<
+  const { data, isError, error, isFetching } = useQuery<
     IWeekByDayDistanceSum[]
   >({
     queryKey: ['WeekByDayDistanceSum', selectedSport],
@@ -55,7 +55,6 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
     keepPreviousData: true,
   });
 
-  if (isLoading) return <div>Loading...</div>;
   if (isError) {
     toast.error((error as Error).message);
     return <div>{(error as Error).message}</div>;
@@ -84,7 +83,24 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
     'saturday',
     'sunday',
   ];
+  // Calculate meanValue based on non zero days
+  const nonZeroDays = sortedData[weekNumber]
+    ? daysOfWeek.filter(
+        (day) =>
+          sortedData[weekNumber]![day as keyof IWeekByDayDistanceSum] !== 0,
+      )
+    : [];
 
+  const meanValue = nonZeroDays.length
+    ? nonZeroDays.reduce(
+        (acc, day) =>
+          acc +
+          Number(
+            sortedData[weekNumber]![day as keyof IWeekByDayDistanceSum] || 0,
+          ),
+        0,
+      ) / nonZeroDays.length
+    : 0;
 
   const chartData = {
     labels: [
@@ -100,9 +116,19 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
       {
         label: `Week of ${sortedData[weekNumber]?.weeks}`,
         data: getDataForWeek(sortedData[weekNumber]),
+        type: 'bar',
         backgroundColor: 'rgba(239, 138, 23, 0.2)',
         borderColor: 'rgb(239, 138, 23)',
         borderWidth: 1,
+      },
+      {
+        label: 'Mean Distance',
+        data: Array(7).fill(unitChange(meanValue, 'm', toUnit)),
+        type: 'line',
+        borderColor: 'red',
+        borderWidth: 2,
+        pointRadius: 0,
+        fill: false,
       },
     ],
   };
@@ -115,9 +141,10 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
       },
       tooltip: {
         callbacks: {
-          label: function (context: TooltipItem<'bar'>) {
+          label: function (context: TooltipItem<'bar' | 'line'>) {
             const value = context.parsed.y.toFixed(2);
-            return `${value} ${toUnit}`;
+            const label = context.dataset.label ?? '';
+            return `${label}: ${value} ${toUnit}`;
           },
         },
       },
@@ -148,10 +175,10 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
   return (
     <div className="flex w-full flex-col">
       {/*Opis+wybór zakresu*/}
-      <div className="flex w-full flex-row justify-between px-2 space-x-1">
+      <div className="flex w-full flex-row justify-between space-x-1 px-2">
         {/*Opis*/}
         <div className="flex w-full flex-col md:pl-10">
-          <div className="flex w-2/3 md:w-1/2 border-t-2 border-t-pb-green mb-1"/>
+          <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green md:w-1/2" />
           <span className="flex text-xl text-pb-green">
             Daily distance summary
           </span>
@@ -161,17 +188,17 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
         </div>
         {/*Wybór zakresu*/}
         <div className=" mb-4 flex flex-row items-center justify-center space-x-2  md:pr-10">
-          <div className="flex w-auto text-pb-dark-gray flex-col whitespace-nowrap">
+          <div className="flex w-auto flex-col whitespace-nowrap text-pb-dark-gray">
             <span className="flex flex-row ">Number of</span>
             <span className="flex flex-row">weeks ago:</span>
           </div>
           <Dropdown
-              label={weekNumber}
-              outline={true}
-              pill={true}
-              color={'success'}
-              disabled={isFetching}
-              className="flex shrink-0"
+            label={weekNumber}
+            outline={true}
+            pill={true}
+            color={'success'}
+            disabled={isFetching}
+            className="flex shrink-0"
           >
             <Dropdown.Item onClick={() => setWeekNumber(0)}>
               This week
@@ -191,9 +218,10 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
       {/*Wykres*/}
       <div className="h-128 w-full px-2">
         <Bar
-            data={chartData}
-            options={chartOptions}
-            className="overflow-hidden"
+          // @ts-expect-error
+          data={chartData}
+          options={chartOptions}
+          className="overflow-hidden"
         />
       </div>
     </div>
