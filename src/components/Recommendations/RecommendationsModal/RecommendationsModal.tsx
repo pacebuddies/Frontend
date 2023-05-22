@@ -108,8 +108,18 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
   };
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onOpenedChange(false);
+      switch (event.key) {
+        case 'Escape':
+          onOpenedChange(false);
+          break;
+        case 'ArrowRight':
+          nextRecommendation();
+          break;
+        case 'ArrowLeft':
+          previousRecommendation();
+          break;
+        default:
+          break;
       }
     };
 
@@ -118,7 +128,7 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onOpenedChange]);
+  }, [onOpenedChange, nextRecommendation, previousRecommendation]);
 
   console.log(data);
 
@@ -133,13 +143,13 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     <>
       <div className="scrollbar-hide fixed inset-0 z-1050 flex snap-x flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
         <button
-          className="fixed right-2 top-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray lg:hidden z-[2000]"
+          className="fixed right-2 top-2 lg:top-5 lg:right-5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray z-[2000]"
           onClick={() => onOpenedChange(false)}
           onKeyDown={(event) => handleEscKeyDown(event)}
         >
           <XMarkIcon className="h-6 w-6" />
         </button>
-        <div className="relative flex h-[80%] h-full max-h-screen w-full flex-col items-center justify-center lg:m-6 lg:w-384">
+        <div className="relative flex h-[90%] max-h-screen w-full flex-col items-center justify-center lg:m-6 lg:w-384">
           <div className="flex w-9/12 flex-row items-center justify-center rounded-t-3xl bg-pb-green">
             <RecommendationsSportSelector
               onSportChange={handleFilteredSportChange}
@@ -194,14 +204,6 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
                     <ChevronRightIcon className="h-6 w-6" />
                   </button>
                 )}
-                {/*Close button*/}
-                <button
-                  className="relative bottom-[20.5rem] right-7 hidden h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray lg:flex"
-                  onClick={() => onOpenedChange(false)}
-                  onKeyDown={(event) => handleEscKeyDown(event)}
-                >
-                  <XMarkIcon className="h-6 w-6" />
-                </button>
               </div>
               {/*Accept Decline Buttons*/}
               <div>

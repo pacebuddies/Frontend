@@ -36,7 +36,7 @@ const RecommendationsChart = ({ data }: IProps) => {
           },
           font: {
             family: 'Arial',
-            size: 14,
+            size: 10,
           },
         },
       },
@@ -46,7 +46,7 @@ const RecommendationsChart = ({ data }: IProps) => {
         labels: {
           font: {
             family: 'Arial',
-            size: 20,
+            size: 10,
           },
         },
       },
@@ -62,7 +62,7 @@ const RecommendationsChart = ({ data }: IProps) => {
         },
         bodyFont: {
           family: 'Arial',
-          size: 20,
+          size: 10,
         },
       },
     },
@@ -82,7 +82,7 @@ const RecommendationsChart = ({ data }: IProps) => {
   };
 
   return (
-    <div className="absolute top-0 left-0 h-full w-full p-4 font-bold">
+    <div className="absolute left-0 top-0 h-full w-full p-4 font-bold">
       <Radar data={dataChart} options={options} />
     </div>
   );

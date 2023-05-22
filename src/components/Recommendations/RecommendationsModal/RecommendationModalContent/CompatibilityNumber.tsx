@@ -7,7 +7,7 @@ interface IProps {
 
 const CompatibilityNumber = ({ num }: IProps) => {
   const { number } = useSpring({
-    from: { number: 0 },
+    from: { number: 100 },
     number: num,
     delay: 100,
     config: { mass: 1, tension: 20, friction: 10 },
