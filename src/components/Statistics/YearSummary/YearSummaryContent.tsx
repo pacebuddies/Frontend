@@ -8,7 +8,9 @@ import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { IYearSummary } from '../../../internalTypes/Interfaces/statisticsChartInterfaces';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../../internalTypes/SportTypeMap';
+import { useSettingsStore } from '../../../store/settingsStore';
 import { formatSecondsToHMS } from '../../../utils/formatSecoundToHMS';
+import { unitChange } from '../../../utils/unitChange';
 import YearSummaryElement from './YearSummaryElement';
 
 interface IProps {
@@ -34,6 +36,10 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
     keepPreviousData: true,
   });
 
+  const measurementPreference = useSettingsStore(
+    (state) => state.measurementUnits,
+  );
+
   const capitalizeFirstLetter = (string: string | undefined) => {
     if (string === undefined) {
       return '';
@@ -44,7 +50,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
   return (
     <>
       <div className="flex w-full flex-row justify-between">
-        <span className="font-bold text-pb-green text-xl small-caps ">
+        <span className="small-caps text-xl font-bold text-pb-green ">
           Year&apos;s summary for{' '}
           {SportTypeMap.getString(selectedSport!)?.toLowerCase()}
         </span>
@@ -99,7 +105,129 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
                   (data[0]?.activity_count ?? 1),
               )}
             />
-            {/*next element*/}
+            <YearSummaryElement
+              icon={<div></div>}
+              label={'Avg activity count per month'}
+              value={data[0]?.avg_activity_count_per_month?.toString() ?? '0'}
+            />
+            <YearSummaryElement
+              icon={<div></div>}
+              label={'Total Distance'}
+              value={
+                measurementPreference === 'metric'
+                  ? unitChange(data[0]?.total_distance ?? 0, 'm', 'km').toFixed(
+                      2,
+                    ) +
+                    ' ' +
+                    'km'
+                  : unitChange(
+                      data[0]?.total_distance ?? 0,
+                      'm',
+                      'mile',
+                    ).toFixed(2) +
+                    ' ' +
+                    'mi'
+              }
+            />
+            <YearSummaryElement
+              icon={<div></div>}
+              label={'Avg Distance per activity'}
+              value={
+                measurementPreference === 'metric'
+                  ? unitChange(data[0]?.avg_distance ?? 0, 'm', 'km').toFixed(
+                      2,
+                    ) +
+                    ' ' +
+                    'km'
+                  : unitChange(data[0]?.avg_distance ?? 0, 'm', 'mile').toFixed(
+                      2,
+                    ) +
+                    ' ' +
+                    'mi'
+              }
+            />
+            <YearSummaryElement
+              icon={<div></div>}
+              label={'Avg pace'}
+              value={
+                measurementPreference === 'metric'
+                  ? unitChange(
+                      data[0]?.avg_pace ?? 0,
+                      'min/km',
+                      'min/km',
+                    ).toFixed(2) +
+                    ' ' +
+                    'min/km'
+                  : unitChange(
+                      data[0]?.avg_pace ?? 0,
+                      'min/km',
+                      'mile/h',
+                    ).toFixed(2) +
+                    ' ' +
+                    'min/mi'
+              }
+            />
+            <YearSummaryElement
+              icon={<div></div>}
+              label={'median distance'}
+              value={
+                measurementPreference === 'metric'
+                  ? unitChange(
+                      data[0]?.median_distance ?? 0,
+                      'm',
+                      'km',
+                    ).toFixed(2) +
+                    ' ' +
+                    'km'
+                  : unitChange(
+                      data[0]?.median_distance ?? 0,
+                      'm',
+                      'mile',
+                    ).toFixed(2) +
+                    ' ' +
+                    'mi'
+              }
+            />
+            <YearSummaryElement
+              icon={<div></div>}
+              label={'total elevation high'}
+              value={
+                measurementPreference === 'metric'
+                  ? unitChange(data[0]?.total_elev_high ?? 0, 'm', 'm').toFixed(
+                      2,
+                    ) +
+                    ' ' +
+                    'm'
+                  : unitChange(
+                      data[0]?.total_elev_high ?? 0,
+                      'm',
+                      'feet',
+                    ).toFixed(2) +
+                    ' ' +
+                    'feet'
+              }
+            />
+            <YearSummaryElement
+              icon={<div></div>}
+              label={'total distance downhill'}
+              value={
+                measurementPreference === 'metric'
+                  ? unitChange(
+                      data[0]?.total_distance_downhill ?? 0,
+                      'm',
+                      'm',
+                    ).toFixed(2) +
+                    ' ' +
+                    'm'
+                  : unitChange(
+                      data[0]?.total_distance_downhill ?? 0,
+                      'm',
+                      'feet',
+                    ).toFixed(2) +
+                    ' ' +
+                    'feet'
+              }
+            />
           </>
         )}
         {isError && (
