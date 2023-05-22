@@ -5,7 +5,6 @@ import { unitChange } from '../../utils/unitChange';
 import DataTextSpan from './PhotoOrMapComponent/DataTextSpan';
 import PhotoOrMapButton from './PhotoOrMapComponent/PhotoOrMapButton';
 import PhotoOrMapComponent from './PhotoOrMapComponent/PhotoOrMapComponent';
-import { SportTypeMap } from "../../internalTypes/SportTypeMap";
 
 interface IProps {
   activity: IActivity;
@@ -13,7 +12,9 @@ interface IProps {
 }
 
 const ActivitesMap = ({ activity, unitPreference }: IProps) => {
-  const [showMap, setShowMap] = useState<boolean>(activity.map.summary_polyline != '');
+  const [showMap, setShowMap] = useState<boolean>(
+    activity.map.summary_polyline != '',
+  );
   const isMap = activity.map.summary_polyline != '';
   const isPhotos = activity.photos.length > 0;
   const handlePhotoOrMapButtonClick = () => {
@@ -30,30 +31,33 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
   return (
     <div className="mt-2 flex h-128 w-full flex-col items-center justify-center px-20">
       {/*Name*/}
-      <div className="flex w-full items-start">
-        {/*TODO:Add type of sport*/}
-        {capitalizeFirstLetter(activity.sport_type.toLowerCase())}
-        <span className="text-xl text-pb-green">
-          <a
-            href={`https://www.strava.com/activities/${activity.id}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {activity.name}
-          </a>
-        </span>
+      <div className="flex w-full justify-between items-center flex-row">
+        <div className="flex w-full items-start">
+          <div className="font-bold text-xl text-pb-orange italic mr-1">
+            [{capitalizeFirstLetter(activity.sport_type.toLowerCase())}]
+          </div>
+          <span className="text-xl text-pb-green">
+            <a
+              href={`https://www.strava.com/activities/${activity.id}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {activity.name}
+            </a>
+          </span>
+        </div>
+        <PhotoOrMapButton
+          isMap={isMap}
+          isPhotos={isPhotos}
+          onClick={handlePhotoOrMapButtonClick}
+        />
       </div>
-      <PhotoOrMapButton
-        isMap={isMap}
-        isPhotos={isPhotos}
-        onClick={handlePhotoOrMapButtonClick}
-      />
       {/*Map*/}
       {(isMap || isPhotos) && (
         <PhotoOrMapComponent
           showMap={showMap}
           activity={activity}
-          className="h-96 w-full"
+          className="h-96 w-full mt-1"
         />
       )}
       <div className="mb-1 flex w-full border-b border-b-pb-green pt-1 md:w-3/4" />
