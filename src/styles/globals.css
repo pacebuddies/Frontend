@@ -69,5 +69,45 @@
         border: 0 none;
         background-color: red;
     }
+
+
+    .rail {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 6px;
+        border-radius: 3px;
+        background: lightgrey;
+    }
+
+    .inner-rail {
+        position: absolute;
+        height: 100%;
+    }
+
+    .control {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        margin-left: calc(16px / -2);
+        transform: translate3d(0, -50%, 0);
+        z-index: 2;
+        @apply bg-pb-green
+    }
+
+    /* For Webkit-based browsers (Chrome, Safari and Opera) */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* For IE, Edge and Firefox */
+    .scrollbar-hide {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
 }
 

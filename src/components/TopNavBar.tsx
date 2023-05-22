@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import { getSession, signOut } from 'next-auth/react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import pacebuddiesApi, { stravaOauthApi } from '../instances/axiosConfigured';
 import { useAthleteStore } from '../store/athleteStore';
@@ -9,10 +9,12 @@ import { useAthleteStore } from '../store/athleteStore';
 import { ArrowPathIcon, BellIcon, PowerIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import SynchronizePopup from './Synchronize/SynchronizePopup';
+import NotificationPopup from './Notifications/NotificationPopup';
 
 const TopNavBar: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [popupOpen, setPopupOpen] = useState(false);
+  const [syncPopupOpen, setSyncPopupOpen] = useState(false);
+  const [notificationPopupOpen, setNotificationPopupOpen] = useState(false);
   const athlete = useAthleteStore((state) => state.athlete);
 
   function SynchronizeData() {
@@ -63,36 +65,42 @@ const TopNavBar: NextPage = () => {
           <div className="flex w-auto items-center justify-between">
             {/*Avatar*/}
             <div className="flex  items-center">
-              <button
-                type="button"
-                className="mr-3 flex h-12 w-12  items-center justify-center rounded-full  "
-              >
-                <Image
-                  className="h-12 w-12 shrink-0 rounded-full border-2 border-solid border-pb-green bg-pb-green"
-                  src={athlete?.profile!}
-                  alt="user avatar"
-                  width={48}
-                  height={48}
-                  title={athlete?.firstname! + ' ' + athlete?.lastname!}
-                  unoptimized={true}
-                />
-              </button>
+              <Link href={'/profile'}>
+                <button
+                  type="button"
+                  className="mr-3 flex h-12 w-12  items-center justify-center rounded-full  "
+                >
+                  <Image
+                    className="h-12 w-12 shrink-0 rounded-full border-2 border-solid border-pb-green bg-pb-green"
+                    src={athlete?.profile!}
+                    alt="user avatar"
+                    width={48}
+                    height={48}
+                    title={athlete?.firstname! + ' ' + athlete?.lastname!}
+                    unoptimized={true}
+                  />
+                </button>
+              </Link>
             </div>
             {/*Notification*/}
-            <div className="flex items-center">
+            <div className="flex flex-col">
               <button
                 type="button"
                 className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-sm"
+                onClick={() => setNotificationPopupOpen(!notificationPopupOpen)}
               >
                 <BellIcon className="h-8 w-8 rounded-full text-white hover:animate-wobble" />
               </button>
+              {notificationPopupOpen && <NotificationPopup
+                show={notificationPopupOpen}
+              />}
             </div>
             {/*Synchronize*/}
             <div className="flex flex-col">
               <button
                 type="button"
                 className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-pb-green to-pb-dark-green text-sm"
-                onClick={() => setPopupOpen(!popupOpen)}
+                onClick={() => setSyncPopupOpen(!syncPopupOpen)}
               >
                 <ArrowPathIcon
                   className={`h-8 w-8 rounded-full text-white ${
@@ -100,7 +108,7 @@ const TopNavBar: NextPage = () => {
                   }`}
                 />
               </button>
-              {popupOpen && <SynchronizePopup synchronize={SynchronizeData} />}
+              {syncPopupOpen && <SynchronizePopup synchronize={SynchronizeData} />}
             </div>
             {/*Logout*/}
             <div className="flex items-center">
