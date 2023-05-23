@@ -1,9 +1,19 @@
-import { ClockIcon, MapIcon } from '@heroicons/react/24/solid';
+import {
+  ArrowTrendingDownIcon,
+  ArrowTrendingUpIcon,
+  ClockIcon,
+  ForwardIcon,
+  MapIcon,
+  MapPinIcon
+} from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
 import { Dropdown } from 'flowbite-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import time_activity from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/time_activity.svg';
+import total_distance from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/total_distance.svg';
+import activity_month from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/activity_month.svg';
+import distance_activity from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/distance_activity.svg';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { IYearSummary } from '../../../internalTypes/Interfaces/statisticsChartInterfaces';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
@@ -108,13 +118,27 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
               )}
             />
             <YearSummaryElement
-              icon={<div></div>}
-              label={'Avg activity count per month'}
+              icon={
+                <Image
+                  src={activity_month.src}
+                  alt={'average activities per month'}
+                  width={39}
+                  height={39}
+                />
+              }
+              label={'Activities/Month'}
               value={data[0]?.avg_activity_count_per_month?.toString() ?? '0'}
             />
             <YearSummaryElement
-              icon={<div></div>}
-              label={'Total Distance'}
+              icon={
+                <Image
+                  src={total_distance.src}
+                  alt={'total distance'}
+                  width={39}
+                  height={39}
+                />
+              }
+              label={'Total distance'}
               value={
                 measurementPreference === 'metric'
                   ? unitChange(data[0]?.total_distance ?? 0, 'm', 'km').toFixed(
@@ -132,8 +156,15 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
               }
             />
             <YearSummaryElement
-              icon={<div></div>}
-              label={'Avg Distance per activity'}
+              icon={
+                <Image
+                  src={distance_activity.src}
+                  alt={'distance per activity'}
+                   width={39}
+                  height={39}
+                />
+            }
+              label={'Distance/Activity'}
               value={
                 measurementPreference === 'metric'
                   ? unitChange(data[0]?.avg_distance ?? 0, 'm', 'km').toFixed(
@@ -149,8 +180,8 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
               }
             />
             <YearSummaryElement
-              icon={<div></div>}
-              label={'Avg pace'}
+              icon={<ForwardIcon className="h-10 w-10 text-white" />}
+              label={'Average pace'}
               value={
                 measurementPreference === 'metric'
                   ? unitChange(
@@ -170,8 +201,8 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
               }
             />
             <YearSummaryElement
-              icon={<div></div>}
-              label={'median distance'}
+              icon={<MapPinIcon className="h-8 w-8 text-white" />}
+              label={'Median distance'}
               value={
                 measurementPreference === 'metric'
                   ? unitChange(
@@ -191,8 +222,8 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
               }
             />
             <YearSummaryElement
-              icon={<div></div>}
-              label={'total elevation high'}
+              icon={<ArrowTrendingUpIcon className="h-8 w-8 text-white"/>}
+              label={'Total elevation high'}
               value={
                 measurementPreference === 'metric'
                   ? unitChange(data[0]?.total_elev_high ?? 0, 'm', 'm').toFixed(
@@ -210,7 +241,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
               }
             />
             <YearSummaryElement
-              icon={<div></div>}
+              icon={<ArrowTrendingDownIcon className="h-8 w-8 text-white"/>}
               label={'total distance downhill'}
               value={
                 measurementPreference === 'metric'
