@@ -4,16 +4,16 @@ import {
   ClockIcon,
   ForwardIcon,
   MapIcon,
-  MapPinIcon
+  MapPinIcon,
 } from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
 import { Dropdown } from 'flowbite-react';
 import Image from 'next/image';
 import { useState } from 'react';
-import time_activity from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/time_activity.svg';
-import total_distance from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/total_distance.svg';
 import activity_month from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/activity_month.svg';
 import distance_activity from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/distance_activity.svg';
+import time_activity from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/time_activity.svg';
+import total_distance from '../../../../src/components/Statistics/YearSummary/YearSummaryIcons/total_distance.svg';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { IYearSummary } from '../../../internalTypes/Interfaces/statisticsChartInterfaces';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
@@ -38,24 +38,34 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
       .then((response) => response.data);
   };
 
+  const fetchYearsWithActivities = (): Promise<string[]> => {
+    return pacebuddiesApi
+      .get('bridge/athlete/activities/years', {
+        params: { sport_type: selectedSport },
+      })
+      .then((response) => response.data);
+  };
+
   const { data, isError, isLoading, isFetching, isSuccess } = useQuery<
     IYearSummary[]
   >({
-    queryKey: ['year-summary', selectedSport, selectedYear],
+    queryKey: ['year-summary-data', selectedSport, selectedYear],
     queryFn: fetchYearSummary,
     keepPreviousData: true,
   });
+  const yearsWithActivities = useQuery<string[]>({
+    queryKey: ['year-summary-years'],
+    queryFn: fetchYearsWithActivities,
+  });
+
+  const sortedYearsWithActivities =
+    yearsWithActivities.data?.sort((a, b) => {
+      return parseInt(b) - parseInt(a);
+    }) ?? [];
 
   const measurementPreference = useSettingsStore(
     (state) => state.measurementUnits,
   );
-
-  const capitalizeFirstLetter = (string: string | undefined) => {
-    if (string === undefined) {
-      return '';
-    }
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
 
   return (
     <>
@@ -71,24 +81,24 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
           outline={true}
           pill={true}
           color={'success'}
-          disabled={isLoading || isFetching}
+          disabled={isLoading || isFetching || yearsWithActivities.isFetching}
         >
-          <Dropdown.Item onClick={() => setSelectedYear(2023)}>
-            2023
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setSelectedYear(2022)}>
-            2022
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => setSelectedYear(2021)}>
-            2021
-          </Dropdown.Item>
+          {sortedYearsWithActivities.map((year) => {
+            return (
+              <Dropdown.Item
+                key={year}
+                onClick={() => setSelectedYear(parseInt(year))}
+              >
+                {year}
+              </Dropdown.Item>
+            );
+          })}
         </Dropdown>
       </div>
       {/*List of summaries*/}
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
         {isSuccess && (
           <>
-            {/*TODO Add more elements*/}
             {/*Total Time*/}
             <YearSummaryElement
               icon={<ClockIcon className="h-10 w-10 text-white" />}
@@ -160,10 +170,10 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
                 <Image
                   src={distance_activity.src}
                   alt={'distance per activity'}
-                   width={39}
+                  width={39}
                   height={39}
                 />
-            }
+              }
               label={'Distance/Activity'}
               value={
                 measurementPreference === 'metric'
@@ -222,7 +232,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
               }
             />
             <YearSummaryElement
-              icon={<ArrowTrendingUpIcon className="h-8 w-8 text-white"/>}
+              icon={<ArrowTrendingUpIcon className="h-8 w-8 text-white" />}
               label={'Total elevation high'}
               value={
                 measurementPreference === 'metric'
@@ -241,7 +251,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
               }
             />
             <YearSummaryElement
-              icon={<ArrowTrendingDownIcon className="h-8 w-8 text-white"/>}
+              icon={<ArrowTrendingDownIcon className="h-8 w-8 text-white" />}
               label={'total distance downhill'}
               value={
                 measurementPreference === 'metric'
