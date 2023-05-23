@@ -48,7 +48,7 @@ const DoubleSlider = ({
 
   return (
     <div className="flex w-full flex-col">
-      <div className="flex  w-[calc(100%-1rem)]">
+      <div className="flex w-[calc(100%-1rem)]">
         <SliderReversed
           steps={minSteps}
           step={minStep}

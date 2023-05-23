@@ -1,3 +1,8 @@
+import {
+  QuestionMarkCircleIcon,
+  UserCircleIcon,
+} from '@heroicons/react/24/outline';
+import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/solid';
 import { NextPage } from 'next';
 import { useState } from 'react';
 import AccountSettingTab from '../../components/Settings/AccountSettingTab';
@@ -38,14 +43,17 @@ const SettingsPage: NextPage = () => {
           {/*TODO: Poprawić wyświetlanie tabów*/}
           <div className="flex h-auto w-full">
             {/*Options tabs*/}
-            <div className="flex h-[calc(100vh-71px)] w-72 flex-col overflow-y-auto  border-r-[1px] border-pb-gray">
+            <div className="flex h-[calc(100vh-71px)] w-24 flex-col overflow-y-auto border-r-[1px]  border-pb-gray md:w-80">
               <button
                 onClick={() => {
                   setSettingsTab(SettingsTabs.Account);
                 }}
                 className="flex h-20 items-center justify-center  border-b-[1px] border-pb-gray"
               >
-                <span className="text-pb-dark-gray">Account</span>
+                <UserCircleIcon className="ml-2 h-5 w-5 text-pb-dark-gray" />
+                <span className="hidden text-pb-dark-gray md:block">
+                  Account
+                </span>
               </button>
               <button
                 onClick={() => {
@@ -53,7 +61,10 @@ const SettingsPage: NextPage = () => {
                 }}
                 className="flex h-20  items-center justify-center border-b-[1px] border-pb-gray"
               >
-                <span className="text-pb-dark-gray">Preferences</span>
+                <AdjustmentsHorizontalIcon className="ml-2 h-5 w-5 text-pb-dark-gray" />
+                <span className="hidden text-pb-dark-gray md:block">
+                  Preferences
+                </span>
               </button>
               <button
                 onClick={() => {
@@ -61,7 +72,8 @@ const SettingsPage: NextPage = () => {
                 }}
                 className="flex h-20 items-center justify-center border-b-[1px] border-pb-gray"
               >
-                <span className="text-pb-dark-gray">Help</span>
+                <QuestionMarkCircleIcon className="ml-2 h-5 w-5 text-pb-dark-gray" />
+                <span className="hidden text-pb-dark-gray md:block">Help</span>
               </button>
               <div className="flex-auto grow"></div>
             </div>
