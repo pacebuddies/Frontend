@@ -3,7 +3,7 @@ import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { FilterOffset, SportTypeFilterRanges } from "../../internalTypes/sportTypeFilterRanges";
 import DoubleSlider from '../Slider/DoubleSlider';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IProps {
   title: string;
@@ -28,9 +28,17 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
     queryKey: ['filterData', sportType],
     queryFn: fetchSportData,
   });
+
+  useEffect(() => {
+    if (!data) return;
+
+    setUserFilterOffset({...offsetData});
+  }, [data]);
+
   if (!isSuccess) return null;
   const filterData = data.filter_settings_model;
   const offsetData = data.filter_offset;
+
   console.log(data);
   return (
     <div className="flex w-full flex-col">
@@ -44,8 +52,8 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
           <DoubleSlider
             step={1}
             value={{
-              min: offsetData.avg_distance_min,
-              max: offsetData.avg_distance_max,
+              min: userFilterOffset?.avg_distance_min ?? 0,
+              max: userFilterOffset?.avg_distance_max ?? 0,
             }}
             minBracketValue={filterData.avg_distance_min}
             maxBracketValue={filterData.avg_distance_max}
