@@ -59,7 +59,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
     return pacebuddiesApi
       .get('recommender/recommendations/list', {
         params: {
-          sportType: SportTypeEnum.Run,
+          sportType: SportTypeEnum.RUN,
         },
       })
       .then((response) => response.data);
@@ -244,7 +244,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                             recommendationQuery.data[recommendationNumber]
                               ?.id ?? '0'
                           }
-                          sportType={SportTypeEnum.Run}
+                          sportType={SportTypeEnum.RUN}
                           onAccepted={recommendationDecisionHandler}
                         />
                       )}
@@ -255,7 +255,7 @@ const RecommendationsModal = ({ opened, onOpenedChange }: IProps) => {
                             recommendationQuery.data[recommendationNumber]
                               ?.id ?? '0'
                           }
-                          sportType={SportTypeEnum.Run}
+                          sportType={SportTypeEnum.RUN}
                           onDeclined={recommendationDecisionHandler}
                         />
                       )}
