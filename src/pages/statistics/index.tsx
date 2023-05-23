@@ -52,16 +52,18 @@ const StatisticsPage: NextPage = () => {
       <Layout>
         <div className="flex shrink-0 flex-col">
           <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
-            <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray ">
-              STATISTICS
+            <span className="small-caps self-center whitespace-nowrap font-istok-web font-bold text-7xl capitalize text-transparent bg-clip-text bg-gradient-to-r from-pb-green to-pb-orange ">
+              Statistics
             </span>
           </div>
           <div className="flex h-full min-h-screen w-full justify-center border-t-2 border-t-pb-green bg-pb-gray">
             {/*Central content*/}
             <div className="flex w-full flex-col items-center bg-white md:w-2/3">
               {/*Sport select*/}
-              <div className="flex h-20 w-full shrink-0 flex-row items-center justify-center border-b-2 border-b-pb-green">
-                <span className="pr-2">Statistics for </span>
+              <div className="flex h-20 w-full shrink-0 flex-row items-center justify-center border-b-2 border-b-pb-green space-x-2">
+                <span className="pr-2 text-istok-web text-pb-dark-gray small-caps text-xl font-bold">
+                  Statistics for
+                </span>
                 <Dropdown
                   label={capitalizeFirstLetter(
                     SportTypeMap.getString(selectedSport!)?.toLowerCase(),
@@ -85,32 +87,28 @@ const StatisticsPage: NextPage = () => {
                 </Dropdown>
               </div>
               {/*Year summary*/}
-              <div className="flex w-full shrink-0 flex-col border-b-2 border-b-pb-green p-4 ">
+              <div className="flex w-full shrink-0 flex-col border-b-2 border-b-pb-green p-4">
                 {/*Title and year dropdown*/}
                 <YearSummaryContent selectedSport={selectedSport} />
               </div>
               {/*Distance*/}
-              <div className="flex w-full  shrink-0 flex-col">
+              <div className=" flex w-full shrink-0 flex-col mb-4 space-y-4">
+                <span className="mt-4 small-caps self-center whitespace-nowrap font-istok-web font-bold text-3xl capitalize text-pb-green">
+                  Distance
+                </span>
                 {/*<DaySummaryChart selectedSport={selectedSport}/>*/}
                 <WeekByDayDistanceSumChart selectedSport={selectedSport} />
-
-                <div className="">
-                  <Accordion title="Distance">
-                    <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
-                    <LastNMonthsDistanceSumChart
-                      selectedSport={selectedSport}
-                    />
-                    <LastNMonthsDistanceAvgChart
-                      selectedSport={selectedSport}
-                    />
-                  </Accordion>
-                  <Accordion title="Pace">
-                    <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
-                    <LastNActivitiesPaceAvgChart
-                      selectedSport={selectedSport}
-                    />
-                  </Accordion>
-                </div>
+                <LastNWeeksDistanceSumChart selectedSport={selectedSport} />
+                <LastNMonthsDistanceSumChart selectedSport={selectedSport} />
+                <LastNMonthsDistanceAvgChart selectedSport={selectedSport} />
+              </div>
+              {/*Pace*/}
+              <div className=" flex w-full shrink-0 flex-col border-t-2 border-t-pb-green space-y-4">
+                <span className="mt-4 small-caps self-center whitespace-nowrap font-istok-web font-bold text-3xl capitalize text-pb-green">
+                  Pace
+                </span>
+                <LastNWeeksPaceAvgChart selectedSport={selectedSport} />
+                <LastNActivitiesPaceAvgChart selectedSport={selectedSport} />
               </div>
             </div>
           </div>

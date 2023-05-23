@@ -13,7 +13,7 @@ import {
 } from 'chart.js';
 import { Dropdown } from 'flowbite-react';
 import React, { useState } from 'react';
-import { Line } from 'react-chartjs-2';
+import {Bar, Line} from 'react-chartjs-2';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 
 import { toast } from 'react-toastify';
@@ -84,7 +84,7 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
   const chartOptions: ChartOptions<'line'> = {
     plugins: {
       title: {
-        display: true,
+        display: false,
         text: 'Average pace for last activities',
       },
       tooltip: {
@@ -123,26 +123,34 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
     toast.error((error as Error).toString());
     return <div>Error loading data</div>;
   }
+
   return (
-    <div>
-      <div className="flex w-full  flex-col md:flex-row">
-        <div className="order-2 h-128 w-full md:order-1">
-          <Line
-            data={chartData}
-            options={chartOptions}
-            className="overflow-hidden"
-          />
-        </div>
-        <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
-          <span className="mr-2 w-auto whitespace-nowrap">
-            Number of activities:
+    <div className="flex w-full flex-col">
+      {/*Opis+wybór zakresu*/}
+      <div className="flex w-full flex-row justify-between px-2 space-x-1">
+        {/*Opis*/}
+        <div className="flex w-full flex-col md:pl-10">
+          <div className="flex w-2/3 md:w-1/2 border-t-2 border-t-pb-green mb-1"/>
+          <span className="flex text-xl text-pb-green">
+            Average pace for last activities
           </span>
+          <span className="flex text-pb-dark-gray">
+            Average pace for selected number of last activities
+          </span>
+        </div>
+        {/*Wybór zakresu*/}
+        <div className=" mb-4 flex flex-row items-center justify-center space-x-2  md:pr-10">
+          <div className="flex w-auto text-pb-dark-gray flex-col whitespace-nowrap">
+            <span className="flex flex-row ">Number of</span>
+            <span className="flex flex-row">activities:</span>
+          </div>
           <Dropdown
-            label={numActivities}
-            outline={true}
-            pill={true}
-            color={'success'}
-            disabled={isLoading || isFetching}
+              label={numActivities}
+              outline={true}
+              pill={true}
+              color={'success'}
+              disabled={isLoading || isFetching}
+              className="flex shrink-0"
           >
             <Dropdown.Item onClick={() => setNumActivities(5)}>5</Dropdown.Item>
             <Dropdown.Item onClick={() => setNumActivities(25)}>
@@ -153,6 +161,14 @@ const ILastNActivitiesPaceAvgChart: React.FC<IProps> = ({
             </Dropdown.Item>
           </Dropdown>
         </div>
+      </div>
+      {/*Wykres*/}
+      <div className="h-128 w-full px-2">
+        <Line
+            data={chartData}
+            options={chartOptions}
+            className="overflow-hidden"
+        />
       </div>
     </div>
   );

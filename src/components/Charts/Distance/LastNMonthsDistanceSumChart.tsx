@@ -56,11 +56,14 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
     keepPreviousData: true,
   });
 
+  const nonZeroActivities = data?.filter((item) => item.distance !== 0);
+
   const meanValue = Math.round(
-    data?.length
-      ? data.reduce((acc, item) => acc + item.distance, 0) / data.length
+    nonZeroActivities?.length
+      ? nonZeroActivities.reduce((acc, item) => acc + item.distance, 0) / nonZeroActivities.length
       : 0,
   );
+
   const sortedData = sortByDateAscending(data ?? []);
   const getMonthAndYearString = (date: string): string => {
     const [, month, year] = date.split('-').map(Number);
@@ -98,7 +101,7 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
         position: 'top' as const,
       },
       title: {
-        display: true,
+        display: false,
         text: 'Distance summary for last months',
       },
       tooltip: {
@@ -142,36 +145,49 @@ const LastNMonthsDistanceSumChart = ({ selectedSport }: IProps) => {
   }
 
   return (
-    <>
-      <div className="flex w-full flex-col md:flex-row">
-        <div className="order-2 h-128 w-full md:order-1">
-          <Bar
+    <div className="flex w-full flex-col">
+      {/*Opis+wybór zakresu*/}
+      <div className="flex w-full flex-row justify-between px-2 space-x-1">
+        {/*Opis*/}
+        <div className="flex w-full flex-col md:pl-10">
+          <div className="flex w-2/3 md:w-1/2 border-t-2 border-t-pb-green mb-1"/>
+          <span className="flex text-xl text-pb-green">
+            Distance summary for last months
+          </span>
+          <span className="flex text-pb-dark-gray">
+            Total distance traveled monthly for selected number of last months
+          </span>
+        </div>
+        {/*Wybór zakresu*/}
+        <div className=" mb-4 flex flex-row items-center justify-center space-x-2  md:pr-10">
+          <div className="flex w-auto text-pb-dark-gray flex-col whitespace-nowrap">
+            <span className="flex flex-row ">Number of</span>
+            <span className="flex flex-row">months:</span>
+          </div>
+          <Dropdown
+              label={monthsNumber}
+              outline={true}
+              pill={true}
+              color={'success'}
+              disabled={isLoading || isFetching}
+              className="flex shrink-0"
+          >
+            <Dropdown.Item onClick={() => setMonthsNumber(3)}>3</Dropdown.Item>
+            <Dropdown.Item onClick={() => setMonthsNumber(6)}>6</Dropdown.Item>
+            <Dropdown.Item onClick={() => setMonthsNumber(12)}>12</Dropdown.Item>
+          </Dropdown>
+        </div>
+      </div>
+      {/*Wykres*/}
+      <div className="h-128 w-full px-2">
+        <Bar
             options={barChartOptions}
             // @ts-expect-error - chart.js types are not compatible with react-chartjs-2
             data={barChartData}
             className="overflow-hidden"
-          />
-        </div>
-        <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
-          <span className="mr-2 w-auto whitespace-nowrap">
-            Number of months:
-          </span>
-          <Dropdown
-            label={monthsNumber}
-            outline={true}
-            pill={true}
-            color={'success'}
-            disabled={isLoading || isFetching}
-          >
-            <Dropdown.Item onClick={() => setMonthsNumber(3)}>3</Dropdown.Item>
-            <Dropdown.Item onClick={() => setMonthsNumber(6)}>6</Dropdown.Item>
-            <Dropdown.Item onClick={() => setMonthsNumber(12)}>
-              12
-            </Dropdown.Item>
-          </Dropdown>
-        </div>
+        />
       </div>
-    </>
+    </div>
   );
 };
 

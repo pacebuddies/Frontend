@@ -90,7 +90,7 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
   const chartOptions: ChartOptions<'bar'> = {
     plugins: {
       title: {
-        display: true,
+        display: false,
         text: 'Average pace for last weeks',
       },
       tooltip: {
@@ -128,28 +128,48 @@ const LastNWeeksPaceAvgChart: React.FC<IProps> = ({
     toast.error((error as Error).toString());
     return <div>Error loading data</div>;
   }
+
   return (
-    <div className="flex w-full  flex-col md:flex-row">
-      <div className="order-2 h-128 w-full md:order-1">
-        <Bar
-          data={chartData}
-          options={chartOptions}
-          className="overflow-hidden"
-        />
+    <div className="flex w-full flex-col">
+      {/*Opis+wybór zakresu*/}
+      <div className="flex w-full flex-row justify-between px-2 space-x-1">
+        {/*Opis*/}
+        <div className="flex w-full flex-col md:pl-10">
+          <div className="flex w-2/3 md:w-1/2 border-t-2 border-t-pb-green mb-1"/>
+          <span className="flex text-xl text-pb-green">
+            Average pace for last weeks
+          </span>
+          <span className="flex text-pb-dark-gray">
+            Average pace of weekly activities for selected number of last weeks
+          </span>
+        </div>
+        {/*Wybór zakresu*/}
+        <div className=" mb-4 flex flex-row items-center justify-center space-x-2  md:pr-10">
+          <div className="flex w-auto text-pb-dark-gray flex-col whitespace-nowrap">
+            <span className="flex flex-row ">Number of</span>
+            <span className="flex flex-row">weeks:</span>
+          </div>
+          <Dropdown
+              label={weekNumber}
+              outline={true}
+              pill={true}
+              color={'success'}
+              disabled={isLoading || isFetching}
+              className="flex shrink-0"
+          >
+            <Dropdown.Item onClick={() => setWeekNumber(4)}>4</Dropdown.Item>
+            <Dropdown.Item onClick={() => setWeekNumber(8)}>8</Dropdown.Item>
+            <Dropdown.Item onClick={() => setWeekNumber(16)}>16</Dropdown.Item>
+          </Dropdown>
+        </div>
       </div>
-      <div className="order-1 mb-4 flex flex-col  items-center px-8 md:order-2">
-        <span className="mr-2 w-auto whitespace-nowrap">Number of weeks:</span>
-        <Dropdown
-          label={weekNumber}
-          outline={true}
-          pill={true}
-          color={'success'}
-          disabled={isLoading || isFetching}
-        >
-          <Dropdown.Item onClick={() => setWeekNumber(4)}>4</Dropdown.Item>
-          <Dropdown.Item onClick={() => setWeekNumber(8)}>8</Dropdown.Item>
-          <Dropdown.Item onClick={() => setWeekNumber(16)}>16</Dropdown.Item>
-        </Dropdown>
+      {/*Wykres*/}
+      <div className="h-128 w-full px-2">
+        <Bar
+            data={chartData}
+            options={chartOptions}
+            className="overflow-hidden"
+        />
       </div>
     </div>
   );
