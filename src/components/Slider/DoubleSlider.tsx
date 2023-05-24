@@ -4,7 +4,6 @@ import SliderNormal from './SliderNormal';
 import SliderReversed from './SliderReversed';
 
 interface IProps {
-  step: number;
   minBracketValue: number;
   maxBracketValue: number;
   minSteps: number[];

@@ -1,11 +1,12 @@
-import { NextPage } from "next";
-import { SportTypeEnum } from "../../internalTypes/sportTypeEnum";
-import { FilterOffset, SportTypeFilterRanges } from "../../internalTypes/sportTypeFilterRanges";
-import FilterSportBlock from "./FilterSportBlock";
-import { useState } from "react";
+import { useQuery } from '@tanstack/react-query';
+import { NextPage } from 'next';
+import pacebuddiesApi from '../../instances/axiosConfigured';
+import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
+import { SportTypeMap } from '../../internalTypes/SportTypeMap';
+import { isAllowedSportTypeNumber } from '../../utils/isAllowedSportType';
+import FilterSportBlock from './FilterSportBlock';
 
 const RecommendationsPreferencesSettingsTab: NextPage = () => {
-
   // const sportData: SportTypeFilterRanges = {
   //   sport_type: 26,
   //   city: 'Toruń',
@@ -24,6 +25,15 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
   //   avg_total_distance_max: 12.983,
   //   empty: false,
   // };
+  const fetchSports = (): Promise<string[]> => {
+    return pacebuddiesApi
+      .get('bridge/athlete/sportTypes')
+      .then((response) => response.data);
+  };
+  const { isSuccess, data } = useQuery({
+    queryKey: ['user-sports'],
+    queryFn: fetchSports,
+  });
 
   return (
     <>
@@ -33,10 +43,26 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
       <div className="w-full pt-4">
         <div className="flex flex-col pl-8">{/*<PreferenceSlider />*/}</div>
       </div>
-      {/*<div className="w-full pt-4">*/}
-      <div className="flex w-72 flex-col pl-2 md:pl-8">
-          <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
-
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+        {/*{isSuccess &&*/}
+        {/*  data.map((sport) => {*/}
+        {/*    const sportNumber = SportTypeMap.getNumber(sport)!;*/}
+        {/*    if (isAllowedSportTypeNumber(sportNumber)) {*/}
+        {/*      return (*/}
+        {/*        <FilterSportBlock*/}
+        {/*          key={sportNumber}*/}
+        {/*          title={sport}*/}
+        {/*          sportType={sportNumber}*/}
+        {/*        />*/}
+        {/*      );*/}
+        {/*    } else {*/}
+        {/*      return null;*/}
+        {/*    }*/}
+        {/*  })}*/}
+        <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
+        <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
+        <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
+        <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
       </div>
     </>
   );
