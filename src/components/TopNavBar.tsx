@@ -48,7 +48,7 @@ const TopNavBar: NextPage = () => {
   return (
     <>
       <nav className="top-0 flex h-auto w-full items-center justify-between border-gray-200 bg-pb-gray px-2 py-2.5">
-        <div className="flex w-full flex-wrap items-center justify-between">
+        <div className="flex w-full flex-nowrap items-center justify-between">
           {/*Name & Logo*/}
           <Link
             href="/home"

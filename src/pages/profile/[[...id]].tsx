@@ -1,31 +1,48 @@
 import { useQuery } from '@tanstack/react-query';
 import { Dropdown } from 'flowbite-react';
 import { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import ActivitiesBySportType from '../../components/Charts/Activities/ActivitiesBySportType';
+import ActivitiesNumberIn4Weeks from '../../components/Charts/Activities/ActivitiesNumberIn4Weeks';
 import WeekByDayDistanceChart from '../../components/Charts/Distance/WeekByDayDistanceSumChart';
 import pacebuddiesApi from '../../instances/axiosConfigured';
-import { IAthlete } from '../../internalTypes/interfaces';
+import { IActivity, IAthlete } from '../../internalTypes/interfaces';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
-import ActivitiesBySportType from "../../components/Charts/Activities/ActivitiesBySportType";
-import { useSession } from "next-auth/react";
+import { useSettingsStore } from '../../store/settingsStore';
+
+const ClientOnlyActivities = dynamic(
+  () => import('../../../src/components/Activity/ClientOnlyActivities'),
+  { ssr: false },
+);
 
 const ProfilePage: NextPage = () => {
   const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
     SportTypeEnum.RUN,
   );
   const params = useRouter();
-
   const id: string[] | undefined = params.query['id'] as string[];
-  const session = useSession();
+  const settingStore = useSettingsStore((store) => store.measurementUnits);
 
-  if (session.status === "authenticated"){
-    console.log(session);
-  }
+  const fetchActivities = (id: string[] | undefined): Promise<IActivity[]> => {
+    if (id === undefined) {
+      return pacebuddiesApi
+        .get(`bridge/athlete/activities`, { params: { count: 5 } })
+        .then((res) => res.data);
+    }
+    return pacebuddiesApi
+      .get(`bridge/athlete/${id[0]}/activities`, { params: { count: 5 } })
+      .then((res) => res.data);
+  };
 
+  const activitiesQuery = useQuery<IActivity[]>({
+    queryKey: ['activities', id],
+    queryFn: () => fetchActivities(id),
+  });
   const fetchAthlete = (id: string[] | undefined): Promise<IAthlete> => {
     if (id === undefined) {
       return pacebuddiesApi.get('bridge/athlete').then((result) => result.data);
@@ -52,11 +69,41 @@ const ProfilePage: NextPage = () => {
     }
   }
 
+  function fetchActivitiesNumber(
+    id: string[] | undefined,
+    weeks: number,
+  ): Promise<Record<'count', number>> {
+    if (id === undefined) {
+      return pacebuddiesApi
+        .get('bridge/chart/ActivitiesSum', {
+          params: { weeks: weeks },
+        })
+        .then((result) => {
+          return result.data;
+        });
+    } else {
+      return pacebuddiesApi
+        .get(`bridge/chart/ActivitiesSum`, {
+          params: { athlete_id: id[0], weeks: weeks },
+        })
+        .then((result) => result.data);
+    }
+  }
+
+  const activitiesNumberQueryFor4Weeks = useQuery<Record<'count', number>>({
+    queryKey: ['userProfileActivitiesNumber', id, 4],
+    queryFn: () => fetchActivitiesNumber(id, 4),
+  });
+
+  const activitiesNumberQueryFor1Week = useQuery<Record<'count', number>>({
+    queryKey: ['userProfileActivitiesNumber', id, 1],
+    queryFn: () => fetchActivitiesNumber(id, 1),
+  });
+
   const sportQuery = useQuery<string[]>({
     queryKey: ['userProfileSports', id],
     queryFn: () => fetchSports(id),
   });
-  console.log(sportQuery.data);
   const sex = () => {
     if (athleteQuery.data?.sex == 'M') return 'Male';
     if (athleteQuery.data?.sex == 'F') return 'Female';
@@ -102,7 +149,9 @@ const ProfilePage: NextPage = () => {
                 <div className="flex flex-row space-x-6">
                   <div className="flex flex-col">
                     <span className="self-center whitespace-nowrap font-istok-web text-4xl text-pb-orange">
-                      4
+                      {activitiesNumberQueryFor1Week.isSuccess
+                        ? activitiesNumberQueryFor1Week.data.count
+                        : 0}
                     </span>
                     <span className="self-center whitespace-nowrap font-istok-web text-base text-pb-dark-gray">
                       LAST WEEK
@@ -110,7 +159,9 @@ const ProfilePage: NextPage = () => {
                   </div>
                   <div className="flex flex-col">
                     <span className="self-center whitespace-nowrap font-istok-web text-4xl text-pb-orange">
-                      15
+                      {activitiesNumberQueryFor4Weeks.isSuccess
+                        ? activitiesNumberQueryFor4Weeks.data.count
+                        : 0}
                     </span>
                     <span className="self-center whitespace-nowrap font-istok-web text-base text-pb-dark-gray">
                       LAST 4 WEEKS
@@ -120,9 +171,7 @@ const ProfilePage: NextPage = () => {
               </div>
               {/*wykres*/}
               <div className="flex items-center justify-center">
-                <span className="self-center whitespace-nowrap font-istok-web text-xl italic text-pb-dark-gray">
-                  WYKRES
-                </span>
+                <ActivitiesNumberIn4Weeks />
               </div>
             </div>
             {/*PERSONAL INFO SECTION*/}
@@ -154,7 +203,9 @@ const ProfilePage: NextPage = () => {
                   </span>
                   {/*Zmienna athletes.city + woj + kraj?*/}
                   <span className="flex items-center justify-center text-pb-dark-gray">
-                    {athleteQuery.isSuccess ? (`${athleteQuery.data.city}, ${athleteQuery.data.country}`  ) : 'Not specified'}
+                    {athleteQuery.isSuccess
+                      ? `${athleteQuery.data.city}, ${athleteQuery.data.country}`
+                      : 'Not specified'}
                   </span>
                 </div>
               </div>
@@ -207,7 +258,11 @@ const ProfilePage: NextPage = () => {
                   Sports Type
                 </span>
                 <div>
-                  {/*<ActivitiesBySportType athleteId={}/>*/}
+                  {id ? (
+                    <ActivitiesBySportType athleteId={id[0]} />
+                  ) : (
+                    <ActivitiesBySportType />
+                  )}
                 </div>
               </div>
             </div>
@@ -219,7 +274,12 @@ const ProfilePage: NextPage = () => {
                   Latest Activities
                 </span>
               </div>
-              <div className="flex flex-col items-center justify-center"></div>
+              {activitiesQuery.isSuccess && (
+                <ClientOnlyActivities
+                  activities={activitiesQuery.data}
+                  unitPreference={settingStore}
+                />
+              )}
             </div>
           </div>
         </div>

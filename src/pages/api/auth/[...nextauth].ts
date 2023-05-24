@@ -60,7 +60,7 @@ export const authOptions: NextAuthOptions = {
           access_token: account.access_token!,
           expires_at: account.expires_at!,
           refresh_token: account.refresh_token!,
-          id: account.userId!,
+          id: account.providerAccountId,
         };
       } else if (Date.now() < token.expires_at * 1000) {
         return token;

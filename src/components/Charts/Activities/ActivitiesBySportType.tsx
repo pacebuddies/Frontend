@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import {
+  ArcElement,
   BarElement,
   CategoryScale,
   Chart as ChartJS,
@@ -9,14 +10,12 @@ import {
   LinearScale,
   Title,
   Tooltip,
-  TooltipItem,
 } from 'chart.js';
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 
 import { toast } from 'react-toastify';
-import { useSettingsStore } from '../../../store/settingsStore';
 
 ChartJS.register(
   CategoryScale,
@@ -25,26 +24,24 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  ArcElement,
 );
 
-interface IAvtivitiesBySportType {
-  sportName: string;
-  activitiesCount: number;
-}
+type IAvtivitiesBySportType = Record<string, number>;
 
 interface IProps {
-  athleteId: number;
+  athleteId?: string;
 }
 
 const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
   athleteId,
 }: IProps) => {
-  const measurementPreference = useSettingsStore(
-    (state) => state.measurementUnits,
-  );
-  const toUnit = measurementPreference === 'metric' ? 'km' : 'mile';
-
   const fetchData = (): Promise<IAvtivitiesBySportType[]> => {
+    if (athleteId === undefined) {
+      return pacebuddiesApi
+        .get('bridge/chart/ActivitiesSumPerSport')
+        .then((response) => response.data);
+    }
     return pacebuddiesApi
       .get('bridge/chart/ActivitiesSumPerSport', {
         params: { athlete_id: athleteId },
@@ -67,24 +64,29 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
     return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
   };
 
-  if (!isSuccess) return <div>Loading...</div>;
+  const Sports = Object.keys(data ?? []);
 
-  const chartData: ChartData<'bar', number[], string> = {
-    labels: data.map((item) => {
-      return capitalizeFirstLetter(item.sportName);
-    }),
+  const chartData: ChartData<'pie'> = {
+    labels: Sports.map((item) => capitalizeFirstLetter(item)),
     datasets: [
       {
         label: 'Sport',
-        data: data.map((item) => item.activitiesCount),
-        backgroundColor: 'rgba(239, 138, 23, 0.2)',
-        borderColor: 'rgb(239, 138, 23)',
+        // @ts-expect-error
+        data: Sports.map((item) => data[item]),
+        backgroundColor: Sports.map((item, index) => {
+          return index % 2 === 0
+            ? 'rgba(239, 138, 23, 0.2)'
+            : 'rgba(76, 189, 23, 0.2)';
+        }),
+        borderColor: Sports.map((item, index) => {
+          return index % 2 === 0 ? 'rgba(239, 138, 23)' : 'rgba(76, 189, 23)';
+        }),
         borderWidth: 1,
       },
     ],
   };
 
-  const chartOptions: ChartOptions<'bar'> = {
+  const chartOptions: ChartOptions<'pie'> = {
     plugins: {
       legend: {
         position: 'top' as const,
@@ -97,34 +99,9 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
         enabled: true,
         intersect: false,
         mode: 'index' as const,
-        filter: (tooltipItem: TooltipItem<'bar'>) => {
-          return tooltipItem.raw !== 0;
-        },
-        callbacks: {
-          label: function (context: TooltipItem<'bar'>) {
-            const label = context.dataset.label ?? '';
-            const value = context.parsed.y.toFixed(2);
-            return `${label}: ${value} ${toUnit}`;
-          },
-        },
       },
     },
-    scales: {
-      x: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Month',
-        },
-      },
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: `Distance (${toUnit})`,
-        },
-      },
-    },
+
     maintainAspectRatio: false,
   };
 
@@ -141,17 +118,16 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
         <div className="flex w-full flex-col md:pl-10">
           <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green md:w-1/2" />
           <span className="flex text-xl text-pb-green">
-            Average distance for last months
+            Activities by sport type
           </span>
           <span className="flex text-pb-dark-gray">
-            Average traveled distance for monthly activities for selected number
-            of last months
+            Number of activities by sport type
           </span>
         </div>
       </div>
       {/*Wykres*/}
       <div className="h-128 w-full px-2">
-        <Bar
+        <Pie
           data={chartData}
           options={chartOptions}
           className="overflow-hidden"
