@@ -100,7 +100,7 @@ const NotificationPopup = ({ show }: IProps) => {
       </svg>
       <animated.div
         style={animation}
-        className="absolute -right-12 top-4 h-[32rem] w-96 overflow-hidden border-2 border-pb-green bg-white/95"
+        className="absolute -right-20 md:-right-12 top-4 h-[32rem] min-w-[20rem] md:w-96 overflow-hidden border-2 border-pb-green bg-white/95"
       >
         <div className="flex flex-col items-center justify-between">
           <div className="flex flex-col w-full items-center justify-center">
