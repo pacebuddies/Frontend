@@ -14,9 +14,12 @@ const AccountSettingTab: NextPage = () => {
   };
 
   return (
-    <div>
-      Account settings panel
-      <div>
+    <div className="flex flex-col m-2">
+      <span className="text-pb-dark-gray text-2xl small-caps font-bold">
+        account settings panel
+      </span>
+      <div className="flex flex-row items-center justify-start mt-4 ml-2 space-x-5">
+        <span className="text-pb-dark-gray text-xl small-caps font-bold ">unit of measurement</span>
         <Dropdown label={measurementUnits}>
           <Dropdown.Item onClick={() => handleUnitsChange('metric')}>
             Metric

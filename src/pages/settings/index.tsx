@@ -50,7 +50,7 @@ const SettingsPage: NextPage = () => {
                 }}
                 className="flex h-20 items-center justify-center  border-b-[1px] border-pb-gray"
               >
-                <UserCircleIcon className="ml-2 h-5 w-5 text-pb-dark-gray" />
+                <UserCircleIcon className="md:mr-1 h-6 w-6 text-pb-dark-gray" />
                 <span className="hidden text-pb-dark-gray md:block">
                   Account
                 </span>
@@ -61,7 +61,7 @@ const SettingsPage: NextPage = () => {
                 }}
                 className="flex h-20  items-center justify-center border-b-[1px] border-pb-gray"
               >
-                <AdjustmentsHorizontalIcon className="ml-2 h-5 w-5 text-pb-dark-gray" />
+                <AdjustmentsHorizontalIcon className="md:mr-1 h-6 w-6 text-pb-dark-gray" />
                 <span className="hidden text-pb-dark-gray md:block">
                   Preferences
                 </span>
@@ -72,7 +72,7 @@ const SettingsPage: NextPage = () => {
                 }}
                 className="flex h-20 items-center justify-center border-b-[1px] border-pb-gray"
               >
-                <QuestionMarkCircleIcon className="ml-2 h-5 w-5 text-pb-dark-gray" />
+                <QuestionMarkCircleIcon className="md:mr-1 h-6 w-6 text-pb-dark-gray" />
                 <span className="hidden text-pb-dark-gray md:block">Help</span>
               </button>
               <div className="flex-auto grow"></div>
