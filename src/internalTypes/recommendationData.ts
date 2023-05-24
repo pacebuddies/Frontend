@@ -7,5 +7,12 @@ export interface RecommendationData {
   lastname: string;
   sex: string;
   compatibility: number;
-  clubs: string[];
+  upvotes: number;
+  clubs: ClubsData[];
+  sport_types: number[];
+}
+export interface ClubsData {
+  name: string;
+  profile_medium: string;
+  url: string;
 }

@@ -30,8 +30,9 @@ ChartJS.register(
 );
 interface IProps {
   selectedSport: number | null;
+  athleteId?: string;
 }
-const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
+const WeekByDayDistanceChart = ({ selectedSport, athleteId }: IProps) => {
   const [weekNumber, setWeekNumber] = useState<number>(0);
 
   const measurementPreference = useSettingsStore(
@@ -40,6 +41,13 @@ const WeekByDayDistanceChart = ({ selectedSport }: IProps) => {
   const toUnit = measurementPreference === 'metric' ? 'km' : 'mile';
 
   const fetchDistanceSum = (): Promise<IWeekByDayDistanceSum[]> => {
+    if (athleteId) {
+      return pacebuddiesApi
+        .get('bridge/chart/WeekByDayDistanceSum', {
+          params: { sport_type: selectedSport, athlete_id: athleteId },
+        })
+        .then((response) => response.data);
+    }
     return pacebuddiesApi
       .get('bridge/chart/WeekByDayDistanceSum', {
         params: { sport_type: selectedSport },

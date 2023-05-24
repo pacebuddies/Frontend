@@ -1,17 +1,48 @@
 import { useQuery } from '@tanstack/react-query';
+import { Dropdown } from 'flowbite-react';
 import { NextPage } from 'next';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import MenuButton from '../../components/MenuButton';
-import RecommendationsButton from '../../components/Recommendations/RecommendationsButton';
-import TopNavBar from '../../components/TopNavBar';
+import { useState } from 'react';
+import ActivitiesBySportType from '../../components/Charts/Activities/ActivitiesBySportType';
+import ActivitiesNumberIn4Weeks from '../../components/Charts/Activities/ActivitiesNumberIn4Weeks';
+import WeekByDayDistanceChart from '../../components/Charts/Distance/WeekByDayDistanceSumChart';
 import pacebuddiesApi from '../../instances/axiosConfigured';
-import { IAthlete } from '../../internalTypes/interfaces';
+import { IActivity, IAthlete } from '../../internalTypes/interfaces';
+import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
+import { SportTypeMap } from '../../internalTypes/SportTypeMap';
+import Layout from '../../Layout';
+import { useSettingsStore } from '../../store/settingsStore';
+
+const ClientOnlyActivities = dynamic(
+  () => import('../../../src/components/Activity/ClientOnlyActivities'),
+  { ssr: false },
+);
 
 const ProfilePage: NextPage = () => {
+  const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
+    SportTypeEnum.RUN,
+  );
   const params = useRouter();
-
   const id: string[] | undefined = params.query['id'] as string[];
+  const settingStore = useSettingsStore((store) => store.measurementUnits);
 
+  const fetchActivities = (id: string[] | undefined): Promise<IActivity[]> => {
+    if (id === undefined) {
+      return pacebuddiesApi
+        .get(`bridge/athlete/activities`, { params: { count: 5 } })
+        .then((res) => res.data);
+    }
+    return pacebuddiesApi
+      .get(`bridge/athlete/${id[0]}/activities`, { params: { count: 5 } })
+      .then((res) => res.data);
+  };
+
+  const activitiesQuery = useQuery<IActivity[]>({
+    queryKey: ['activities', id],
+    queryFn: () => fetchActivities(id),
+  });
   const fetchAthlete = (id: string[] | undefined): Promise<IAthlete> => {
     if (id === undefined) {
       return pacebuddiesApi.get('bridge/athlete').then((result) => result.data);
@@ -26,21 +57,75 @@ const ProfilePage: NextPage = () => {
     queryFn: () => fetchAthlete(id),
   });
 
+  function fetchSports(id: string[] | undefined): Promise<string[]> {
+    if (id === undefined) {
+      return pacebuddiesApi
+        .get('bridge/athlete/sportTypes')
+        .then((result) => result.data);
+    } else {
+      return pacebuddiesApi
+        .get(`bridge/athlete/${id[0]}/sportTypes`)
+        .then((result) => result.data);
+    }
+  }
+
+  function fetchActivitiesNumber(
+    id: string[] | undefined,
+    weeks: number,
+  ): Promise<Record<'count', number>> {
+    if (id === undefined) {
+      return pacebuddiesApi
+        .get('bridge/chart/ActivitiesSum', {
+          params: { weeks: weeks },
+        })
+        .then((result) => {
+          return result.data;
+        });
+    } else {
+      return pacebuddiesApi
+        .get(`bridge/chart/ActivitiesSum`, {
+          params: { athlete_id: id[0], weeks: weeks },
+        })
+        .then((result) => result.data);
+    }
+  }
+
+  const activitiesNumberQueryFor4Weeks = useQuery<Record<'count', number>>({
+    queryKey: ['userProfileActivitiesNumber', id, 4],
+    queryFn: () => fetchActivitiesNumber(id, 4),
+  });
+
+  const activitiesNumberQueryFor1Week = useQuery<Record<'count', number>>({
+    queryKey: ['userProfileActivitiesNumber', id, 1],
+    queryFn: () => fetchActivitiesNumber(id, 1),
+  });
+
+  const sportQuery = useQuery<string[]>({
+    queryKey: ['userProfileSports', id],
+    queryFn: () => fetchSports(id),
+  });
   const sex = () => {
     if (athleteQuery.data?.sex == 'M') return 'Male';
     if (athleteQuery.data?.sex == 'F') return 'Female';
     return 'Not specified';
   };
+  const capitalizeFirstLetter = (string: string | undefined) => {
+    if (string === undefined) {
+      return '';
+    }
+    return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
+  };
 
   return (
-    <>
+    <Layout>
       <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-        <TopNavBar />
         <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
           {/*<span>Naglowek</span>*/}
-          <img
+          <Image
             className="h-32 w-32 items-center border-2 border-pb-green"
-            src={athleteQuery.data?.profile}
+            width={128}
+            height={128}
+            src={athleteQuery.data?.profile ?? ''}
             alt="user avatar"
           />
           <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
@@ -64,17 +149,21 @@ const ProfilePage: NextPage = () => {
                 <div className="flex flex-row space-x-6">
                   <div className="flex flex-col">
                     <span className="self-center whitespace-nowrap font-istok-web text-4xl text-pb-orange">
-                      4
+                      {activitiesNumberQueryFor1Week.isSuccess
+                        ? activitiesNumberQueryFor1Week.data.count
+                        : 0}
                     </span>
-                    <span className="text-m self-center whitespace-nowrap font-istok-web text-pb-dark-gray">
+                    <span className="self-center whitespace-nowrap font-istok-web text-base text-pb-dark-gray">
                       LAST WEEK
                     </span>
                   </div>
                   <div className="flex flex-col">
                     <span className="self-center whitespace-nowrap font-istok-web text-4xl text-pb-orange">
-                      15
+                      {activitiesNumberQueryFor4Weeks.isSuccess
+                        ? activitiesNumberQueryFor4Weeks.data.count
+                        : 0}
                     </span>
-                    <span className="text-m self-center whitespace-nowrap font-istok-web text-pb-dark-gray">
+                    <span className="self-center whitespace-nowrap font-istok-web text-base text-pb-dark-gray">
                       LAST 4 WEEKS
                     </span>
                   </div>
@@ -82,9 +171,7 @@ const ProfilePage: NextPage = () => {
               </div>
               {/*wykres*/}
               <div className="flex items-center justify-center">
-                <span className="self-center whitespace-nowrap font-istok-web text-xl italic text-pb-dark-gray">
-                  WYKRES
-                </span>
+                <ActivitiesNumberIn4Weeks />
               </div>
             </div>
             {/*PERSONAL INFO SECTION*/}
@@ -116,7 +203,9 @@ const ProfilePage: NextPage = () => {
                   </span>
                   {/*Zmienna athletes.city + woj + kraj?*/}
                   <span className="flex items-center justify-center text-pb-dark-gray">
-                    {athleteQuery.data?.city ?? 'Not specified'}
+                    {athleteQuery.isSuccess
+                      ? `${athleteQuery.data.city}, ${athleteQuery.data.country}`
+                      : 'Not specified'}
                   </span>
                 </div>
               </div>
@@ -134,11 +223,47 @@ const ProfilePage: NextPage = () => {
                 <span className="flex text-lg text-pb-dark-gray">
                   Distance per day
                 </span>
-                <span className="flex text-xl italic">Wykres1</span>
+                <div>
+                  <Dropdown
+                    label={capitalizeFirstLetter(
+                      SportTypeMap.getString(selectedSport!)?.toLowerCase(),
+                    )}
+                    outline={true}
+                    pill={true}
+                    color={'success'}
+                  >
+                    {sportQuery.isSuccess &&
+                      sportQuery.data.map((item) => (
+                        <Dropdown.Item
+                          key={item}
+                          onClick={() =>
+                            setSelectedSport(SportTypeMap.getNumber(item)!)
+                          }
+                        >
+                          {' '}
+                          {capitalizeFirstLetter(item.toLowerCase())}
+                        </Dropdown.Item>
+                      ))}
+                  </Dropdown>
+                  {id ? (
+                    <WeekByDayDistanceChart
+                      selectedSport={selectedSport}
+                      athleteId={id[0]}
+                    />
+                  ) : (
+                    <WeekByDayDistanceChart selectedSport={selectedSport} />
+                  )}
+                </div>
                 <span className="flex text-lg text-pb-dark-gray">
                   Sports Type
                 </span>
-                <span className="flex text-xl italic">Wykres2</span>
+                <div>
+                  {id ? (
+                    <ActivitiesBySportType athleteId={id[0]} />
+                  ) : (
+                    <ActivitiesBySportType />
+                  )}
+                </div>
               </div>
             </div>
             {/*Latest Activities SECTION*/}
@@ -149,14 +274,17 @@ const ProfilePage: NextPage = () => {
                   Latest Activities
                 </span>
               </div>
-              <div className="flex flex-col items-center justify-center"></div>
+              {activitiesQuery.isSuccess && (
+                <ClientOnlyActivities
+                  activities={activitiesQuery.data}
+                  unitPreference={settingStore}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-      <RecommendationsButton />
-      <MenuButton />
-    </>
+    </Layout>
   );
 };
 export default ProfilePage;
