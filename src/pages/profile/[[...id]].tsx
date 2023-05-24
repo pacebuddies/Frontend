@@ -1,16 +1,30 @@
 import { useQuery } from '@tanstack/react-query';
+import { Dropdown } from 'flowbite-react';
 import { NextPage } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import MenuButton from '../../components/MenuButton';
-import RecommendationsButton from '../../components/Recommendations/RecommendationsButton';
-import TopNavBar from '../../components/TopNavBar';
+import { useState } from 'react';
+import WeekByDayDistanceChart from '../../components/Charts/Distance/WeekByDayDistanceSumChart';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { IAthlete } from '../../internalTypes/interfaces';
+import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
+import { SportTypeMap } from '../../internalTypes/SportTypeMap';
+import Layout from '../../Layout';
+import ActivitiesBySportType from "../../components/Charts/Activities/ActivitiesBySportType";
+import { useSession } from "next-auth/react";
 
 const ProfilePage: NextPage = () => {
+  const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
+    SportTypeEnum.RUN,
+  );
   const params = useRouter();
 
   const id: string[] | undefined = params.query['id'] as string[];
+  const session = useSession();
+
+  if (session.status === "authenticated"){
+    console.log(session);
+  }
 
   const fetchAthlete = (id: string[] | undefined): Promise<IAthlete> => {
     if (id === undefined) {
@@ -26,21 +40,45 @@ const ProfilePage: NextPage = () => {
     queryFn: () => fetchAthlete(id),
   });
 
+  function fetchSports(id: string[] | undefined): Promise<string[]> {
+    if (id === undefined) {
+      return pacebuddiesApi
+        .get('bridge/athlete/sportTypes')
+        .then((result) => result.data);
+    } else {
+      return pacebuddiesApi
+        .get(`bridge/athlete/${id[0]}/sportTypes`)
+        .then((result) => result.data);
+    }
+  }
+
+  const sportQuery = useQuery<string[]>({
+    queryKey: ['userProfileSports', id],
+    queryFn: () => fetchSports(id),
+  });
+  console.log(sportQuery.data);
   const sex = () => {
     if (athleteQuery.data?.sex == 'M') return 'Male';
     if (athleteQuery.data?.sex == 'F') return 'Female';
     return 'Not specified';
   };
+  const capitalizeFirstLetter = (string: string | undefined) => {
+    if (string === undefined) {
+      return '';
+    }
+    return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
+  };
 
   return (
-    <>
+    <Layout>
       <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-        <TopNavBar />
         <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
           {/*<span>Naglowek</span>*/}
-          <img
+          <Image
             className="h-32 w-32 items-center border-2 border-pb-green"
-            src={athleteQuery.data?.profile}
+            width={128}
+            height={128}
+            src={athleteQuery.data?.profile ?? ''}
             alt="user avatar"
           />
           <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
@@ -66,7 +104,7 @@ const ProfilePage: NextPage = () => {
                     <span className="self-center whitespace-nowrap font-istok-web text-4xl text-pb-orange">
                       4
                     </span>
-                    <span className="text-m self-center whitespace-nowrap font-istok-web text-pb-dark-gray">
+                    <span className="self-center whitespace-nowrap font-istok-web text-base text-pb-dark-gray">
                       LAST WEEK
                     </span>
                   </div>
@@ -74,7 +112,7 @@ const ProfilePage: NextPage = () => {
                     <span className="self-center whitespace-nowrap font-istok-web text-4xl text-pb-orange">
                       15
                     </span>
-                    <span className="text-m self-center whitespace-nowrap font-istok-web text-pb-dark-gray">
+                    <span className="self-center whitespace-nowrap font-istok-web text-base text-pb-dark-gray">
                       LAST 4 WEEKS
                     </span>
                   </div>
@@ -116,7 +154,7 @@ const ProfilePage: NextPage = () => {
                   </span>
                   {/*Zmienna athletes.city + woj + kraj?*/}
                   <span className="flex items-center justify-center text-pb-dark-gray">
-                    {athleteQuery.data?.city ?? 'Not specified'}
+                    {athleteQuery.isSuccess ? (`${athleteQuery.data.city}, ${athleteQuery.data.country}`  ) : 'Not specified'}
                   </span>
                 </div>
               </div>
@@ -134,11 +172,43 @@ const ProfilePage: NextPage = () => {
                 <span className="flex text-lg text-pb-dark-gray">
                   Distance per day
                 </span>
-                <span className="flex text-xl italic">Wykres1</span>
+                <div>
+                  <Dropdown
+                    label={capitalizeFirstLetter(
+                      SportTypeMap.getString(selectedSport!)?.toLowerCase(),
+                    )}
+                    outline={true}
+                    pill={true}
+                    color={'success'}
+                  >
+                    {sportQuery.isSuccess &&
+                      sportQuery.data.map((item) => (
+                        <Dropdown.Item
+                          key={item}
+                          onClick={() =>
+                            setSelectedSport(SportTypeMap.getNumber(item)!)
+                          }
+                        >
+                          {' '}
+                          {capitalizeFirstLetter(item.toLowerCase())}
+                        </Dropdown.Item>
+                      ))}
+                  </Dropdown>
+                  {id ? (
+                    <WeekByDayDistanceChart
+                      selectedSport={selectedSport}
+                      athleteId={id[0]}
+                    />
+                  ) : (
+                    <WeekByDayDistanceChart selectedSport={selectedSport} />
+                  )}
+                </div>
                 <span className="flex text-lg text-pb-dark-gray">
                   Sports Type
                 </span>
-                <span className="flex text-xl italic">Wykres2</span>
+                <div>
+                  {/*<ActivitiesBySportType athleteId={}/>*/}
+                </div>
               </div>
             </div>
             {/*Latest Activities SECTION*/}
@@ -154,9 +224,7 @@ const ProfilePage: NextPage = () => {
           </div>
         </div>
       </div>
-      <RecommendationsButton />
-      <MenuButton />
-    </>
+    </Layout>
   );
 };
 export default ProfilePage;

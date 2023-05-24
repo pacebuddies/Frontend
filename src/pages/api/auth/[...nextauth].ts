@@ -60,6 +60,7 @@ export const authOptions: NextAuthOptions = {
           access_token: account.access_token!,
           expires_at: account.expires_at!,
           refresh_token: account.refresh_token!,
+          id: account.userId!,
         };
       } else if (Date.now() < token.expires_at * 1000) {
         return token;
@@ -70,6 +71,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }): Promise<Session> {
       // Send properties to the client, like an access_token
       session.accessToken = token.access_token;
+      session.id = token.id;
       return session;
     },
   },
