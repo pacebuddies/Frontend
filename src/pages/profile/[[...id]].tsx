@@ -10,6 +10,7 @@ import ActivitiesNumberIn4Weeks from '../../components/Charts/Activities/Activit
 import WeekByDayDistanceChart from '../../components/Charts/Distance/WeekByDayDistanceSumChart';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { IActivity, IAthlete } from '../../internalTypes/interfaces';
+import { ClubsData } from '../../internalTypes/recommendationData';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
@@ -89,6 +90,23 @@ const ProfilePage: NextPage = () => {
         .then((result) => result.data);
     }
   }
+
+  const fetchClubs = (id: string[] | undefined): Promise<ClubsData[]> => {
+    if (id === undefined) {
+      return pacebuddiesApi
+        .get('bridge/athlete/clubs')
+        .then((result) => result.data);
+    } else {
+      return pacebuddiesApi
+        .get(`bridge/athlete/${id[0]}/clubs`)
+        .then((result) => result.data);
+    }
+  };
+
+  const clubsQuery = useQuery<ClubsData[]>({
+    queryKey: ['userProfileClubs', id],
+    queryFn: () => fetchClubs(id),
+  });
 
   const activitiesNumberQueryFor4Weeks = useQuery<Record<'count', number>>({
     queryKey: ['userProfileActivitiesNumber', id, 4],
@@ -208,6 +226,37 @@ const ProfilePage: NextPage = () => {
                       : 'Not specified'}
                   </span>
                 </div>
+              </div>
+            </div>
+            <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
+              {/*PERSONAL INFO HEADER*/}
+              <div className="flex w-full flex-col border-b-2 border-pb-green">
+                <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                  Clubs
+                </span>
+              </div>
+              <div className="grid grid-cols-3">
+                {clubsQuery.isSuccess &&
+                  clubsQuery.data.map((club) => (
+                    <a
+                      key={club.url}
+                      className="flex flex-row items-center"
+                      href={`https://www.strava.com/clubs/${club.url}`}
+                      target={'_blank'}
+                      rel="noreferrer"
+                    >
+                      <Image
+                        src={club.profile_medium}
+                        height={48}
+                        width={48}
+                        alt={club.name}
+                        className="h-12 w-12 rounded-full bg-pb-orange"
+                      />
+                      <span className="p-2 font-bold text-pb-dark-gray">
+                        {club.name}
+                      </span>
+                    </a>
+                  ))}
               </div>
             </div>
             {/*SUMMARY OF ACTV SECTION*/}
