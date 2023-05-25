@@ -12,6 +12,7 @@ export interface RecommendationData {
   sport_types: number[];
 }
 export interface ClubsData {
+  id: string;
   name: string;
   profile_medium: string;
   url: string;

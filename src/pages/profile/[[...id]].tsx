@@ -241,7 +241,9 @@ const ProfilePage: NextPage = () => {
                     <a
                       key={club.url}
                       className="flex flex-row items-center"
-                      href={`https://www.strava.com/clubs/${club.url}`}
+                      href={`https://www.strava.com/clubs/${
+                        club.url == '' ? club.id : club.url
+                      }`}
                       target={'_blank'}
                       rel="noreferrer"
                     >
