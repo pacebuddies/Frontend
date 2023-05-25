@@ -1,25 +1,25 @@
-import { useQuery } from '@tanstack/react-query';
-import { Dropdown } from 'flowbite-react';
-import { NextPage } from 'next';
+import {useQuery} from '@tanstack/react-query';
+import {Dropdown} from 'flowbite-react';
+import {NextPage} from 'next';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
+import {useRouter} from 'next/router';
+import {useState} from 'react';
 import ActivitiesBySportType from '../../components/Charts/Activities/ActivitiesBySportType';
 import ActivitiesNumberIn4Weeks from '../../components/Charts/Activities/ActivitiesNumberIn4Weeks';
 import WeekByDayDistanceChart from '../../components/Charts/Distance/WeekByDayDistanceSumChart';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
+import {LoadingSpinner} from '../../components/LoadingSpinner';
 import pacebuddiesApi from '../../instances/axiosConfigured';
-import { IActivity, IAthlete } from '../../internalTypes/interfaces';
-import { ClubsData } from '../../internalTypes/recommendationData';
-import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
-import { SportTypeMap } from '../../internalTypes/SportTypeMap';
+import {IActivity, IAthlete} from '../../internalTypes/interfaces';
+import {ClubsData} from '../../internalTypes/recommendationData';
+import {SportTypeEnum} from '../../internalTypes/sportTypeEnum';
+import {SportTypeMap} from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
-import { useSettingsStore } from '../../store/settingsStore';
+import {useSettingsStore} from '../../store/settingsStore';
 
 const ClientOnlyActivities = dynamic(
   () => import('../../../src/components/Activity/ClientOnlyActivities'),
-  { ssr: false },
+  {ssr: false},
 );
 
 const ProfilePage: NextPage = () => {
@@ -47,11 +47,11 @@ const ProfilePage: NextPage = () => {
   const fetchActivities = (id: string[] | undefined): Promise<IActivity[]> => {
     if (id === undefined) {
       return pacebuddiesApi
-        .get(`bridge/athlete/activities`, { params: { count: 5 } })
+        .get(`bridge/athlete/activities`, {params: {count: 5}})
         .then((res) => res.data);
     }
     return pacebuddiesApi
-      .get(`bridge/athlete/${id[0]}/activities`, { params: { count: 5 } })
+      .get(`bridge/athlete/${id[0]}/activities`, {params: {count: 5}})
       .then((res) => res.data);
   };
 
@@ -59,6 +59,7 @@ const ProfilePage: NextPage = () => {
     queryKey: ['activities', id],
     queryFn: () => fetchActivities(id),
   });
+
   function fetchSports(id: string[] | undefined): Promise<string[]> {
     if (id === undefined) {
       return pacebuddiesApi
@@ -78,7 +79,7 @@ const ProfilePage: NextPage = () => {
     if (id === undefined) {
       return pacebuddiesApi
         .get('bridge/chart/ActivitiesSum', {
-          params: { weeks: weeks },
+          params: {weeks: weeks},
         })
         .then((result) => {
           return result.data;
@@ -86,7 +87,7 @@ const ProfilePage: NextPage = () => {
     } else {
       return pacebuddiesApi
         .get(`bridge/chart/ActivitiesSum`, {
-          params: { athlete_id: id[0], weeks: weeks },
+          params: {athlete_id: id[0], weeks: weeks},
         })
         .then((result) => result.data);
     }
@@ -138,9 +139,10 @@ const ProfilePage: NextPage = () => {
     return (
       <Layout>
         <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-          <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+          <div
+            className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
             {/*<span>Naglowek</span>*/}
-            <LoadingSpinner />
+            <LoadingSpinner/>
           </div>
         </div>
       </Layout>
@@ -150,7 +152,8 @@ const ProfilePage: NextPage = () => {
     return (
       <Layout>
         <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-          <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+          <div
+            className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
             {/*<span>Naglowek</span>*/}
             <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
               No athlete found
@@ -164,7 +167,8 @@ const ProfilePage: NextPage = () => {
       return (
         <Layout>
           <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-            <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+            <div
+              className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
               {/*<span>Naglowek</span>*/}
               <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
                 No athlete found
@@ -179,7 +183,8 @@ const ProfilePage: NextPage = () => {
   return (
     <Layout>
       <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-        <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+        <div
+          className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
           {/*<span>Naglowek</span>*/}
           <Image
             className="h-32 w-32 items-center border-2 border-pb-green"
@@ -199,10 +204,10 @@ const ProfilePage: NextPage = () => {
             {/*number of activities + wykres ostatniego tygodnia*/}
             <div
               className="mt-2 flex flex-col items-center justify-between
-                            space-y-4 md:flex-row md:space-x-14 md:space-y-0"
+                            space-y-4 md:flex-row md:space-x-5 md:space-y-0"
             >
               {/*number of activities*/}
-              <div className="flex w-1/2 flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center">
                 <span className="self-center whitespace-nowrap font-istok-web text-xl text-pb-dark-gray">
                   NUMBER OF ACTIVITIES
                 </span>
@@ -241,10 +246,11 @@ const ProfilePage: NextPage = () => {
               </div>
             </div>
             {/*PERSONAL INFO SECTION*/}
-            <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
+            <div className="mt-2 flex w-full flex-col items-start justify-start px-6 md:px-16">
               {/*PERSONAL INFO HEADER*/}
               <div className="flex w-full flex-col border-b-2 border-pb-green">
-                <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                <span
+                  className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
                   Personal info
                 </span>
               </div>
@@ -277,18 +283,19 @@ const ProfilePage: NextPage = () => {
               </div>
             </div>
             <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
-              {/*PERSONAL INFO HEADER*/}
+              {/*CLUBS HEADER*/}
               <div className="flex w-full flex-col border-b-2 border-pb-green">
-                <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                <span
+                  className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
                   Clubs
                 </span>
               </div>
-              <div className="grid grid-cols-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 mt-2">
                 {clubsQuery.isSuccess &&
                   clubsQuery.data.map((club) => (
                     <a
                       key={club.url}
-                      className="flex flex-row items-center"
+                      className="flex flex-row items-center break-words"
                       href={`https://www.strava.com/clubs/${
                         club.url == '' ? club.id : club.url
                       }`}
@@ -313,54 +320,52 @@ const ProfilePage: NextPage = () => {
             <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
               {/*SUMMARY OF ACTV HEADER*/}
               <div className="flex w-full flex-col border-b-2 border-pb-green">
-                <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                <span
+                  className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
                   Summary of Activities
                 </span>
               </div>
               {/*WYKRESY*/}
               <div className="mt-2 flex w-full flex-col items-center justify-center space-y-3">
-                <span className="flex text-lg text-pb-dark-gray">
-                  Distance per day
-                </span>
-                <div>
-                  <Dropdown
-                    label={capitalizeFirstLetter(
-                      SportTypeMap.getString(selectedSport!)?.toLowerCase(),
-                    )}
-                    outline={true}
-                    pill={true}
-                    color={'success'}
-                  >
-                    {sportQuery.isSuccess &&
-                      sportQuery.data.map((item) => (
-                        <Dropdown.Item
-                          key={item}
-                          onClick={() =>
-                            setSelectedSport(SportTypeMap.getNumber(item)!)
-                          }
-                        >
-                          {' '}
-                          {capitalizeFirstLetter(item.toLowerCase())}
-                        </Dropdown.Item>
-                      ))}
-                  </Dropdown>
+                <div className="flex flex-col w-full items-center space-y-2">
+                  <div className="flex flex-row items-center justify-center space-x-2">
+                    <span className="flex text-pb-dark-gray">Show chart for sport type: </span>
+                    <Dropdown
+                      label={capitalizeFirstLetter(
+                        SportTypeMap.getString(selectedSport!)?.toLowerCase(),
+                      )}
+                      outline={true}
+                      pill={true}
+                      color={'success'}
+                    >
+                      {sportQuery.isSuccess &&
+                        sportQuery.data.map((item) => (
+                          <Dropdown.Item
+                            key={item}
+                            onClick={() =>
+                              setSelectedSport(SportTypeMap.getNumber(item)!)
+                            }
+                          >
+                            {' '}
+                            {capitalizeFirstLetter(item.toLowerCase())}
+                          </Dropdown.Item>
+                        ))}
+                    </Dropdown>
+                  </div>
                   {id ? (
                     <WeekByDayDistanceChart
                       selectedSport={selectedSport}
                       athleteId={id[0]}
                     />
                   ) : (
-                    <WeekByDayDistanceChart selectedSport={selectedSport} />
+                    <WeekByDayDistanceChart selectedSport={selectedSport}/>
                   )}
                 </div>
-                <span className="flex text-lg text-pb-dark-gray">
-                  Sports Type
-                </span>
                 <div>
                   {id ? (
-                    <ActivitiesBySportType athleteId={id[0]} />
+                    <ActivitiesBySportType athleteId={id[0]}/>
                   ) : (
-                    <ActivitiesBySportType />
+                    <ActivitiesBySportType/>
                   )}
                 </div>
               </div>
@@ -369,7 +374,8 @@ const ProfilePage: NextPage = () => {
             <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
               {/*Latest Activity HEADER*/}
               <div className="flex w-full flex-col border-b-2 border-pb-green">
-                <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                <span
+                  className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
                   Latest Activities
                 </span>
               </div>
