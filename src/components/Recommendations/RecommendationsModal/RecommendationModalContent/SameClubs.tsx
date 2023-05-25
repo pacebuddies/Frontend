@@ -16,7 +16,15 @@ const SameClubs = ({ clubs }: IProps) => {
       </div>
       <div className="flex flex-col overflow-y-hidden">
         {clubs.map((club) => (
-          <div key={club.url} className="flex flex-row items-center ">
+          <a
+            key={club.url}
+            className="flex flex-row items-center"
+            href={`https://www.strava.com/clubs/${
+              club.url == '' ? club.id : club.url
+            }`}
+            target={'_blank'}
+            rel="noreferrer"
+          >
             <Image
               src={club.profile_medium}
               height={48}
@@ -25,7 +33,7 @@ const SameClubs = ({ clubs }: IProps) => {
               className="h-12 w-12 rounded-full bg-pb-orange"
             />
             <span className="p-2 font-bold text-pb-dark-gray">{club.name}</span>
-          </div>
+          </a>
         ))}
       </div>
     </>
