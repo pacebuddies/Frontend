@@ -38,7 +38,16 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
   return (
     <>
       <div>
-        <span>Running</span>
+        <span className="flex mt-2 small-caps font-bold text-pb-dark-gray text-2xl justify-center items-center">
+          preferences
+        </span>
+        <span className="flex  font-bold text-pb-dark-gray text-md px-2 justify-center items-center ">
+          Here you can adjust your recommendation's filters to the preferred level for each sport type.<br/>
+        </span>
+        <span className="flex text-pb-dark-gray text-md px-2 justify-center items-center ">
+          Under every slider you can see current range calculated from our algorithm and your preferences.<br/>
+          After changes remember to save your new settings.
+        </span>
       </div>
       <div className="w-full pt-4">
         <div className="flex flex-col pl-8">{/*<PreferenceSlider />*/}</div>
@@ -59,6 +68,7 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
         {/*      return null;*/}
         {/*    }*/}
         {/*  })}*/}
+        {/*TODO: title - podane małymi literami*/}
         <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
         <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
         <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />

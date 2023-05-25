@@ -43,7 +43,7 @@ const SettingsPage: NextPage = () => {
           {/*TODO: Poprawić wyświetlanie tabów*/}
           <div className="flex h-auto w-full">
             {/*Options tabs*/}
-            <div className="flex h-[calc(100vh-71px)] w-24 flex-col overflow-y-auto border-r-[1px]  border-pb-gray md:w-80">
+            <div className="flex h-full w-24 flex-col overflow-y-auto border-r-[1px]  border-pb-gray md:w-80">
               <button
                 onClick={() => {
                   setSettingsTab(SettingsTabs.Account);

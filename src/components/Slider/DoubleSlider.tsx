@@ -63,6 +63,7 @@ const DoubleSlider = ({
         />
       </div>
       <div className="mx-auto mt-3">
+        {/*TODO: zmienic szybkosc zmiany liczb*/}
         <NumberGrow
           springConfig={{ mass: 1, tension: 60, friction: 20 }}
           num={calculateMinBracketValue(values.min)}
@@ -72,7 +73,7 @@ const DoubleSlider = ({
         >
           &nbsp;km
         </NumberGrow>
-        <span> - </span>
+        <span className="font-bold text-pb-green"> - </span>
         <NumberGrow
           springConfig={{ mass: 1, tension: 60, friction: 20 }}
           num={calculateMaxBracketValue(values.max)}

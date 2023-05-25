@@ -116,14 +116,14 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
       .catch((err) => console.log(err));
   };
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col border-t-2  border-t-pb-green">
       <div>
-        <span>{title}</span>
+        <span className="flex pt-2 items-center justify-center text-pb-orange text-xl small-caps font-bold">{title}</span>
       </div>
       {/*Average distance slider*/}
       <div>
-        <span>Average distance</span>
-        <div className="w-full pt-4">
+        <span className="px-2 text-pb-green font-bold border-t-pb-green border-t">Average distance</span>
+        <div className="w-full pb-4">
           <DoubleSlider
             value={{
               min: userFilterOffset.avg_distance_min,
@@ -147,8 +147,9 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
       </div>
       {/*Average max speed*/}
       <div>
-        <span>Average max speed</span>
-        <div className="w-full pt-4">
+        <span className="px-2 text-pb-green font-bold border-t-pb-green border-t">Average max speed</span>
+        <span className="px-2 text-pb-green"></span>
+        <div className="w-full pb-4">
           <DoubleSlider
             value={{
               min: userFilterOffset.avg_max_speed_min,
@@ -172,8 +173,8 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
       </div>
       {/*Average speed*/}
       <div>
-        <span>Average speed</span>
-        <div className="w-full pt-4">
+        <span className="px-2 text-pb-green font-bold border-t-pb-green border-t">Average speed</span>
+        <div className="w-full pb-4">
           <DoubleSlider
             value={{
               min: userFilterOffset.avg_speed_min,
@@ -197,8 +198,8 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
       </div>
       {/*Average moving time*/}
       <div>
-        <span>Average moving time</span>
-        <div className="w-full pt-4">
+        <span className="px-2 text-pb-green font-bold border-t-pb-green border-t">Average moving time</span>
+        <div className="w-full pb-4">
           <DoubleSlider
             value={{
               min: userFilterOffset.avg_moving_time_min,
@@ -222,8 +223,8 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
       </div>
       {/*Average total moving time*/}
       <div>
-        <span>Average total moving time</span>
-        <div className="w-full pt-4">
+        <span className="px-2 text-pb-green font-bold border-t-pb-green border-t">Average total moving time</span>
+        <div className="w-full pb-4">
           <DoubleSlider
             value={{
               min: userFilterOffset.avg_total_moving_time_min,
@@ -247,8 +248,8 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
       </div>
       {/*Average total distance*/}
       <div>
-        <span>Average total distance</span>
-        <div className="w-full pt-4">
+        <span className="px-2 text-pb-green font-bold border-t-pb-green border-t">Average total distance</span>
+        <div className="w-full pb-4">
           <DoubleSlider
             value={{
               min: userFilterOffset.avg_total_distance_min,
@@ -272,8 +273,8 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
       </div>
       {/*Average total elevation gain*/}
       <div>
-        <span>Average total elevation gain</span>
-        <div className="w-full pt-4">
+        <span className="px-2 text-pb-green font-bold border-t-pb-green border-t">Average total elevation gain</span>
+        <div className="w-full">
           <DoubleSlider
             value={{
               min: userFilterOffset.avg_total_elevation_gain_min,
@@ -295,7 +296,7 @@ const FilterSportBlock = ({ title, sportType }: IProps) => {
           />
         </div>
       </div>
-      <div>
+      <div className="flex items-end justify-end pr-4">
         <Button
           color="success"
           disabled={compareOffsetAndSettings(offsetData, userFilterOffset)}
