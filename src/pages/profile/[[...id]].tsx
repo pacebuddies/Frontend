@@ -8,6 +8,7 @@ import { useState } from 'react';
 import ActivitiesBySportType from '../../components/Charts/Activities/ActivitiesBySportType';
 import ActivitiesNumberIn4Weeks from '../../components/Charts/Activities/ActivitiesNumberIn4Weeks';
 import WeekByDayDistanceChart from '../../components/Charts/Distance/WeekByDayDistanceSumChart';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { IActivity, IAthlete } from '../../internalTypes/interfaces';
 import { ClubsData } from '../../internalTypes/recommendationData';
@@ -29,6 +30,20 @@ const ProfilePage: NextPage = () => {
   const id: string[] | undefined = params.query['id'] as string[];
   const settingStore = useSettingsStore((store) => store.measurementUnits);
 
+  const fetchAthlete = (id: string[] | undefined): Promise<IAthlete> => {
+    if (id === undefined) {
+      return pacebuddiesApi.get('bridge/athlete').then((result) => result.data);
+    } else {
+      return pacebuddiesApi
+        .get(`bridge/athlete/${id[0]}`)
+        .then((result) => result.data);
+    }
+  };
+  const athleteQuery = useQuery<IAthlete>({
+    queryKey: ['userProfileAthlete', id],
+    queryFn: () => fetchAthlete(id),
+  });
+
   const fetchActivities = (id: string[] | undefined): Promise<IActivity[]> => {
     if (id === undefined) {
       return pacebuddiesApi
@@ -44,20 +59,6 @@ const ProfilePage: NextPage = () => {
     queryKey: ['activities', id],
     queryFn: () => fetchActivities(id),
   });
-  const fetchAthlete = (id: string[] | undefined): Promise<IAthlete> => {
-    if (id === undefined) {
-      return pacebuddiesApi.get('bridge/athlete').then((result) => result.data);
-    } else {
-      return pacebuddiesApi
-        .get(`bridge/athlete/${id[0]}`)
-        .then((result) => result.data);
-    }
-  };
-  const athleteQuery = useQuery<IAthlete>({
-    queryKey: ['userProfileAthlete', id],
-    queryFn: () => fetchAthlete(id),
-  });
-
   function fetchSports(id: string[] | undefined): Promise<string[]> {
     if (id === undefined) {
       return pacebuddiesApi
@@ -133,6 +134,47 @@ const ProfilePage: NextPage = () => {
     }
     return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
   };
+  if (athleteQuery.isLoading) {
+    return (
+      <Layout>
+        <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
+          <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+            {/*<span>Naglowek</span>*/}
+            <LoadingSpinner />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+  if (athleteQuery.isError) {
+    return (
+      <Layout>
+        <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
+          <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+            {/*<span>Naglowek</span>*/}
+            <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
+              No athlete found
+            </span>
+          </div>
+        </div>
+      </Layout>
+    );
+  } else if (athleteQuery.isSuccess) {
+    if (athleteQuery.data === null) {
+      return (
+        <Layout>
+          <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
+            <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+              {/*<span>Naglowek</span>*/}
+              <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
+                No athlete found
+              </span>
+            </div>
+          </div>
+        </Layout>
+      );
+    }
+  }
 
   return (
     <Layout>
@@ -143,12 +185,12 @@ const ProfilePage: NextPage = () => {
             className="h-32 w-32 items-center border-2 border-pb-green"
             width={128}
             height={128}
-            src={athleteQuery.data?.profile ?? ''}
+            src={athleteQuery.data.profile ?? ''}
             alt="user avatar"
           />
           <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
-            {`${athleteQuery.data?.firstname ?? ''} ${
-              athleteQuery.data?.lastname ?? ''
+            {`${athleteQuery.data.firstname ?? ''} ${
+              athleteQuery.data.lastname ?? ''
             }`}
           </span>
         </div>
