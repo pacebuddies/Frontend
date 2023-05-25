@@ -231,7 +231,13 @@ const ProfilePage: NextPage = () => {
               </div>
               {/*wykres*/}
               <div className="flex items-center justify-center">
-                <ActivitiesNumberIn4Weeks />
+                {id ? (
+                  <ActivitiesNumberIn4Weeks
+                    athleteId={id[0]}
+                  />
+                ) : (
+                  <ActivitiesNumberIn4Weeks/>
+                )}
               </div>
             </div>
             {/*PERSONAL INFO SECTION*/}
