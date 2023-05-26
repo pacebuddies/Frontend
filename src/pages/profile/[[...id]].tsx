@@ -8,8 +8,10 @@ import { useState } from 'react';
 import ActivitiesBySportType from '../../components/Charts/Activities/ActivitiesBySportType';
 import ActivitiesNumberIn4Weeks from '../../components/Charts/Activities/ActivitiesNumberIn4Weeks';
 import WeekByDayDistanceChart from '../../components/Charts/Distance/WeekByDayDistanceSumChart';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { IActivity, IAthlete } from '../../internalTypes/interfaces';
+import { ClubsData } from '../../internalTypes/recommendationData';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
@@ -28,6 +30,20 @@ const ProfilePage: NextPage = () => {
   const id: string[] | undefined = params.query['id'] as string[];
   const settingStore = useSettingsStore((store) => store.measurementUnits);
 
+  const fetchAthlete = (id: string[] | undefined): Promise<IAthlete> => {
+    if (id === undefined) {
+      return pacebuddiesApi.get('bridge/athlete').then((result) => result.data);
+    } else {
+      return pacebuddiesApi
+        .get(`bridge/athlete/${id[0]}`)
+        .then((result) => result.data);
+    }
+  };
+  const athleteQuery = useQuery<IAthlete>({
+    queryKey: ['userProfileAthlete', id],
+    queryFn: () => fetchAthlete(id),
+  });
+
   const fetchActivities = (id: string[] | undefined): Promise<IActivity[]> => {
     if (id === undefined) {
       return pacebuddiesApi
@@ -43,20 +59,6 @@ const ProfilePage: NextPage = () => {
     queryKey: ['activities', id],
     queryFn: () => fetchActivities(id),
   });
-  const fetchAthlete = (id: string[] | undefined): Promise<IAthlete> => {
-    if (id === undefined) {
-      return pacebuddiesApi.get('bridge/athlete').then((result) => result.data);
-    } else {
-      return pacebuddiesApi
-        .get(`bridge/athlete/${id[0]}`)
-        .then((result) => result.data);
-    }
-  };
-  const athleteQuery = useQuery<IAthlete>({
-    queryKey: ['userProfileAthlete', id],
-    queryFn: () => fetchAthlete(id),
-  });
-
   function fetchSports(id: string[] | undefined): Promise<string[]> {
     if (id === undefined) {
       return pacebuddiesApi
@@ -90,6 +92,23 @@ const ProfilePage: NextPage = () => {
     }
   }
 
+  const fetchClubs = (id: string[] | undefined): Promise<ClubsData[]> => {
+    if (id === undefined) {
+      return pacebuddiesApi
+        .get('bridge/athlete/clubs')
+        .then((result) => result.data);
+    } else {
+      return pacebuddiesApi
+        .get(`bridge/athlete/${id[0]}/clubs`)
+        .then((result) => result.data);
+    }
+  };
+
+  const clubsQuery = useQuery<ClubsData[]>({
+    queryKey: ['userProfileClubs', id],
+    queryFn: () => fetchClubs(id),
+  });
+
   const activitiesNumberQueryFor4Weeks = useQuery<Record<'count', number>>({
     queryKey: ['userProfileActivitiesNumber', id, 4],
     queryFn: () => fetchActivitiesNumber(id, 4),
@@ -115,6 +134,47 @@ const ProfilePage: NextPage = () => {
     }
     return string.charAt(0).toUpperCase() + string.slice(1).replace(/_/g, ' ');
   };
+  if (athleteQuery.isLoading) {
+    return (
+      <Layout>
+        <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
+          <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+            {/*<span>Naglowek</span>*/}
+            <LoadingSpinner />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+  if (athleteQuery.isError) {
+    return (
+      <Layout>
+        <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
+          <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+            {/*<span>Naglowek</span>*/}
+            <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
+              No athlete found
+            </span>
+          </div>
+        </div>
+      </Layout>
+    );
+  } else if (athleteQuery.isSuccess) {
+    if (athleteQuery.data === null) {
+      return (
+        <Layout>
+          <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
+            <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+              {/*<span>Naglowek</span>*/}
+              <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
+                No athlete found
+              </span>
+            </div>
+          </div>
+        </Layout>
+      );
+    }
+  }
 
   return (
     <Layout>
@@ -125,12 +185,12 @@ const ProfilePage: NextPage = () => {
             className="h-32 w-32 items-center border-2 border-pb-green"
             width={128}
             height={128}
-            src={athleteQuery.data?.profile ?? ''}
+            src={athleteQuery.data.profile ?? ''}
             alt="user avatar"
           />
           <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
-            {`${athleteQuery.data?.firstname ?? ''} ${
-              athleteQuery.data?.lastname ?? ''
+            {`${athleteQuery.data.firstname ?? ''} ${
+              athleteQuery.data.lastname ?? ''
             }`}
           </span>
         </div>
@@ -171,7 +231,13 @@ const ProfilePage: NextPage = () => {
               </div>
               {/*wykres*/}
               <div className="flex items-center justify-center">
-                <ActivitiesNumberIn4Weeks />
+                {id ? (
+                  <ActivitiesNumberIn4Weeks
+                    athleteId={id[0]}
+                  />
+                ) : (
+                  <ActivitiesNumberIn4Weeks/>
+                )}
               </div>
             </div>
             {/*PERSONAL INFO SECTION*/}
@@ -208,6 +274,39 @@ const ProfilePage: NextPage = () => {
                       : 'Not specified'}
                   </span>
                 </div>
+              </div>
+            </div>
+            <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
+              {/*PERSONAL INFO HEADER*/}
+              <div className="flex w-full flex-col border-b-2 border-pb-green">
+                <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                  Clubs
+                </span>
+              </div>
+              <div className="grid grid-cols-3">
+                {clubsQuery.isSuccess &&
+                  clubsQuery.data.map((club) => (
+                    <a
+                      key={club.url}
+                      className="flex flex-row items-center"
+                      href={`https://www.strava.com/clubs/${
+                        club.url == '' ? club.id : club.url
+                      }`}
+                      target={'_blank'}
+                      rel="noreferrer"
+                    >
+                      <Image
+                        src={club.profile_medium}
+                        height={48}
+                        width={48}
+                        alt={club.name}
+                        className="h-12 w-12 rounded-full bg-pb-orange"
+                      />
+                      <span className="p-2 font-bold text-pb-dark-gray">
+                        {club.name}
+                      </span>
+                    </a>
+                  ))}
               </div>
             </div>
             {/*SUMMARY OF ACTV SECTION*/}
