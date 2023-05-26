@@ -3,6 +3,7 @@ import {
   ChevronRightIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { useMediaQuery } from '../../../hooks/useMediaQuery';
@@ -10,6 +11,10 @@ import { RecommendationData } from '../../../internalTypes/recommendationData';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 import AcceptButton from './AcceptButton';
 import DeclineButton from './DeclineButton';
+import BestBuddySvg from './RecommendationModalContent/BuddyIcons/BestBuddy.svg';
+import BuddySvg from './RecommendationModalContent/BuddyIcons/Buddy.svg';
+import GoodBuddySvg from './RecommendationModalContent/BuddyIcons/GoodBuddy.svg';
+import NiceBuddySvg from './RecommendationModalContent/BuddyIcons/NiceBuddy.svg';
 import RecommendationsModalContent from './RecommendationModalContent/RecommendationsModalContent';
 import RecommendationsSportSelector from './RecommendationsSportSelector';
 
@@ -139,24 +144,73 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     onSwipedRight: () => previousRecommendation(),
     trackMouse: true,
   });
+
+  const showBuddyBadge = (num: number) => {
+    if (num < 3) {
+      return (
+        <Image
+          src={BuddySvg.src}
+          alt={BuddySvg.name}
+          width={260}
+          height={146}
+          className="h-[96px] lg:h-[146px] lg:w-[260px]"
+        />
+      );
+    } else if (num >= 3 && num < 10) {
+      return (
+        <Image
+          src={NiceBuddySvg.src}
+          alt={NiceBuddySvg.name}
+          width={260}
+          height={146}
+          className="h-[96px] lg:h-[146px] lg:w-[260px]"
+        />
+      );
+    } else if (num >= 10 && num < 20) {
+      return (
+        <Image
+          src={GoodBuddySvg.src}
+          alt={GoodBuddySvg.name}
+          width={260}
+          height={146}
+          className="h-[96px] lg:h-[146px] lg:w-[260px]"
+        />
+      );
+    } else {
+      return (
+        <Image
+          src={BestBuddySvg.src}
+          alt={BestBuddySvg.name}
+          width={260}
+          height={146}
+          className="h-[96px] lg:h-[146px] lg:w-[260px]"
+        />
+      );
+    }
+  };
+
   return (
     <>
       <div className="scrollbar-hide fixed inset-0 z-1050 flex snap-x flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
         <button
-          className="fixed right-2 top-2 lg:top-5 lg:right-5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray z-[2000]"
+          className="fixed right-2 top-2 z-[2000] flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pb-gray lg:right-5 lg:top-5"
           onClick={() => onOpenedChange(false)}
           onKeyDown={(event) => handleEscKeyDown(event)}
         >
           <XMarkIcon className="h-6 w-6" />
         </button>
         <div className="relative flex h-[90%] max-h-screen w-full flex-col items-center justify-center lg:m-6 lg:w-384">
-          <div className="flex w-9/12 flex-row items-center justify-center rounded-t-3xl bg-pb-green">
+          <div className="flex w-9/12 flex-row items-center justify-center rounded-t-3xl bg-pb-dark-gray">
             <RecommendationsSportSelector
               onSportChange={handleFilteredSportChange}
             />
           </div>
           <div className="relative mx-auto flex h-full w-full flex-row items-center justify-center">
             {/*Content*/}
+            <div className="-top-1 translate-x-12 lg:-translate-x-8 absolute z-[2000] drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)] right-0">
+              {showBuddyBadge(filteredData[recommendationNumber]!.upvotes)}
+            </div>
+
             <div className="flex h-full w-full flex-col items-center justify-center">
               {/*Upper content*/}
               <div className="flex h-full w-full flex-row items-center justify-center">
