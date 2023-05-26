@@ -4,6 +4,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { CustomFlowbiteTheme, Flowbite } from 'flowbite-react';
 import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import StravaWatermark from '../components/StravaWatermark';
@@ -21,6 +22,14 @@ const queryClient = new QueryClient({
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
+    <>
+    <Head>
+      <title> PaceBuddies </title>
+      <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png"/>
+      <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png"/>
+      <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png"/>
+      <link rel="manifest" href="/site.webmanifest"/>
+    </Head>
     <SessionProvider session={session}>
       <Flowbite theme={{ theme }}>
         <QueryClientProvider client={queryClient}>
@@ -42,6 +51,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         theme="light"
       />
     </SessionProvider>
+    </>
   );
 }
 
