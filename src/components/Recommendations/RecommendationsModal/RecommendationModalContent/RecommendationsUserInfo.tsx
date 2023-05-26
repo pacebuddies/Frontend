@@ -49,7 +49,7 @@ const RecommendationsUserInfo = ({
               <span className="text-sm lg:text-base">Location</span>
             </div>
             <div className="flex h-full max-w-[5rem] flex-col justify-between font-bold text-pb-dark-gray lg:max-w-[8rem] lg:py-8 xl:max-w-[8rem] 2xl:max-w-[10rem]">
-              <span className="text-sm lg:text-base">{sex}</span>
+              <span className="text-sm lg:text-base">{sex == 'F' ? 'Female' : 'Male'}</span>
               <span className="truncate text-sm font-bold text-pb-dark-gray lg:text-base">
                 {city}, {country}
               </span>
@@ -74,7 +74,7 @@ const RecommendationsUserInfo = ({
               {firstname} {lastname}
             </span>
             <span className="truncate pr-3 text-sm font-bold text-pb-dark-gray">
-              {sex}, {city}, {country}
+              {sex == 'F' ? 'Female' : 'Male'}, {city}, {country}
             </span>
           </div>
         </>

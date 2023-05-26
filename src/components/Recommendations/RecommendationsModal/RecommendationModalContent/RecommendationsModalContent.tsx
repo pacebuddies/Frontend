@@ -7,7 +7,6 @@ import RecommendationsUserInfo from './RecommendationsUserInfo';
 import SameClubs from './SameClubs';
 import SameSportTypes from './SameSportTypes';
 
-import { faker } from '@faker-js/faker';
 import BestBuddySvg from './BuddyIcons/BestBuddy.svg';
 import BuddySvg from './BuddyIcons/Buddy.svg';
 import GoodBuddySvg from './BuddyIcons/GoodBuddy.svg';
@@ -41,46 +40,7 @@ const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
     );
   }
 
-  const showBuddyBadge = (num: number) => {
-    if (num < 3) {
-      return (
-        <Image
-          src={BuddySvg.src}
-          alt={BuddySvg.name}
-          width={260}
-          height={146}
-          className="h-[64px] lg:h-[146px] lg:w-[260px]"
-        />
-      );
-    } else if (num >= 3 && num < 10) {
-      return (
-        <Image
-          src={NiceBuddySvg.src}
-          alt={NiceBuddySvg.name}
-          width={260}
-          height={146}
-        />
-      );
-    } else if (num >= 10 && num < 20) {
-      return (
-        <Image
-          src={GoodBuddySvg.src}
-          alt={GoodBuddySvg.name}
-          width={260}
-          height={146}
-        />
-      );
-    } else {
-      return (
-        <Image
-          src={BestBuddySvg.src}
-          alt={BestBuddySvg.name}
-          width={260}
-          height={146}
-        />
-      );
-    }
-  };
+
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -95,9 +55,7 @@ const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
           profile={athlete.profile}
           sex={athlete.sex}
         />
-        <div className="relative  w-1/5 drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)] lg:bottom-7 lg:left-9">
-          {showBuddyBadge(athlete.upvotes)}
-        </div>
+
       </div>
       {/*Bottom block information*/}
       <div className="flex w-full grow flex-wrap lg:flex-row lg:flex-nowrap">
@@ -118,12 +76,17 @@ const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
             <span className="text-lg lg:text-2xl xl:text-3xl">
               Compatibility
             </span>
-            <CompatibilityNumber num={Number(faker.random.numeric(2))} />
+            <CompatibilityNumber num={athlete.compatibility} />
           </div>
         </div>
         {/*Right block information / chart*/}
         <div className="relative mt-4 min-h-[16rem] min-w-[10rem] flex-auto border border-green-500 bg-white p-8 lg:mt-0">
-          <RecommendationsChart data={[20, 50, 60, 90, 65]} />
+          <RecommendationsChart
+            recommended_user_name={athlete.firstname}
+            recommended_user_graph_data={athlete.recommended_graph_stats}
+            user_graph_data={athlete.my_graph_stats}
+            data={[20, 50, 60, 90, 65]}
+          />
         </div>
       </div>
     </div>
