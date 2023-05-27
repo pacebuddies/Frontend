@@ -189,6 +189,8 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     }
   };
 
+  console.log(recommendationNumber);
+
   return (
     <>
       <div className="scrollbar-hide fixed inset-0 z-1050 flex snap-x flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
@@ -207,8 +209,8 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
           </div>
           <div className="relative mx-auto flex h-full w-full flex-row items-center justify-center">
             {/*Content*/}
-            <div className="-top-1 translate-x-12 lg:-translate-x-8 absolute z-[2000] drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)] right-0">
-              {showBuddyBadge(filteredData[recommendationNumber]!.upvotes)}
+            <div className="absolute -top-1 right-0 z-[2000] translate-x-12 drop-shadow-[0_10px_15px_rgba(0,0,0,0.3)] lg:-translate-x-8">
+              {showBuddyBadge(filteredData[recommendationNumber]?.upvotes ?? 0)}
             </div>
 
             <div className="flex h-full w-full flex-col items-center justify-center">
@@ -229,7 +231,6 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
                   </div>
                 )}
                 <div className="flex h-full w-full flex-row rounded-full border-0 bg-white/0 shadow-lg outline-none focus:outline-none">
-                  {/*UWAGA! Poniższa linia styli ustala szerokość modalu na różnych urządzeniach*/}
                   <div
                     className={
                       'relative h-full w-full flex-auto rounded-3xl bg-white p-3 lg:p-6'
