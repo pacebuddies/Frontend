@@ -243,14 +243,21 @@ const ProfilePage: NextPage = () => {
                 )}
               </div>
             </div>
+            {/*/!*CLUBS*!/*/}
+            {/*<div className="mt-2 flex w-full flex-col items-start justify-start md:px-16">*/}
+            {/*  /!*CLUBS HEADER*!/*/}
+            {/*  <div className="flex w-full px-10">*/}
+            {/*    <div className="flex w-full flex-col border-b-2 border-pb-green">*/}
+            {/*      <span className="flex w-full justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">*/}
             {/*PERSONAL INFO SECTION*/}
-            <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
+            <div className="mt-2 flex w-full flex-col items-start justify-start md:px-16">
               {/*PERSONAL INFO HEADER*/}
-              <div className="flex w-full flex-col border-b-2 border-pb-green">
-                <span
-                  className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
-                  Personal info
-                </span>
+              <div className="flex w-full px-10">
+                <div className="flex w-full flex-col border-b-2 border-pb-green">
+                  <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                    Personal info
+                  </span>
+                </div>
               </div>
               {/*CONTENT PERSONAL INFO*/}
               <div className="mt-2 flex w-full flex-col items-start justify-start space-y-2">
@@ -285,10 +292,10 @@ const ProfilePage: NextPage = () => {
               {/*CLUBS HEADER*/}
               <div className="flex w-full px-10">
                 <div className="flex w-full flex-col border-b-2 border-pb-green">
-                <span
-                  className="flex w-full justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
-                  Clubs
-                </span>
+                  <span
+                    className="flex w-full justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                    Clubs
+                  </span>
                 </div>
               </div>
               <div className="mt-2 grid w-full grid-cols-2 md:grid-cols-3">
