@@ -1,15 +1,16 @@
 import Link from 'next/link';
 import { animated, useSpring } from 'react-spring';
 import { useMediaQuery } from '../hooks/useMediaQuery';
+import { ChartPieIcon, MapIcon, UserIcon, UsersIcon } from "@heroicons/react/24/solid";
 
 interface IProps {
   open: boolean;
 }
 
 const MenuBar = ({ open }: IProps) => {
-  const isMinWidth768 = useMediaQuery('(min-width: 768px)');
+  const isMinWidth768 = useMediaQuery('(min-width: 1024px)');
   const containerSpring = useSpring({
-    width: open ? (isMinWidth768 ? '750px' : '250px') : '56px',
+    width: open ? (isMinWidth768 ? '900px' : '300px') : '56px',
     config: { tension: 600, friction: 60 },
   });
 
@@ -19,24 +20,23 @@ const MenuBar = ({ open }: IProps) => {
         className={`max:w-full fixed bottom-6 z-1010 left-4 flex h-14 w-0 items-center justify-center space-x-3 overflow-hidden rounded-full bg-pb-gray`}
         style={containerSpring}
       >
+        {/*Matches*/}
+        <div className="ml-14 flex items-center">
+          <Link href={'/matches'} className="flex space-x-2">
+            <UsersIcon className="h-8 w-8 fill-pb-green" />
+            {/*Text*/}
+            <span className="hidden self-center whitespace-nowrap font-istok-web text-2xl text-pb-green lg:block">
+              MATCHES
+            </span>
+          </Link>
+        </div>
         {/*Activities*/}
         <div className="ml-14 flex items-center">
           <Link href={'/activities'} className="flex space-x-2">
             {/*SVG Map Icon*/}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-8 w-8 fill-pb-green"
-            >
-              <path
-                fillRule="evenodd"
-                d="M8.161 2.58a1.875 1.875 0 011.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0121.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 01-1.676 0l-4.994-2.497a.375.375 0 00-.336 0l-3.868 1.935A1.875 1.875 0 012.25 19.18V6.695c0-.71.401-1.36 1.036-1.677l4.875-2.437zM9 6a.75.75 0 01.75.75V15a.75.75 0 01-1.5 0V6.75A.75.75 0 019 6zm6.75 3a.75.75 0 00-1.5 0v8.25a.75.75 0 001.5 0V9z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <MapIcon className="h-8 w-8 fill-pb-green" />
             {/*Text*/}
-            <span className="hidden self-center whitespace-nowrap font-istok-web text-2xl text-pb-green md:block">
+            <span className="hidden self-center whitespace-nowrap font-istok-web text-2xl text-pb-green lg:block">
               ACTIVITIES
             </span>
           </Link>
@@ -45,25 +45,9 @@ const MenuBar = ({ open }: IProps) => {
         <div className="flex items-center">
           <Link href={'/statistics'} className="flex space-x-1.5">
             {/*SVG Chart Icon*/}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-8 w-8 fill-pb-green"
-            >
-              <path
-                fillRule="evenodd"
-                d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z"
-                clipRule="evenodd"
-              />
-              <path
-                fillRule="evenodd"
-                d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <ChartPieIcon className="h-8 w-8 fill-pb-green" />
             {/*Text*/}
-            <span className="hidden self-center whitespace-nowrap font-istok-web text-2xl text-pb-green md:block">
+            <span className="hidden self-center whitespace-nowrap font-istok-web text-2xl text-pb-green lg:block">
               STATISTICS
             </span>
           </Link>
@@ -72,20 +56,9 @@ const MenuBar = ({ open }: IProps) => {
         <div className="flex items-center">
           <Link href={'/profile'} className="flex space-x-1.5">
             {/*SVG User Icon*/}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-8 w-8 fill-pb-green"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <UserIcon className="h-8 w-8 fill-pb-green" />
             {/*Text*/}
-            <span className="hidden self-center whitespace-nowrap font-istok-web text-2xl text-pb-green md:block">
+            <span className="hidden self-center whitespace-nowrap font-istok-web text-2xl text-pb-green lg:block">
               PROFILE
             </span>
           </Link>
@@ -114,7 +87,7 @@ const MenuBar = ({ open }: IProps) => {
             </svg>
 
             {/*Text*/}
-            <span className="hidden self-center whitespace-nowrap font-istok-web text-2xl text-pb-green md:block">
+            <span className="hidden self-center whitespace-nowrap font-istok-web text-2xl text-pb-green lg:block">
               SETTINGS
             </span>
           </Link>
