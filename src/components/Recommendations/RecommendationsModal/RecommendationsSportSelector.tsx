@@ -3,15 +3,14 @@ import { useState } from 'react';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../../internalTypes/SportTypeMap';
+import { LoadingSpinner } from '../../LoadingSpinner';
 
 interface IProps {
-  onSportChange: (sport: SportTypeEnum | null) => void;
+  onSportChange: (sport: SportTypeEnum[]) => void;
 }
 
 const RecommendationsSportSelector = ({ onSportChange }: IProps) => {
-  const [selectedSport, setSelectedSport] = useState<SportTypeEnum | null>(
-    null,
-  );
+  const [selectedSport, setSelectedSport] = useState<SportTypeEnum[]>([]);
 
   const fetchSports = (): Promise<string[]> => {
     return pacebuddiesApi
@@ -20,13 +19,18 @@ const RecommendationsSportSelector = ({ onSportChange }: IProps) => {
   };
 
   const selectedSportHandler = (sport: SportTypeEnum) => {
-    setSelectedSport((prevSelectedSport) => {
-      if (sport === prevSelectedSport) {
-        onSportChange(null);
-        return null;
+    setSelectedSport((prevSelectedSports) => {
+      if (prevSelectedSports.includes(sport)) {
+        const newSelectedSports = prevSelectedSports.filter(
+          (item) => item !== sport,
+        );
+        onSportChange(newSelectedSports);
+        return newSelectedSports;
+      } else {
+        const newSelectedSports = [...prevSelectedSports, sport];
+        onSportChange(newSelectedSports);
+        return [...prevSelectedSports, sport];
       }
-      onSportChange(sport);
-      return sport;
     });
   };
 
@@ -36,25 +40,22 @@ const RecommendationsSportSelector = ({ onSportChange }: IProps) => {
     <button
       key={item}
       onClick={() => selectedSportHandler(item)}
-      className={`flex flex-col items-center justify-center p-2 ${
-        selectedSport === item ? 'bg-gray-200' : ''
+      className={`m-2 flex min-w-[3rem] shrink-0 flex-col items-center justify-center rounded-full bg-pb-green p-2 ${
+        selectedSport.includes(item) ? 'bg-pb-orange' : ''
       }`}
     >
-      <span title={SportTypeMap.getString(item)?.toLowerCase()}>
-        {SportTypeMap.getString(item)?.toUpperCase()[0]}
-      </span>
-      <span>{item}</span>
+      <span>{SportTypeMap.getString(item)?.toLowerCase()}</span>
     </button>
   );
 
   return sportsQuery.isSuccess ? (
-    <>
+    <div className="flex h-12 flex-row overflow-hidden overflow-x-auto overscroll-contain ">
       {sportsQuery.data
         .map((item) => SportTypeMap.getNumber(item)! as SportTypeEnum)
         .map(renderSportButton)}
-    </>
+    </div>
   ) : (
-    <div>
+    <div className="flex h-12 flex-row">
       {sportsQuery.isError && (
         <div>
           error :{' '}
@@ -64,7 +65,7 @@ const RecommendationsSportSelector = ({ onSportChange }: IProps) => {
           }
         </div>
       )}
-      {sportsQuery.isLoading && <div>loading...</div>}
+      {sportsQuery.isLoading && <LoadingSpinner />}
     </div>
   );
 };

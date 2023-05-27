@@ -2,6 +2,7 @@ import 'next-auth';
 import 'next-auth/jwt';
 declare module 'next-auth' {
   interface Session {
+    id?: string;
     accessToken?: string;
   }
 }
@@ -13,6 +14,7 @@ declare module 'next-auth/jwt' {
     access_token: string;
     expires_at: number;
     refresh_token: string;
+    id: string;
     error?: 'RefreshAccessTokenError' | 'NoError';
   }
 }

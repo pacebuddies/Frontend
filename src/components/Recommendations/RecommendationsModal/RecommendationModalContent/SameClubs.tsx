@@ -1,8 +1,11 @@
+import Image from 'next/image';
+import { ClubsData } from '../../../../internalTypes/recommendationData';
 interface IProps {
-  clubs: string[];
+  clubs: ClubsData[];
 }
 
 const SameClubs = ({ clubs }: IProps) => {
+  console.log(clubs);
   return (
     <>
       <div className="flex w-full flex-row justify-between">
@@ -13,15 +16,25 @@ const SameClubs = ({ clubs }: IProps) => {
       </div>
       <div className="flex flex-col overflow-y-hidden">
         {clubs.map((club) => (
-          <div key={club} className="flex flex-row items-center ">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-b from-red-400 to-white"></div>
-            <span className="p-2 font-bold text-pb-dark-gray">{club}</span>
-          </div>
+          <a
+            key={club.url}
+            className="flex flex-row items-center"
+            href={`https://www.strava.com/clubs/${
+              club.url == '' ? club.id : club.url
+            }`}
+            target={'_blank'}
+            rel="noreferrer"
+          >
+            <Image
+              src={club.profile_medium}
+              height={48}
+              width={48}
+              alt={club.name}
+              className="h-12 w-12 rounded-full bg-pb-orange"
+            />
+            <span className="p-2 font-bold text-pb-dark-gray">{club.name}</span>
+          </a>
         ))}
-        <div className="flex flex-row items-center ">
-          <div className="h-12 w-12 rounded-full bg-gradient-to-b from-red-400 to-white"></div>
-          <span className="p-2 font-bold text-pb-dark-gray">Test club</span>
-        </div>
       </div>
     </>
   );
