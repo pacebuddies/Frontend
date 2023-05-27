@@ -21,44 +21,6 @@
 }
 
 @layer components {
-    :root {
-        --slider-height: 16px;
-    }
-    .wrapper {
-        position: relative;
-        width: 100%;
-        display: flex;
-        flex-shrink: 0;
-        align-items: center;
-        margin: 8px;
-        height: 16px;
-    }
-
-    .input-wrapper {
-        width: calc(100% + 16px);
-        margin: 0 calc(16px / -2);
-        position: absolute;
-        height: var(--slider-height);
-    }
-
-    .control-wrapper {
-        width: 100%;
-        position: absolute;
-        height: var(--slider-height);
-    }
-
-    .input {
-        position: absolute;
-        width: 100%;
-        pointer-events: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        height: 100%;
-        opacity: 0;
-        z-index: 3;
-        padding: 0;
-    }
     .input::-ms-track {
         appearance: none;
         background: transparent;
@@ -92,7 +54,7 @@
         pointer-events: all;
         width: 16px;
         height: 16px;
-        border-radius: 0px;
+        border-radius: 0;
         border: 0 none;
         background-color: red;
     }
@@ -103,7 +65,7 @@
         pointer-events: all;
         width: 16px;
         height: 16px;
-        border-radius: 0px;
+        border-radius: 0;
         border: 0 none;
         background-color: red;
     }

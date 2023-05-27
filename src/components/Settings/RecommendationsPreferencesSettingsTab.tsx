@@ -1,155 +1,78 @@
+import { useQuery } from '@tanstack/react-query';
 import { NextPage } from 'next';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
-import { SportTypeFilterRanges } from '../../internalTypes/sportTypeFilterRanges';
-import RecommendationFilterRangeSlider from './RecommendationFilterRangeSlider';
-
-pacebuddiesApi
-  .get('recommender/recommendations/getFilter', {
-    params: {
-      sport_type: SportTypeEnum.RUN,
-    },
-  })
-  .then((res) => {
-    console.log(res.data);
-  })
-  .catch((err) => {
-    console.log(err.response);
-  });
+import { SportTypeMap } from '../../internalTypes/SportTypeMap';
+import { isAllowedSportTypeNumber } from '../../utils/isAllowedSportType';
+import FilterSportBlock from './FilterSportBlock';
 
 const RecommendationsPreferencesSettingsTab: NextPage = () => {
-  const sportData: SportTypeFilterRanges = {
-    sport_type: 26,
-    city: 'Toruń',
-    country: 'Poland',
-    avg_max_speed_min: 15.92352,
-    avg_max_speed_max: 23.88528,
-    avg_speed_min: 5.764,
-    avg_speed_max: 8.264,
-    avg_distance_min: 1.661,
-    avg_distance_max: 3.661,
-    avg_moving_time_min: 0,
-    avg_moving_time_max: 38.43889,
-    avg_total_moving_time_min: 0,
-    avg_total_moving_time_max: 600,
-    avg_total_distance_min: 2.9829998,
-    avg_total_distance_max: 12.983,
-    empty: false,
+  // const sportData: SportTypeFilterRanges = {
+  //   sport_type: 26,
+  //   city: 'Toruń',
+  //   country: 'Poland',
+  //   avg_max_speed_min: 15.92352,
+  //   avg_max_speed_max: 23.88528,
+  //   avg_speed_min: 5.764,
+  //   avg_speed_max: 8.264,
+  //   avg_distance_min: 1.661,
+  //   avg_distance_max: 3.661,
+  //   avg_moving_time_min: 0,
+  //   avg_moving_time_max: 38.43889,
+  //   avg_total_moving_time_min: 0,
+  //   avg_total_moving_time_max: 600,
+  //   avg_total_distance_min: 2.9829998,
+  //   avg_total_distance_max: 12.983,
+  //   empty: false,
+  // };
+  const fetchSports = (): Promise<string[]> => {
+    return pacebuddiesApi
+      .get('bridge/athlete/sportTypes')
+      .then((response) => response.data);
   };
+  const { isSuccess, data } = useQuery({
+    queryKey: ['user-sports'],
+    queryFn: fetchSports,
+  });
 
   return (
     <>
       <div>
-        <span>Running</span>
+        <span className="flex mt-2 small-caps font-bold text-pb-dark-gray text-2xl justify-center items-center">
+          preferences
+        </span>
+        <span className="flex  font-bold text-pb-dark-gray text-md px-2 justify-center items-center ">
+          Here you can adjust your recommendation's filters to the preferred level for each sport type.<br/>
+        </span>
+        <span className="flex text-pb-dark-gray text-md px-2 justify-center items-center ">
+          Under every slider you can see current range calculated from our algorithm and your preferences.<br/>
+          After changes remember to save your new settings.
+        </span>
       </div>
-      <div>
-        <div className="w-full pt-4">
-          <div className="flex flex-col pl-8">
-            <RecommendationFilterRangeSlider
-              text={'Avg Max Speed'}
-              default_max={sportData.avg_max_speed_max}
-              default_min={sportData.avg_max_speed_min}
-              user_max={sportData.avg_max_speed_max}
-              user_min={sportData.avg_max_speed_min}
-            />
-          </div>
-          <div className="flex flex-col pl-8">
-            <div className="w-1/3 border-[1px]"></div>
-            <RecommendationFilterRangeSlider
-              text={'Avg Speed'}
-              default_max={sportData.avg_speed_max}
-              default_min={sportData.avg_speed_min}
-              user_max={sportData.avg_speed_max}
-              user_min={sportData.avg_speed_min}
-            />
-          </div>
-          <div className="flex flex-col pl-8">
-            <div className="w-1/3 border-[1px]"></div>
-            <RecommendationFilterRangeSlider
-              text={'Avg Distance'}
-              default_max={sportData.avg_distance_max}
-              default_min={sportData.avg_distance_min}
-              user_max={sportData.avg_distance_max}
-              user_min={sportData.avg_distance_min}
-            />
-          </div>
-          <div className="flex flex-col pl-8">
-            <div className="w-1/3 border-[1px]"></div>
-            <RecommendationFilterRangeSlider
-              text={'Avg Moving Time'}
-              default_max={sportData.avg_moving_time_max}
-              default_min={sportData.avg_moving_time_min}
-              user_max={sportData.avg_moving_time_max}
-              user_min={sportData.avg_moving_time_min}
-            />
-          </div>
-          <div className="flex flex-col pl-8">
-            <div className="w-1/3 border-[1px]"></div>
-            <RecommendationFilterRangeSlider
-              text={'Avg Total Moving Time'}
-              default_max={sportData.avg_total_moving_time_max}
-              default_min={sportData.avg_total_moving_time_min}
-              user_max={sportData.avg_total_moving_time_max}
-              user_min={sportData.avg_total_moving_time_min}
-              scale={'large'}
-            />
-          </div>
-          <div className="flex flex-col pl-8">
-            <div className="w-1/3 border-[1px]"></div>
-            <RecommendationFilterRangeSlider
-              text={'Avg Total Distance'}
-              default_max={sportData.avg_total_distance_max}
-              default_min={sportData.avg_total_distance_min}
-              user_max={sportData.avg_total_distance_max}
-              user_min={sportData.avg_total_distance_min}
-            />
-          </div>
-        </div>
-        <div className="pt-4">
-          <span>Swimming</span>
-        </div>
-        <div className="pt-4">
-          <div className="flex flex-col pl-8">
-            <div className="w-1/3 border-[1px]"></div>
-            <RecommendationFilterRangeSlider
-              text={'Avg Total Distance'}
-              default_max={sportData.avg_total_distance_max}
-              default_min={sportData.avg_total_distance_min}
-              user_max={sportData.avg_total_distance_max}
-              user_min={sportData.avg_total_distance_min}
-            />
-          </div>
-        </div>
-        <div className="pt-4">
-          <span>Riding</span>
-        </div>
-        <div className="pt-4">
-          <div className="flex flex-col pl-8">
-            <div className="w-1/3 border-[1px]"></div>
-            <RecommendationFilterRangeSlider
-              text={'Avg Total Distance'}
-              default_max={sportData.avg_total_distance_max}
-              default_min={sportData.avg_total_distance_min}
-              user_max={sportData.avg_total_distance_max}
-              user_min={sportData.avg_total_distance_min}
-            />
-          </div>
-        </div>
-        <div className="pt-4">
-          <span>Rest</span>
-        </div>
-        <div className="pt-4">
-          <div className="flex flex-col pl-8">
-            <div className="w-1/3 border-[1px]"></div>
-            <RecommendationFilterRangeSlider
-              text={'Avg Total Distance'}
-              default_max={sportData.avg_total_distance_max}
-              default_min={sportData.avg_total_distance_min}
-              user_max={sportData.avg_total_distance_max}
-              user_min={sportData.avg_total_distance_min}
-            />
-          </div>
-        </div>
+      <div className="w-full pt-4">
+        <div className="flex flex-col pl-8">{/*<PreferenceSlider />*/}</div>
+      </div>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+        {/*{isSuccess &&*/}
+        {/*  data.map((sport) => {*/}
+        {/*    const sportNumber = SportTypeMap.getNumber(sport)!;*/}
+        {/*    if (isAllowedSportTypeNumber(sportNumber)) {*/}
+        {/*      return (*/}
+        {/*        <FilterSportBlock*/}
+        {/*          key={sportNumber}*/}
+        {/*          title={sport}*/}
+        {/*          sportType={sportNumber}*/}
+        {/*        />*/}
+        {/*      );*/}
+        {/*    } else {*/}
+        {/*      return null;*/}
+        {/*    }*/}
+        {/*  })}*/}
+        {/*TODO: title - podane małymi literami*/}
+        <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
+        <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
+        <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
+        <FilterSportBlock title={'Running'} sportType={SportTypeEnum.RUN} />
       </div>
     </>
   );

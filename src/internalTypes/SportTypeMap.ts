@@ -17,7 +17,6 @@ export class SportTypeMap {
       const key = item!;
 
       const enumValue = Number(enumObject[key as keyof typeof enumObject]);
-      console.log(`key: ${key}, enumValue: ${enumValue}`);
       SportTypeMap.stringToNumber.set(key.toUpperCase(), enumValue);
       SportTypeMap.numberToString.set(enumValue, key.toUpperCase());
     }
