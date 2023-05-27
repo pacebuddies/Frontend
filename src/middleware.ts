@@ -10,5 +10,6 @@ export const config = {
     '/settings/:path*',
     '/statistics/:path*',
     '/activities/:path*',
+    '/matches/:path*',
   ],
 };

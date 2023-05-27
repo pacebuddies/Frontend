@@ -8,7 +8,7 @@ import {ForwardIcon, MapIcon, PresentationChartBarIcon, UserGroupIcon} from "@he
 const Login: NextPage = () => {
   return (
     <>
-      <div className="flex h-screen  shrink-0 flex-nowrap items-center justify-center bg-[url('../img/background_on_login.png')]">
+      <div className="flex h-screen shrink-0 flex-nowrap items-center justify-center bg-[url('/img/background_on_login.png')]">
         {/*<Image*/}
         {/*  src={bg_image}*/}
         {/*  alt="people doing sport together"*/}

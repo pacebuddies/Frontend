@@ -26,7 +26,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
   return (
     <div className={`mb-4 w-full overflow-hidden ${isOpen ? '' : 'w-0'} `}>
       <button
-        className=" flex w-full flex-row justify-between border-y border-pb-green px-4 py-3 text-left font-semibold text-gray-800 focus:outline-none"
+        className=" flex w-full flex-row justify-between border-b border-x border-pb-green px-4 py-3 text-left font-semibold text-gray-800 focus:outline-none"
         onClick={toggleAccordion}
       >
         {title}
@@ -44,7 +44,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
         }}
         ref={contentRef}
       >
-        <div className={`overflow-hidden p-4 text-gray-600 `}>{children}</div>
+        <div className={`overflow-hidden p-4 text-gray-600 bg-pb-gray/40 rounded-b-xl`}>{children}</div>
       </animated.div>
     </div>
   );

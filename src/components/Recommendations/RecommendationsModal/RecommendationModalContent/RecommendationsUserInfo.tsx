@@ -1,6 +1,7 @@
 import Image from 'next/image';
+import { useMediaQuery } from '../../../../hooks/useMediaQuery';
 
-interface IProps {
+interface IProps extends React.HTMLAttributes<HTMLDivElement> {
   profile: string;
   firstname: string;
   lastname: string;
@@ -16,31 +17,68 @@ const RecommendationsUserInfo = ({
   country,
   firstname,
   lastname,
+  ...props
 }: IProps) => {
+  const isMinWidth1024 = useMediaQuery('(min-width: 1024px)');
+
   return (
-    <div className="mb-8 flex w-4/5 flex-row justify-between border border-green-500 bg-white">
-      {/*Avatar*/}
-      <div className="flex flex-row">
-        <Image src={profile} height={128} width={128} alt={'user avatar'} />
-        <div className="ml-8 flex h-full items-center justify-center text-4xl font-bold text-pb-green">
-          <span>
-            {firstname} {lastname}
-          </span>
-        </div>
-      </div>
-      {/*Top block information*/}
-      <div className="mr-20 flex flex-row">
-        <div className="flex h-full flex-col justify-between py-8 pr-4 font-bold text-pb-green">
-          <span>Gender</span>
-          <span>Location</span>
-        </div>
-        <div className="flex h-full max-w-sm flex-col justify-between py-8 font-bold text-pb-dark-gray">
-          <span>{sex}</span>
-          <span className="overflow-hidden text-ellipsis whitespace-nowrap font-bold text-pb-dark-gray">
-            {city}, {country}
-          </span>
-        </div>
-      </div>
+    <div {...props}>
+      {isMinWidth1024 ? (
+        <>
+          {/*Avatar*/}
+          <div className="flex h-16 min-w-0 flex-row items-center justify-center lg:h-32 ">
+            <Image
+              src={profile}
+              height={128}
+              width={128}
+              alt={`${firstname + ' ' + lastname} user avatar`}
+              className="h-16 w-16 lg:h-32 lg:w-32"
+              title={`${firstname + ' ' + lastname}`}
+            />
+            <span
+              className="mlg:max-h-32 ml-2 max-h-16 overflow-hidden text-ellipsis text-xl font-bold text-pb-green lg:ml-8 lg:truncate lg:text-4xl"
+              title={`${firstname + ' ' + lastname} `}
+            >
+              {firstname} {lastname}
+            </span>
+          </div>
+          {/*Top block information*/}
+          <div className="flex min-w-0 flex-row pr-10  lg:pr-20">
+            <div className="flex h-full flex-col justify-between pr-4 font-bold text-pb-green lg:py-8">
+              <span className="text-sm lg:text-base">Gender</span>
+              <span className="text-sm lg:text-base">Location</span>
+            </div>
+            <div className="flex h-full max-w-[5rem] flex-col justify-between font-bold text-pb-dark-gray lg:max-w-[8rem] lg:py-8 xl:max-w-[8rem] 2xl:max-w-[10rem]">
+              <span className="text-sm lg:text-base">{sex == 'F' ? 'Female' : 'Male'}</span>
+              <span className="truncate text-sm font-bold text-pb-dark-gray lg:text-base">
+                {city}, {country}
+              </span>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <Image
+            src={profile}
+            height={128}
+            width={128}
+            alt={`${firstname + ' ' + lastname} user avatar`}
+            className="h-16 w-16 lg:h-32 lg:w-32"
+            title={`${firstname + ' ' + lastname}`}
+          />
+          <div className="ml-4 flex w-[calc(100%-4rem)] shrink-0 flex-col">
+            <span
+              className=" truncate pr-3 text-xl font-bold text-pb-green"
+              title={`${firstname + ' ' + lastname}`}
+            >
+              {firstname} {lastname}
+            </span>
+            <span className="truncate pr-3 text-sm font-bold text-pb-dark-gray">
+              {sex == 'F' ? 'Female' : 'Male'}, {city}, {country}
+            </span>
+          </div>
+        </>
+      )}
     </div>
   );
 };

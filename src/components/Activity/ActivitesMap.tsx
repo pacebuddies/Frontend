@@ -5,6 +5,9 @@ import { unitChange } from '../../utils/unitChange';
 import DataTextSpan from './PhotoOrMapComponent/DataTextSpan';
 import PhotoOrMapButton from './PhotoOrMapComponent/PhotoOrMapButton';
 import PhotoOrMapComponent from './PhotoOrMapComponent/PhotoOrMapComponent';
+import Image from "next/image";
+import no_photos from '../Activity/ActivitiesIcons/no_photos.svg';
+
 
 interface IProps {
   activity: IActivity;
@@ -53,12 +56,24 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
         />
       </div>
       {/*Map*/}
-      {(isMap || isPhotos) && (
+      {(isMap || isPhotos) ? (
         <PhotoOrMapComponent
           showMap={showMap}
           activity={activity}
           className="h-96 w-full mt-1"
         />
+      ) : (
+        <div className="h-96 w-full mt-1 items-center justify-center bg-pb-gray">
+          <div className="flex flex-col w-full h-full text-xl items-center justify-center italic text-pb-dark-gray text-center px-2">
+            <Image
+              src={no_photos.src}
+              alt={'time per activity'}
+              width={40}
+              height={40}
+            />
+            There are no photos and map connected with this activity
+          </div>
+        </div>
       )}
       <div className="mb-1 flex w-full border-b border-b-pb-green pt-1 md:w-3/4" />
       <div className="grid grid-cols-2 gap-2 md:w-3/4 xl:grid-cols-3 2xl:grid-cols-4 ">

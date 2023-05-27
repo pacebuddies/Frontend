@@ -7,7 +7,7 @@ const MenuButton = () => {
   return (
     <>
       <button
-        className="group/menuButton fixed bottom-6 left-4 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-pb-gray"
+        className="group/menuButton fixed bottom-6 left-4 z-1020 flex h-14 w-14 items-center justify-center rounded-full bg-pb-gray"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
       >
         <svg
