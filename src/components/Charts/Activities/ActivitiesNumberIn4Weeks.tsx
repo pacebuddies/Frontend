@@ -109,6 +109,9 @@ const WeekByDayDistanceChart = ({ athleteId }: IProps) => {
           display: true,
           text: 'Weekday',
         },
+        ticks: {
+          padding: -7,
+        },
       },
       y: {
         beginAtZero: true,
@@ -117,7 +120,7 @@ const WeekByDayDistanceChart = ({ athleteId }: IProps) => {
           text: `Number of activities`,
         },
         ticks: {
-          padding: -75,
+          padding: 0,
         },
       },
     },
@@ -130,12 +133,9 @@ const WeekByDayDistanceChart = ({ athleteId }: IProps) => {
       <div className="flex w-full flex-row justify-between space-x-1 px-2">
         {/*Opis*/}
         <div className="flex w-full flex-col md:pl-10">
-          <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green md:w-1/2" />
+          <div className="mb-1 flex w-2/5 border-t-2 border-t-pb-green" />
           <span className="flex text-xl text-pb-green">
-            Daily distance summary
-          </span>
-          <span className="flex text-pb-dark-gray">
-            Total distance traveled daily in selected week from last 4 weeks
+            Activities in 4 weeks
           </span>
         </div>
       </div>

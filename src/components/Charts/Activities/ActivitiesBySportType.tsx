@@ -116,17 +116,14 @@ const LastNMonthsDistanceAvgChart: React.FC<IProps> = ({
       <div className="flex w-full flex-row justify-between space-x-1 px-2">
         {/*Opis*/}
         <div className="flex w-full flex-col md:pl-10">
-          <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green md:w-1/2" />
+          <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green" />
           <span className="flex text-xl text-pb-green">
             Activities by sport type
-          </span>
-          <span className="flex text-pb-dark-gray">
-            Number of activities by sport type
           </span>
         </div>
       </div>
       {/*Wykres*/}
-      <div className="h-128 w-full px-2">
+      <div className="h-96 w-full px-2">
         <Pie
           data={chartData}
           options={chartOptions}
