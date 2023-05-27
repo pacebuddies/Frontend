@@ -1,25 +1,25 @@
-import { useQuery } from '@tanstack/react-query';
-import { Dropdown } from 'flowbite-react';
-import { NextPage } from 'next';
+import {useQuery} from '@tanstack/react-query';
+import {Dropdown} from 'flowbite-react';
+import {NextPage} from 'next';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
+import {useRouter} from 'next/router';
+import {useState} from 'react';
 import ActivitiesBySportType from '../../components/Charts/Activities/ActivitiesBySportType';
 import ActivitiesNumberIn4Weeks from '../../components/Charts/Activities/ActivitiesNumberIn4Weeks';
 import WeekByDayDistanceChart from '../../components/Charts/Distance/WeekByDayDistanceSumChart';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
+import {LoadingSpinner} from '../../components/LoadingSpinner';
 import pacebuddiesApi from '../../instances/axiosConfigured';
-import { IActivity, IAthlete } from '../../internalTypes/interfaces';
-import { ClubsData } from '../../internalTypes/recommendationData';
-import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
-import { SportTypeMap } from '../../internalTypes/SportTypeMap';
+import {IActivity, IAthlete} from '../../internalTypes/interfaces';
+import {ClubsData} from '../../internalTypes/recommendationData';
+import {SportTypeEnum} from '../../internalTypes/sportTypeEnum';
+import {SportTypeMap} from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
-import { useSettingsStore } from '../../store/settingsStore';
+import {useSettingsStore} from '../../store/settingsStore';
 
 const ClientOnlyActivities = dynamic(
   () => import('../../../src/components/Activity/ClientOnlyActivities'),
-  { ssr: false },
+  {ssr: false},
 );
 
 const ProfilePage: NextPage = () => {
@@ -47,11 +47,11 @@ const ProfilePage: NextPage = () => {
   const fetchActivities = (id: string[] | undefined): Promise<IActivity[]> => {
     if (id === undefined) {
       return pacebuddiesApi
-        .get(`bridge/athlete/activities`, { params: { count: 5 } })
+        .get(`bridge/athlete/activities`, {params: {count: 5}})
         .then((res) => res.data);
     }
     return pacebuddiesApi
-      .get(`bridge/athlete/${id[0]}/activities`, { params: { count: 5 } })
+      .get(`bridge/athlete/${id[0]}/activities`, {params: {count: 5}})
       .then((res) => res.data);
   };
 
@@ -79,7 +79,7 @@ const ProfilePage: NextPage = () => {
     if (id === undefined) {
       return pacebuddiesApi
         .get('bridge/chart/ActivitiesSum', {
-          params: { weeks: weeks },
+          params: {weeks: weeks},
         })
         .then((result) => {
           return result.data;
@@ -87,7 +87,7 @@ const ProfilePage: NextPage = () => {
     } else {
       return pacebuddiesApi
         .get(`bridge/chart/ActivitiesSum`, {
-          params: { athlete_id: id[0], weeks: weeks },
+          params: {athlete_id: id[0], weeks: weeks},
         })
         .then((result) => result.data);
     }
@@ -139,9 +139,10 @@ const ProfilePage: NextPage = () => {
     return (
       <Layout>
         <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-          <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+          <div
+            className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
             {/*<span>Naglowek</span>*/}
-            <LoadingSpinner />
+            <LoadingSpinner/>
           </div>
         </div>
       </Layout>
@@ -151,7 +152,8 @@ const ProfilePage: NextPage = () => {
     return (
       <Layout>
         <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-          <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+          <div
+            className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
             {/*<span>Naglowek</span>*/}
             <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
               No athlete found
@@ -165,7 +167,8 @@ const ProfilePage: NextPage = () => {
       return (
         <Layout>
           <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-            <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+            <div
+              className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
               {/*<span>Naglowek</span>*/}
               <span className="self-center whitespace-nowrap font-istok-web text-2xl text-pb-dark-gray">
                 No athlete found
@@ -180,7 +183,8 @@ const ProfilePage: NextPage = () => {
   return (
     <Layout>
       <div className="flex h-full shrink flex-col items-center justify-center bg-pb-gray">
-        <div className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
+        <div
+          className="flex h-56 w-full shrink-0 flex-col items-center justify-center space-y-3 bg-gradient-to-r from-pb-orange via-white to-pb-green">
           {/*<span>Naglowek</span>*/}
           <Image
             className="h-32 w-32 items-center border-2 border-pb-green"
@@ -233,9 +237,9 @@ const ProfilePage: NextPage = () => {
               {/*wykres*/}
               <div className="flex items-center justify-center">
                 {id ? (
-                  <ActivitiesNumberIn4Weeks athleteId={id[0]} />
+                  <ActivitiesNumberIn4Weeks athleteId={id[0]}/>
                 ) : (
-                  <ActivitiesNumberIn4Weeks />
+                  <ActivitiesNumberIn4Weeks/>
                 )}
               </div>
             </div>
@@ -243,7 +247,8 @@ const ProfilePage: NextPage = () => {
             <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
               {/*PERSONAL INFO HEADER*/}
               <div className="flex w-full flex-col border-b-2 border-pb-green">
-                <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                <span
+                  className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
                   Personal info
                 </span>
               </div>
@@ -276,12 +281,15 @@ const ProfilePage: NextPage = () => {
               </div>
             </div>
             {/*CLUBS*/}
-            <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
+            <div className="mt-2 flex w-full flex-col items-start justify-start md:px-16">
               {/*CLUBS HEADER*/}
-              <div className="flex w-full flex-col border-b-2 border-pb-green">
-                <span className="flex w-full justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+              <div className="flex w-full px-10">
+                <div className="flex w-full flex-col border-b-2 border-pb-green">
+                <span
+                  className="flex w-full justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
                   Clubs
                 </span>
+                </div>
               </div>
               <div className="mt-2 grid w-full grid-cols-2 md:grid-cols-3">
                 {clubsQuery.isSuccess &&
@@ -302,7 +310,8 @@ const ProfilePage: NextPage = () => {
                         alt={club.name}
                         className="h-12 w-12 rounded-full bg-pb-orange"
                       />
-                      <span className="items-center justify-center p-2 text-center font-bold text-pb-dark-gray md:justify-normal lg:text-left">
+                      <span
+                        className="items-center justify-center p-2 text-center font-bold text-pb-dark-gray md:justify-normal lg:text-left">
                         {club.name}
                       </span>
                     </a>
@@ -310,19 +319,22 @@ const ProfilePage: NextPage = () => {
               </div>
             </div>
             {/*SUMMARY OF ACTV SECTION*/}
-            <div className="mt-2 flex w-full flex-col items-start justify-start px-10 md:px-16">
+            <div className="mt-2 flex w-full flex-col items-start justify-start md:px-16">
               {/*SUMMARY OF ACTV HEADER*/}
-              <div className="flex w-full flex-col border-b-2 border-pb-green">
-                <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+              <div className="flex w-full px-10">
+                <div className="flex w-full flex-col border-b-2 border-pb-green">
+                <span
+                  className="justify-items-start w-full justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
                   Summary of Activities
                 </span>
+                </div>
               </div>
               {/*WYKRESY*/}
               <div className="mt-2 flex w-full flex-col items-center justify-center space-y-3">
                 <div className="flex w-full flex-col items-center space-y-2">
-                  <div className="flex flex-row items-center justify-center space-x-2">
-                    <span className="flex text-pb-dark-gray">
-                      Show chart for sport type:{' '}
+                  <div className="flex flex-row w-full items-center justify-center">
+                    <span className="flex text-pb-dark-gray whitespace-pre pr-1">
+                      Show chart for sport type:
                     </span>
                     <Dropdown
                       label={capitalizeFirstLetter(
@@ -331,6 +343,7 @@ const ProfilePage: NextPage = () => {
                       outline={true}
                       pill={true}
                       color={'success'}
+                      className="flex"
                     >
                       {sportQuery.isSuccess &&
                         sportQuery.data.map((item) => (
@@ -352,14 +365,14 @@ const ProfilePage: NextPage = () => {
                       athleteId={id[0]}
                     />
                   ) : (
-                    <WeekByDayDistanceChart selectedSport={selectedSport} />
+                    <WeekByDayDistanceChart selectedSport={selectedSport}/>
                   )}
                 </div>
                 <div>
                   {id ? (
-                    <ActivitiesBySportType athleteId={id[0]} />
+                    <ActivitiesBySportType athleteId={id[0]}/>
                   ) : (
-                    <ActivitiesBySportType />
+                    <ActivitiesBySportType/>
                   )}
                 </div>
               </div>
@@ -369,7 +382,8 @@ const ProfilePage: NextPage = () => {
               {/*Latest Activity HEADER*/}
               <div className="flex w-full px-10">
                 <div className="flex w-full flex-col border-b-2 border-pb-green">
-                  <span className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
+                  <span
+                    className="justify-items-start justify-self-start whitespace-nowrap font-istok-web text-xl text-pb-green">
                     Latest Activities
                   </span>
                 </div>
