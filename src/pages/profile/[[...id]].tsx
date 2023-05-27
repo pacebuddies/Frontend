@@ -200,7 +200,7 @@ const ProfilePage: NextPage = () => {
             {/*number of activities + wykres ostatniego tygodnia*/}
             <div
               className="mt-2 flex flex-col items-center justify-between
-                            space-y-4 md:space-x-5 lg:flex-row lg:space-y-0"
+                            space-y-4 md:space-x-10 lg:flex-row lg:space-y-0"
             >
               {/*number of activities*/}
               <div className="flex flex-col items-center justify-center">
@@ -288,7 +288,7 @@ const ProfilePage: NextPage = () => {
                   clubsQuery.data.map((club) => (
                     <a
                       key={club.url}
-                      className="flex flex-col items-center break-words md:flex-row"
+                      className="flex flex-col items-center break-words lg:flex-row"
                       href={`https://www.strava.com/clubs/${
                         club.url == '' ? club.id : club.url
                       }`}
@@ -302,7 +302,7 @@ const ProfilePage: NextPage = () => {
                         alt={club.name}
                         className="h-12 w-12 rounded-full bg-pb-orange"
                       />
-                      <span className="items-center justify-center p-2 text-center font-bold text-pb-dark-gray md:justify-normal md:text-left">
+                      <span className="items-center justify-center p-2 text-center font-bold text-pb-dark-gray md:justify-normal lg:text-left">
                         {club.name}
                       </span>
                     </a>
