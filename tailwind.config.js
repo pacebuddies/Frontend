@@ -9,6 +9,7 @@ module.exports = {
     "./src/**/*.{ts,tsx}",
   ],
   plugins: [require("flowbite/plugin")],
+  darkMode: false, // or 'media' or 'class'
   theme: {
     extend:{
       zIndex:{
@@ -71,6 +72,7 @@ module.exports = {
         'pb-dark-green': '#1B4308',
         'pb-red-discard': '#BD1717',
         'pb-orange': "#EF8A17",
+        'pb-strava-orange': '#FC4C02',
       },
       boxShadow: {
         'border': '4px 4px 10px 0px rgba(76, 189, 23, 1)',
