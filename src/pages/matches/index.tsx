@@ -32,7 +32,11 @@ const Matches = () => {
             {isSuccess &&
               sportsEnum?.map((sport) => {
                 return (
-                  <MatchList key={sport} sportType={sport} className="w-full" />
+                  <MatchList
+                    key={sport}
+                    sportType={sport}
+                    className="w-full pt-2"
+                  />
                 );
               })}
           </div>

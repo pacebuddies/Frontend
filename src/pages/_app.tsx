@@ -23,34 +23,48 @@ const queryClient = new QueryClient({
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <>
-    <Head>
-      <title> PaceBuddies </title>
-      <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png"/>
-      <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png"/>
-      <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png"/>
-      <link rel="manifest" href="/site.webmanifest"/>
-    </Head>
-    <SessionProvider session={session}>
-      <Flowbite theme={{ theme }}>
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-          <StravaWatermark />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </Flowbite>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </SessionProvider>
+      <Head>
+        <title> PaceBuddies </title>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/img/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/img/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/img/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+      </Head>
+      <SessionProvider session={session}>
+        <Flowbite theme={{ theme }}>
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+            <StravaWatermark />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </Flowbite>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </SessionProvider>
     </>
   );
 }
@@ -60,6 +74,7 @@ const theme: CustomFlowbiteTheme = {
     color: {
       success:
         'text-white bg-pb-green border border-transparent hover:bg-pb-green focus:ring-4 focus:ring-green-300 disabled:hover:bg-pb-green dark:bg-pb-green dark:hover:bg-pb-green dark:focus:bg-pb-green dark:disabled:hover:bg-pb-green',
+      strava: 'text-white bg-pb-strava-orange',
     },
     outline: {
       on: 'flex justify-center bg-white text-gray-900 transition-all duration-75 ease-in group-hover:bg-opacity-0 group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full',
