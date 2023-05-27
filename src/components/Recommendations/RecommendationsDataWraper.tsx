@@ -1,9 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import pacebuddiesApi from "../../instances/axiosConfigured";
-import { RecommendationData } from "../../internalTypes/recommendationData";
-import { SportTypeEnum } from "../../internalTypes/sportTypeEnum";
-import RecommendationsModal from "./RecommendationsModal/RecommendationsModal";
-import RecommendationsModalLoading from "./RecommendationsModal/RecommendationsModalLoading";
+import { useQuery } from '@tanstack/react-query';
+import pacebuddiesApi from '../../instances/axiosConfigured';
+import { RecommendationData } from '../../internalTypes/recommendationData';
+import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
+import NoRecommendationsModal from './RecommendationsModal/NoRecommendationsModal';
+import RecommendationsModal from './RecommendationsModal/RecommendationsModal';
+import RecommendationsModalLoading from './RecommendationsModal/RecommendationsModalLoading';
 
 interface IProps {
   opened: boolean;
@@ -15,7 +16,7 @@ const RecommendationsDataWraper = ({ onOpenedChange }: IProps) => {
     return pacebuddiesApi
       .get('recommender/recommendations/listByFewSportTypes', {
         params: {
-          sport_type: [SportTypeEnum.RUN,SportTypeEnum.RIDE]
+          sport_type: [SportTypeEnum.RUN],
         },
         paramsSerializer: (params) => {
           return qs.stringify(params, { arrayFormat: 'repeat' });
@@ -30,9 +31,12 @@ const RecommendationsDataWraper = ({ onOpenedChange }: IProps) => {
 
   return (
     <>
-      {isSuccess && (
-        <RecommendationsModal data={data} onOpenedChange={onOpenedChange} />
-      )}
+      {isSuccess &&
+        (data.length > 0 ? (
+          <RecommendationsModal data={data} onOpenedChange={onOpenedChange} />
+        ) : (
+          <NoRecommendationsModal onOpenedChange={onOpenedChange} />
+        ))}
       {isLoading && (
         <RecommendationsModalLoading onOpenedChange={onOpenedChange} />
       )}

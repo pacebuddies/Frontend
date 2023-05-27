@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { RecommendationData } from '../../../../internalTypes/recommendationData';
 import { SportTypeEnum } from '../../../../internalTypes/sportTypeEnum';
 import CompatibilityNumber from './CompatibilityNumber';
@@ -7,10 +6,7 @@ import RecommendationsUserInfo from './RecommendationsUserInfo';
 import SameClubs from './SameClubs';
 import SameSportTypes from './SameSportTypes';
 
-import BestBuddySvg from './BuddyIcons/BestBuddy.svg';
-import BuddySvg from './BuddyIcons/Buddy.svg';
-import GoodBuddySvg from './BuddyIcons/GoodBuddy.svg';
-import NiceBuddySvg from './BuddyIcons/NiceBuddy.svg';
+import NoRecommendationsContent from './NoRecommendationsContent';
 interface IProps {
   data: RecommendationData[];
   num: number;
@@ -26,21 +22,8 @@ const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
 
   // show message if there is no recommendations
   if (athlete === undefined || data.length === 0) {
-    return (
-      <div className="flex h-full w-full flex-col items-center justify-center">
-        <span>We have no recommendations for you 😢</span>
-        <span>To get more you could try</span>
-        <span>change your preferences</span>
-        <span>change filtered sport type</span>
-        <span>
-          add more activities to your strava account and synchronize it with us
-          😊
-        </span>
-      </div>
-    );
+    return <NoRecommendationsContent />;
   }
-
-
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -55,7 +38,6 @@ const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
           profile={athlete.profile}
           sex={athlete.sex}
         />
-
       </div>
       {/*Bottom block information*/}
       <div className="flex w-full grow flex-wrap lg:flex-row lg:flex-nowrap">
