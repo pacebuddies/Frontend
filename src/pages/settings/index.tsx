@@ -41,7 +41,7 @@ const SettingsPage: NextPage = () => {
       <Layout>
         <div className="h-screen flex-col">
           {/*TODO: Poprawić wyświetlanie tabów*/}
-          <div className="flex h-auto w-full">
+          <div className="flex h-full w-full">
             {/*Options tabs*/}
             <div className="flex h-full w-24 flex-col overflow-y-auto border-r-[1px]  border-pb-gray md:w-80">
               <button
@@ -78,7 +78,7 @@ const SettingsPage: NextPage = () => {
               <div className="flex-auto grow"></div>
             </div>
             {/*Settings tab content*/}
-            <div className="w-full">{selectSettingsTab(settingsTab)}</div>
+            <div className="w-full px-4">{selectSettingsTab(settingsTab)}</div>
           </div>
         </div>
       </Layout>

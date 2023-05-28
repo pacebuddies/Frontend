@@ -1,9 +1,9 @@
 type DistanceUnit = 'm' | 'km' | 'mile' | 'feet';
 type SpeedUnit = 'm/s' | 'km/h' | 'mile/h';
 type PaceUnit = 'min/km' | 'min/mile' | 's/m';
+type TimeUnit = 's' | 'min' | 'h';
 
-
-export type Unit = DistanceUnit | SpeedUnit | PaceUnit;
+export type Unit = DistanceUnit | SpeedUnit | PaceUnit | TimeUnit;
 
 const converter = {
   from: {
@@ -49,21 +49,35 @@ const converter = {
     'min/km': {
       'min/mile': (val: number) => val * 1.609344,
       'min/km': (val: number) => val,
-      's/m': (val: number) => val * 60 / 1000,
+      's/m': (val: number) => (val * 60) / 1000,
     },
     'min/mile': {
       'min/km': (val: number) => val / 1.609344,
-      's/m': (val: number) => val * 60 / 1609.344,
+      's/m': (val: number) => (val * 60) / 1609.344,
       'min/mile': (val: number) => val,
     },
     's/m': {
       's/m': (val: number) => val,
-      'min/km': (val: number) => val * 1000 / 60,
-      'min/mile': (val: number) => val * 1609.344 / 60,
+      'min/km': (val: number) => (val * 1000) / 60,
+      'min/mile': (val: number) => (val * 1609.344) / 60,
+    },
+    s: {
+      s: (val: number) => val,
+      min: (val: number) => val / 60,
+      h: (val: number) => val / 3600,
+    },
+    min: {
+      s: (val: number) => val * 60,
+      min: (val: number) => val,
+      h: (val: number) => val / 60,
+    },
+    h: {
+      s: (val: number) => val * 3600,
+      min: (val: number) => val * 60,
+      h: (val: number) => val,
     },
   },
 };
-
 
 function getConverterFunction(
   fromUnit: Unit,

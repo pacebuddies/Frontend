@@ -2,6 +2,8 @@ import { useState } from 'react';
 import NumberGrow from '../NumberGrow';
 import SliderNormal from './SliderNormal';
 import SliderReversed from './SliderReversed';
+import { UnitPreference } from "../../internalTypes/interfaces";
+import { Unit, unitChange } from "../../utils/unitChange";
 
 interface IProps {
   minBracketValue: number;
@@ -12,6 +14,8 @@ interface IProps {
   maxStep: number;
   value: { min: number; max: number };
   onChange: (values: { min: number; max: number }) => void;
+  unitFrom: Unit;
+  unitTo: Unit;
 }
 
 const DoubleSlider = ({
@@ -23,18 +27,21 @@ const DoubleSlider = ({
   maxStep,
   value,
   onChange,
+  unitFrom,
+  unitTo,
 }: IProps) => {
-  const [values, setValues] = useState(value);
+  // const [values, setValues] = useState(value);
   // const [left, right] = values;
 
-  const handleLeftSliderChange = (value: number) => {
-    setValues({ ...values, min: value });
-    onChange({ ...values, min: value });
+  const handleLeftSliderChange = (newValue: number) => {
+    const updatedValues = { ...value, min: newValue };
+    onChange(updatedValues);
   };
-  const handleRightSliderChange = (value: number) => {
-    setValues({ ...values, max: value });
-    onChange({ ...values, max: value });
+  const handleRightSliderChange = (newValue: number) => {
+    const updatedValues = { ...value, max: newValue };
+    onChange(updatedValues);
   };
+
 
   const calculateMinBracketValue = (value: number) => {
     const bracketValue = minBracketValue + value;
@@ -45,43 +52,43 @@ const DoubleSlider = ({
     return maxBracketValue + value;
   };
 
+
   return (
     <div className="flex w-full flex-col">
       <div className="flex w-[calc(100%-1rem)]">
         <SliderReversed
           steps={minSteps}
           step={minStep}
-          value={values.min}
+          value={value.min}
           onChange={handleLeftSliderChange}
         />
         <div className="relative left-2 top-3 h-2 w-8 bg-pb-green"></div>
         <SliderNormal
           steps={maxSteps}
           step={maxStep}
-          value={values.max}
+          value={value.max}
           onChange={handleRightSliderChange}
         />
       </div>
       <div className="mx-auto mt-3">
-        {/*TODO: zmienic szybkosc zmiany liczb*/}
         <NumberGrow
-          springConfig={{ mass: 1, tension: 60, friction: 20 }}
-          num={calculateMinBracketValue(values.min)}
+          springConfig={{ mass: 0.1, tension: 240, friction: 20 }}
+          num={unitChange(calculateMinBracketValue(value.min), unitFrom, unitTo)}
           className={`font-bold ${
-            values.min == 0 ? 'text-pb-green' : 'text-pb-orange'
+            value.min == 0 ? 'text-pb-green' : 'text-pb-orange'
           }`}
         >
-          &nbsp;km
+          &nbsp;{unitTo}
         </NumberGrow>
         <span className="font-bold text-pb-green"> - </span>
         <NumberGrow
-          springConfig={{ mass: 1, tension: 60, friction: 20 }}
-          num={calculateMaxBracketValue(values.max)}
+          springConfig={{ mass: 0.1, tension: 240, friction: 20 }}
+          num={unitChange(calculateMaxBracketValue(value.max), unitFrom, unitTo)}
           className={`font-bold ${
-            values.max == 0 ? 'text-pb-green' : 'text-pb-orange'
+            value.max == 0 ? 'text-pb-green' : 'text-pb-orange'
           }`}
         >
-          &nbsp;km
+          &nbsp;{unitTo}
         </NumberGrow>
       </div>
     </div>

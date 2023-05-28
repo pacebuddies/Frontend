@@ -8,17 +8,16 @@ interface IProps {
 }
 
 const SliderReversed = ({step, steps, value, onChange }: IProps) => {
-  const [inputValue, setInputValue] = useState(value);
   const min = Math.min(...steps);
   const max = Math.max(...steps);
   const handleLeftChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const newValue = +e.target.value;
-    setInputValue(newValue);
+    value = newValue;
     onChange(newValue);
   };
 
-  const position = ((inputValue - min) / (max - min)) * 100;
+  const position = ((value - min) / (max - min)) * 100;
 
   return (
     <div className="relative w-1/2">
@@ -27,7 +26,7 @@ const SliderReversed = ({step, steps, value, onChange }: IProps) => {
           <input
             className="input2 absolute z-3 h-full w-full appearance-none p-0 opacity-0"
             type="range"
-            value={inputValue}
+            value={value}
             step={step}
             min={min}
             max={max}

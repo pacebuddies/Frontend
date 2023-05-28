@@ -5,10 +5,10 @@ import { useSpring } from 'react-spring';
 interface IProps extends React.HTMLAttributes<HTMLSpanElement> {
   num: number;
   children?: React.ReactNode;
-  springConfig: {mass: number, tension: number, friction: number};
+  springConfig: { mass: number; tension: number; friction: number };
 }
 
-const NumberGrow = ({ springConfig,children, num, ...props }: IProps) => {
+const NumberGrow = ({ springConfig, children, num, ...props }: IProps) => {
   const { number } = useSpring({
     from: { number: 0 },
     number: num,
@@ -17,11 +17,9 @@ const NumberGrow = ({ springConfig,children, num, ...props }: IProps) => {
   });
   return (
     <>
-    <animated.span {...props}>
-      {number.to((n) => n.toFixed(0))}
-    </animated.span>
+      <animated.span {...props}>{number.to((n) => n.toFixed(1))}</animated.span>
       <span {...props}>{children}</span>
-</>
+    </>
   );
 };
 
