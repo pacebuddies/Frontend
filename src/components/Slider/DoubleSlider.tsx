@@ -2,6 +2,8 @@ import { useState } from 'react';
 import NumberGrow from '../NumberGrow';
 import SliderNormal from './SliderNormal';
 import SliderReversed from './SliderReversed';
+import { UnitPreference } from "../../internalTypes/interfaces";
+import { Unit, unitChange } from "../../utils/unitChange";
 
 interface IProps {
   minBracketValue: number;
@@ -12,7 +14,8 @@ interface IProps {
   maxStep: number;
   value: { min: number; max: number };
   onChange: (values: { min: number; max: number }) => void;
-  unit: string;
+  unitFrom: Unit;
+  unitTo: Unit;
 }
 
 const DoubleSlider = ({
@@ -24,7 +27,8 @@ const DoubleSlider = ({
   maxStep,
   value,
   onChange,
-  unit,
+  unitFrom,
+  unitTo,
 }: IProps) => {
   // const [values, setValues] = useState(value);
   // const [left, right] = values;
@@ -49,6 +53,7 @@ const DoubleSlider = ({
     return maxBracketValue + value;
   };
 
+
   return (
     <div className="flex w-full flex-col">
       <div className="flex w-[calc(100%-1rem)]">
@@ -69,22 +74,22 @@ const DoubleSlider = ({
       <div className="mx-auto mt-3">
         <NumberGrow
           springConfig={{ mass: 0.1, tension: 240, friction: 20 }}
-          num={calculateMinBracketValue(value.min)}
+          num={unitChange(calculateMinBracketValue(value.min), unitFrom, unitTo)}
           className={`font-bold ${
             value.min == 0 ? 'text-pb-green' : 'text-pb-orange'
           }`}
         >
-          &nbsp;{unit}
+          &nbsp;{unitTo}
         </NumberGrow>
         <span className="font-bold text-pb-green"> - </span>
         <NumberGrow
           springConfig={{ mass: 0.1, tension: 240, friction: 20 }}
-          num={calculateMaxBracketValue(value.max)}
+          num={unitChange(calculateMaxBracketValue(value.max), unitFrom, unitTo)}
           className={`font-bold ${
             value.max == 0 ? 'text-pb-green' : 'text-pb-orange'
           }`}
         >
-          &nbsp;{unit}
+          &nbsp;{unitTo}
         </NumberGrow>
       </div>
     </div>
