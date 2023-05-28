@@ -119,4 +119,5 @@ export interface INotification {
   date_time: string;
   seen: boolean;
   action: string
+  from_id: string
 }
