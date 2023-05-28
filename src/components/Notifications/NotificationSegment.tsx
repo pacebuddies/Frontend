@@ -47,8 +47,7 @@ const NotificationSegment = ({ data, markAsSeen }: IProps) => {
 
   const getMatchedAthlete =
     useSetMatchRecommendationStore((state) => state.findMatch) ?? [];
-  // TODO: change it to real number when Szymon will add it to the backend :meow_boop:
-  const recommendedAthlete = getMatchedAthlete('115836057');
+  const recommendedAthlete = getMatchedAthlete(data.from_id);
 
   console.log(
     recommendedAthlete,
