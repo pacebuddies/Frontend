@@ -65,14 +65,7 @@ const TopNavBar: NextPage = () => {
       })
       .catch((err) => console.error(err));
   }
-  const prefetchNotyfications = async () => {
-    // The results of this query will be cached like a normal query
-    await queryClient.prefetchQuery({
-      queryKey: ['todos'],
-      queryFn: fetchNotifications,
-      staleTime: 10,
-    });
-  };
+
   return (
     <>
       <nav className="top-0 flex h-auto w-full items-center justify-between border-gray-200 bg-pb-gray px-2 py-2.5">
@@ -111,7 +104,7 @@ const TopNavBar: NextPage = () => {
               </Link>
             </div>
             {/*Notification*/}
-            <div className="relative" onMouseEnter={prefetchNotyfications}>
+            <div className="relative">
               {unreadNotifications > 0 && (
                 <div className="absolute -top-1 left-9 h-4 w-4 animate-pulse rounded-full bg-pb-orange" />
               )}
@@ -122,7 +115,6 @@ const TopNavBar: NextPage = () => {
               >
                 <BellIcon className="h-8 w-8 rounded-full text-white hover:animate-wobble" />
               </button>
-              {notificationPopupOpen && (
                 <NotificationPopup
                   show={notificationPopupOpen}
                   onUnreadNotificationsChange={(num: number) => {
@@ -130,7 +122,7 @@ const TopNavBar: NextPage = () => {
                     console.log(num);
                   }}
                 />
-              )}
+
             </div>
             {/*Synchronize*/}
             <div className="flex flex-col">

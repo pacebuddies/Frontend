@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { RecommendationData } from '../../internalTypes/recommendationData';
-import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
+import { useRecommendationsStore } from '../../store/recommendationsStore';
 import NoRecommendationsModal from './RecommendationsModal/NoRecommendationsModal';
 import RecommendationsModal from './RecommendationsModal/RecommendationsModal';
 import RecommendationsModalLoading from './RecommendationsModal/RecommendationsModalLoading';
+import { useSetMatchRecommendationStore } from "../../store/matchRecommendationsStore";
 
 interface IProps {
   opened: boolean;
@@ -12,11 +13,14 @@ interface IProps {
 }
 const qs = require('qs');
 const RecommendationsDataWraper = ({ onOpenedChange }: IProps) => {
+  const getSelectedSportTypes = useRecommendationsStore(
+    (state) => state.recommendations,
+  ).sports;
   const fetchRecommendations = (): Promise<RecommendationData[]> => {
     return pacebuddiesApi
       .get('recommender/recommendations/listByFewSportTypes', {
         params: {
-          sport_type: [SportTypeEnum.RUN],
+          sport_type: getSelectedSportTypes,
         },
         paramsSerializer: (params) => {
           return qs.stringify(params, { arrayFormat: 'repeat' });
@@ -28,7 +32,10 @@ const RecommendationsDataWraper = ({ onOpenedChange }: IProps) => {
     queryKey: ['recommendations'],
     queryFn: fetchRecommendations,
   });
-
+  const setMatchedRecommendations = useSetMatchRecommendationStore(state => state.setRecommendations);
+  if (isSuccess) {
+    setMatchedRecommendations({matches: [...data]});
+  }
   return (
     <>
       {isSuccess &&
