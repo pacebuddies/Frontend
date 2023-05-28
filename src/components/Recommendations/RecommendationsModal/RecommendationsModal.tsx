@@ -189,7 +189,7 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     }
   };
 
-  console.log(recommendationNumber);
+  console.log(recommendationNumber, data);
 
   return (
     <>

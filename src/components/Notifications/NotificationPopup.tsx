@@ -90,6 +90,8 @@ const NotificationPopup = ({ show, onUnreadNotificationsChange }: IProps) => {
       return null;
     },
     keepPreviousData: true,
+    // refetchInterval: 10000, // 1s
+    refetchIntervalInBackground: true,
   });
 
   const loadMore = (): void => {
@@ -111,7 +113,7 @@ const NotificationPopup = ({ show, onUnreadNotificationsChange }: IProps) => {
   }, [show]);
 
   return (
-    <div className="relative z-50">
+    <div className={`relative z-50 ${!show && 'hidden'}`}>
       <svg
         width="18"
         height="15"
