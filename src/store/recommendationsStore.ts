@@ -4,7 +4,8 @@ import { persist } from 'zustand/middleware';
 
 interface RecommendationsStates {
   recommendations: {
-    gender: string;
+    gender: 'Male' | 'Female' | 'All';
+    sports: number[];
   };
 }
 
@@ -18,11 +19,15 @@ interface RecommendationsStore
 
 const initialRecommendationsStates: RecommendationsStates = {
   recommendations: {
-    gender: 'all',
+    gender: 'All',
+    sports: [],
   },
 };
 
-export const useSetRecommendationsStore = create<RecommendationsStore>()(
+export const useSetRecommendationsStore = create<
+  RecommendationsStore,
+  [['zustand/persist', RecommendationsStore]]
+>(
   persist(
     (set, get) => ({
       ...initialRecommendationsStates,

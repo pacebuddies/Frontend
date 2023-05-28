@@ -73,24 +73,27 @@ const theme: CustomFlowbiteTheme = {
   button: {
     color: {
       success:
-        'text-white bg-pb-green border border-transparent hover:bg-pb-green focus:ring-4 focus:ring-green-300 disabled:hover:bg-pb-green dark:bg-pb-green dark:hover:bg-pb-green dark:focus:bg-pb-green dark:disabled:hover:bg-pb-green',
+        'text-white bg-pb-green border border-transparent hover:bg-pb-green focus:ring-4 focus:ring-green-300 disabled:hover:bg-pb-green',
       strava: 'text-white bg-pb-strava-orange',
     },
     outline: {
-      on: 'flex justify-center bg-white text-gray-900 transition-all duration-75 ease-in group-hover:bg-opacity-0 group-hover:text-inherit dark:bg-gray-900 dark:text-white w-full',
+      on: 'flex justify-center bg-white text-gray-900 transition-all duration-75 ease-in group-hover:bg-opacity-0 group-hover:text-inherit w-full',
     },
+    gradientDuoTone: {
+      greenToDarkGreen: 'bg-gradient-to-r from-pb-green to-pb-dark-green text-white',
+    }
   },
   carousel: {
     indicators: {
       active: {
-        off: 'bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800',
-        on: 'bg-white dark:bg-gray-800',
+        off: 'bg-white/50 hover:bg-white',
+        on: 'bg-white ',
       },
       base: 'h-3 w-3 rounded-full',
       wrapper: 'absolute bottom-5 left-1/2 flex -translate-x-1/2 space-x-3',
     },
     control: {
-      base: 'inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/30 group-hover:bg-white/50 group-focus:outline-none group-focus:ring-4 group-focus:ring-white dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70 sm:h-10 sm:w-10',
+      base: 'inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/30 group-hover:bg-white/50 group-focus:outline-none group-focus:ring-4 group-focus:ring-white sm:h-10 sm:w-10',
       icon: 'h-5 w-5 text-gray-800 sm:h-6 sm:w-6',
     },
     scrollContainer: {

@@ -49,7 +49,6 @@ const DoubleSlider = ({
     else return minBracketValue + value;
   };
   const calculateMaxBracketValue = (value: number) => {
-    console.log(maxBracketValue + value);
     return maxBracketValue + value;
   };
 

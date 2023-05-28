@@ -152,9 +152,6 @@ const FilterRunTypeSportBlock = ({ title, sportType }: IProps) => {
     if (data == null) return;
     setFilterOffset();
   }, [data, isSuccess]);
-
-  console.log('userFilterOffset', userFilterOffset);
-
   if (!isSuccess || data === null) return null;
   // console.log(data);
   const filterData = data!.filter_settings_model;
