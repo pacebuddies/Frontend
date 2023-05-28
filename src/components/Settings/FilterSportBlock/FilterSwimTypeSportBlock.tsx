@@ -12,6 +12,7 @@ import { compareOffsetAndSettings } from '../../../utils/compareOffsetAndSetting
 import { unitChange } from '../../../utils/unitChange';
 import DoubleSlider from '../../Slider/DoubleSlider';
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
+import { toast } from "react-toastify";
 
 interface IProps {
   title: string;
@@ -89,6 +90,7 @@ const FilterSwimTypeSportBlock = ({ title, sportType }: IProps) => {
           ...previousValue,
           filter_offset: newFilter,
         });
+        toast.success('Filter saved');
 
         return { previousValue };
       },

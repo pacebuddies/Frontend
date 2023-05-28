@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from 'flowbite-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 import {
@@ -8,10 +9,10 @@ import {
   SportTypeFilterRanges,
 } from '../../../internalTypes/sportTypeFilterRanges';
 import { useSettingsStore } from '../../../store/settingsStore';
+import { capitalizeFirstLetter } from '../../../utils/capitalizeFirstLetter';
 import { compareOffsetAndSettings } from '../../../utils/compareOffsetAndSettings';
 import { unitChange } from '../../../utils/unitChange';
 import DoubleSlider from '../../Slider/DoubleSlider';
-import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 
 interface IProps {
   title: string;
@@ -89,7 +90,7 @@ const FilterRideTypeSportBlock = ({ title, sportType }: IProps) => {
           ...previousValue,
           filter_offset: newFilter,
         });
-
+        toast.success('Filter saved');
         return { previousValue };
       },
       // If the mutation fails, use the context returned from onMutate to roll back
@@ -152,7 +153,6 @@ const FilterRideTypeSportBlock = ({ title, sportType }: IProps) => {
     if (data == null) return;
     setFilterOffset();
   }, [data, isSuccess]);
-
 
   if (!isSuccess || data === null) return null;
   // console.log(data);
