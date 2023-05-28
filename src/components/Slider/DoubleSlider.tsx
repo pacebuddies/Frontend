@@ -12,6 +12,7 @@ interface IProps {
   maxStep: number;
   value: { min: number; max: number };
   onChange: (values: { min: number; max: number }) => void;
+  unit: string;
 }
 
 const DoubleSlider = ({
@@ -23,18 +24,20 @@ const DoubleSlider = ({
   maxStep,
   value,
   onChange,
+  unit,
 }: IProps) => {
-  const [values, setValues] = useState(value);
+  // const [values, setValues] = useState(value);
   // const [left, right] = values;
 
-  const handleLeftSliderChange = (value: number) => {
-    setValues({ ...values, min: value });
-    onChange({ ...values, min: value });
+  const handleLeftSliderChange = (newValue: number) => {
+    const updatedValues = { ...value, min: newValue };
+    onChange(updatedValues);
   };
-  const handleRightSliderChange = (value: number) => {
-    setValues({ ...values, max: value });
-    onChange({ ...values, max: value });
+  const handleRightSliderChange = (newValue: number) => {
+    const updatedValues = { ...value, max: newValue };
+    onChange(updatedValues);
   };
+
 
   const calculateMinBracketValue = (value: number) => {
     const bracketValue = minBracketValue + value;
@@ -42,6 +45,7 @@ const DoubleSlider = ({
     else return minBracketValue + value;
   };
   const calculateMaxBracketValue = (value: number) => {
+    console.log(maxBracketValue + value);
     return maxBracketValue + value;
   };
 
@@ -51,36 +55,36 @@ const DoubleSlider = ({
         <SliderReversed
           steps={minSteps}
           step={minStep}
-          value={values.min}
+          value={value.min}
           onChange={handleLeftSliderChange}
         />
         <div className="relative left-2 top-3 h-2 w-8 bg-pb-green"></div>
         <SliderNormal
           steps={maxSteps}
           step={maxStep}
-          value={values.max}
+          value={value.max}
           onChange={handleRightSliderChange}
         />
       </div>
       <div className="mx-auto mt-3">
         <NumberGrow
           springConfig={{ mass: 0.1, tension: 240, friction: 20 }}
-          num={calculateMinBracketValue(values.min)}
+          num={calculateMinBracketValue(value.min)}
           className={`font-bold ${
-            values.min == 0 ? 'text-pb-green' : 'text-pb-orange'
+            value.min == 0 ? 'text-pb-green' : 'text-pb-orange'
           }`}
         >
-          &nbsp;km
+          &nbsp;{unit}
         </NumberGrow>
         <span className="font-bold text-pb-green"> - </span>
         <NumberGrow
           springConfig={{ mass: 0.1, tension: 240, friction: 20 }}
-          num={calculateMaxBracketValue(values.max)}
+          num={calculateMaxBracketValue(value.max)}
           className={`font-bold ${
-            values.max == 0 ? 'text-pb-green' : 'text-pb-orange'
+            value.max == 0 ? 'text-pb-green' : 'text-pb-orange'
           }`}
         >
-          &nbsp;km
+          &nbsp;{unit}
         </NumberGrow>
       </div>
     </div>
