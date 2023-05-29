@@ -1,63 +1,73 @@
-import { Button } from 'flowbite-react';
+import {
+  ForwardIcon,
+  MapIcon,
+  PresentationChartBarIcon,
+  UserGroupIcon,
+} from '@heroicons/react/24/solid';
 import type { NextPage } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import logo from '../components/logo.svg';
 import StravaLoginButton from '../components/StravaLoginButton';
 import StravaWatermark from '../components/StravaWatermark';
-import {ForwardIcon, MapIcon, PresentationChartBarIcon, UserGroupIcon} from "@heroicons/react/24/solid";
-import logo from '../components/logo.svg';
-import Image from "next/image";
-import {auto} from "@popperjs/core";
 
 const Login: NextPage = () => {
+  const [disabled, setDisabled] = useState<boolean>(false);
+
   return (
     <>
       <div className="flex h-screen shrink-0 flex-nowrap items-center justify-center bg-[url('/img/background_on_login.png')]">
-        {/*<Image*/}
-        {/*  src={bg_image}*/}
-        {/*  alt="people doing sport together"*/}
-        {/*  fill={true}*/}
-        {/*  placeholder="blur"*/}
-        {/*></Image>*/}
         <div className="flex h-screen "></div>
         {/*Center div with login panel*/}
         <div className="flex h-screen shrink-0 basis-1/2 flex-col flex-nowrap items-center justify-center">
           {/*Login panel*/}
-          <div className="flex  flex-col h-auto w-full items-center justify-center">
-              {/*<Image*/}
-              {/*  src={logo.src}*/}
-              {/*  alt="logo"*/}
-              {/*  width={600}*/}
-              {/*  height={300}*/}
-              {/*  className="flex flex-auto h-24  w-full drop-shadow-xl bg-gradient-to-r from-pb-orange/60 to-pb-green/60 items-center justify-center pointer-events-none"*/}
-              {/*/>*/}
-            <div className="flex pt-1 h-96 md:h-[24rem] w-full px-2 flex-auto flex-col justify-between drop-shadow-2xl items-center bg-white/95 border-2 border-pb-green">
+          <div className="flex  h-auto w-full flex-col items-center justify-center">
+            <div className="flex h-96 w-full flex-auto flex-col items-center justify-between border-2 border-pb-green bg-white/95 px-2 pt-1 drop-shadow-2xl md:h-[24rem]">
               <Image
                 src={logo.src}
                 alt="logo"
                 width={600}
                 height={300}
-                className="flex flex-auto h-24 w-full items-center justify-center pointer-events-none"
+                className="pointer-events-none flex h-24 w-full flex-auto items-center justify-center"
               />
-              <span className=" w-full border-t-2 border-t-pb-green small-caps mt-1 items-center justify-center font-bold text-center font-istok-web text-bold text-pb-orange text-3xl">Connect with your buddies!</span>
-              <ul className="small-caps whitespace-normal space-y-2 font-bold list-disc list-inside text-pb-green text-xl">
+              <span className=" small-caps text-bold mt-1 w-full items-center justify-center border-t-2 border-t-pb-green text-center font-istok-web text-3xl font-bold text-pb-orange">
+                Connect with your buddies!
+              </span>
+              <ul className="small-caps list-inside list-disc space-y-2 whitespace-normal text-xl font-bold text-pb-green">
                 <li className="flex items-center leading-4">
-                  <UserGroupIcon className="w-10 h-10 shrink-0 fill-pb-green pr-2" />
+                  <UserGroupIcon className="h-10 w-10 shrink-0 fill-pb-green pr-2" />
                   find new buddies to train with
                 </li>
                 <li className="flex items-center leading-4">
-                  <ForwardIcon className="w-10 h-10 shrink-0 fill-pb-green pr-2" />
+                  <ForwardIcon className="h-10 w-10 shrink-0 fill-pb-green pr-2" />
                   train together with similar pace
                 </li>
                 <li className="flex items-center leading-4">
-                  <PresentationChartBarIcon className="w-10 h-10 shrink-0 fill-pb-green pr-2" />
+                  <PresentationChartBarIcon className="h-10 w-10 shrink-0 fill-pb-green pr-2" />
                   analyze your athletic performance with statistics
                 </li>
                 <li className="flex items-center leading-4">
-                  <MapIcon className="w-10 h-10 shrink-0 fill-pb-green pr-2" />
+                  <MapIcon className="h-10 w-10 shrink-0 fill-pb-green pr-2" />
                   browse your activities
                 </li>
               </ul>
+              <div className="flex">
+                <input
+                  id="policy"
+                  type="checkbox"
+                  checked={disabled}
+                  onChange={() => setDisabled(!disabled)}
+                  className="h-4 w-4 rounded border border-gray-300 bg-gray-100 accent-pb-green focus:ring-2 focus:ring-pb-green"
+                />
+
+                <label htmlFor="policy" className="text-xl text-pb-green">
+                  Zaakceptuj regulamin, przeczytaj go{' '}
+                  <Link href={'/policy'} className="underline">tutaj</Link>
+                </label>
+              </div>
               <div className="flex items-center justify-center">
-                <StravaLoginButton />
+                <StravaLoginButton disabled={!disabled} />
               </div>
             </div>
           </div>

@@ -1,8 +1,12 @@
 import { signIn } from 'next-auth/react';
 
-const StravaLoginButton = () => {
+interface IProps{
+  disabled: boolean
+}
+
+const StravaLoginButton = ({disabled}: IProps) => {
   return (
-    <button onClick={() => signIn('strava')}>
+    <button disabled={disabled} onClick={() => signIn('strava')}>
       <svg
         width="193px"
         height="48px"
