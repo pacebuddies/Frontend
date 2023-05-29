@@ -50,9 +50,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - [x] [`react-icons`](https://react-icons.github.io/react-icons)
 - [x] [`heroicons`](https://heroicons.com/)
 - [x] [`react-chartjs-2`](https://react-chartjs-2.js.org/)
-- [`chart.js`](https://react-chartjs-2.js.org/)
 - [x] [`react-toastify`](https://fkhadra.github.io/react-toastify/introduction)
 - [x] [`tailwindcss`](https://tailwindcss.com)
+- [x] [`leaflet`](https://tailwindcss.com)
 - [x] Quality of life tools, like
   - [x] [`eslint`](https://eslint.org) with some plugins
   - [x] [`prettier`](https://prettier.io)
