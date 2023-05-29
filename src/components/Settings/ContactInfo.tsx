@@ -11,6 +11,10 @@ const predefinedContacts: ContactInfo[] = [
   { id: '2', label: 'Snapchat', info: '', description: '' },
   { id: '3', label: 'Messenger', info: '', description: '' },
   { id: '4', label: 'Whatsapp', info: '', description: '' },
+  { id: '5', label: 'Instagram', info: '', description: '' },
+  { id: '6', label: 'Twitter', info: '', description: '' },
+  { id: '7', label: 'Discord', info: '', description: '' },
+  { id: '8', label: 'Telegram', info: '', description: '' },
 ];
 const fetchContactInfo = async () => {
   return pacebuddiesApi
@@ -19,6 +23,19 @@ const fetchContactInfo = async () => {
 };
 
 const updateContactInfo = async (contactInfo: ContactInfo) => {
+  if (contactInfo.info.length === 0 || contactInfo.label.length === 0) {
+    throw new Error('Contact info and label must not be empty');
+  }
+  if (
+    contactInfo.info.length > 255 ||
+    contactInfo.label.length > 255 ||
+    contactInfo.description.length > 255
+  ) {
+    throw new Error(
+      'Contact info, label and description must be less than 255 characters',
+    );
+  }
+
   if (predefinedContacts.find((contact) => contact.id === contactInfo.id)) {
     const { id, ...rest } = contactInfo;
     return pacebuddiesApi
@@ -31,12 +48,36 @@ const updateContactInfo = async (contactInfo: ContactInfo) => {
 };
 
 const addContactInfo = async (contactInfo: ContactInfo) => {
+  if (contactInfo.info.length === 0 || contactInfo.label.length === 0) {
+    throw new Error('Contact info and label must not be empty');
+  }
+  if (
+    contactInfo.info.length > 255 ||
+    contactInfo.label.length > 255 ||
+    contactInfo.description.length > 255
+  ) {
+    throw new Error(
+      'Contact info, label and description must be less than 255 characters',
+    );
+  }
   return pacebuddiesApi
     .post('bridge/athlete/contactinfo', { ...contactInfo })
     .then((res) => res.data);
 };
 
 const deleteContactInfo = async (contactInfo: ContactInfo) => {
+  if (contactInfo.info.length === 0 || contactInfo.label.length === 0) {
+    throw new Error('Contact info and label must not be empty');
+  }
+  if (
+    contactInfo.info.length > 255 ||
+    contactInfo.label.length > 255 ||
+    contactInfo.description.length > 255
+  ) {
+    throw new Error(
+      'Contact info, label and description must be less than 255 characters',
+    );
+  }
   return pacebuddiesApi
     .delete(`bridge/athlete/contactinfo`, { data: { ...contactInfo } })
     .then((res) => res.data);
@@ -71,6 +112,11 @@ const ContactInfoComponent: React.FC = () => {
       toast.success('Contact info updated successfully');
       queryClient.invalidateQueries(['contactInfo']);
     },
+    onError: (error, variables, rollback) => {
+      // @ts-ignore
+      toast.error(`Failed to update contact info: ${error.message}`);
+      // You can implement rollback here if needed
+    },
   });
 
   const addMutation = useMutation(addContactInfo, {
@@ -79,12 +125,23 @@ const ContactInfoComponent: React.FC = () => {
       toast.success('Contact info added successfully');
       queryClient.invalidateQueries(['contactInfo']);
     },
+    onError: (error, variables, rollback) => {
+      // @ts-ignore
+      toast.error(`Failed to add contact info: ${error.message}`);
+      // You can implement rollback here if needed
+    },
   });
+
   const deleteMutation = useMutation(deleteContactInfo, {
     onSuccess: () => {
       // Invalidate and refetch
       toast.success('Contact info deleted successfully');
       queryClient.invalidateQueries(['contactInfo']);
+    },
+    onError: (error, variables, rollback) => {
+      // @ts-ignore
+      toast.error(`Failed to delete contact info: ${error.message}`);
+      // You can implement rollback here if needed
     },
   });
   const [editData, setEditData] = useState<ContactInfo | null>(null);
@@ -128,7 +185,8 @@ const ContactInfoComponent: React.FC = () => {
       <span className="small-caps text-xl font-bold text-pb-dark-gray ">
         Contact Information
       </span>
-      <div className="grid-cols-1 lg:grid-cols-2 grid ">
+      <div className="flex w-2/3 md:w-1/2 border-t-2 border-t-pb-green mb-1"/>
+      <div className="grid grid-cols-1 lg:grid-cols-2 ">
         {contactInfoList.map((contactInfo) => (
           <div key={contactInfo.id}>
             {editData?.id === contactInfo.id ? (
@@ -186,9 +244,9 @@ const ContactInfoComponent: React.FC = () => {
               </div>
             ) : (
               <div>
-                <div>
-                  {contactInfo.label}: {contactInfo.info}
-                </div>
+                <p>{contactInfo.label}</p>
+                <p className="truncate">{contactInfo.description}</p>
+
                 <Button
                   outline={true}
                   gradientDuoTone={'greenToDarkGreen'}

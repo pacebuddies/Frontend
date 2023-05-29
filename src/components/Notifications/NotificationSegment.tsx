@@ -49,12 +49,6 @@ const NotificationSegment = ({ data, markAsSeen }: IProps) => {
     useSetMatchRecommendationStore((state) => state.findMatch) ?? [];
   const recommendedAthlete = getMatchedAthlete(data.from_id);
 
-  console.log(
-    recommendedAthlete,
-    'recommendedAthlete',
-    data.athlete.id,
-    'data.id',
-  );
   return (
     <>
       {data.action == 'REQUEST_MATCH' ? (

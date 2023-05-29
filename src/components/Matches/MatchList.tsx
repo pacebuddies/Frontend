@@ -34,7 +34,7 @@ const MatchList = ({ sportType, ...props }: IProps) => {
   };
   return (
     <div {...props}>
-      {isSuccess && data.length === 0 && (
+      {(isSuccess && data.length !== 0) && (
         <div className="mb-1 flex w-full flex-col pl-2 md:pl-10">
           <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green md:w-1/2" />
           <span className="flex text-xl text-pb-green">

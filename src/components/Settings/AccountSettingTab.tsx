@@ -12,7 +12,8 @@ import {
   useSetSettingsStore,
   useSettingsStore,
 } from '../../store/settingsStore';
-import ContactInfo from "./ContactInfo";
+import ContactInfo from './ContactInfo';
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 
 const Modal = dynamic(() => import('flowbite-react').then((mod) => mod.Modal), {
   ssr: false,
@@ -63,7 +64,7 @@ const AccountSettingTab: NextPage = () => {
             unit of measurement
           </span>
           <Dropdown
-            label={measurementUnits}
+            label={capitalizeFirstLetter(measurementUnits)}
             gradientDuoTone="greenToDarkGreen"
             outline={true}
           >
@@ -83,8 +84,6 @@ const AccountSettingTab: NextPage = () => {
           <Button color="failure" onClick={() => setOpenModal('default')}>
             Delete account
           </Button>
-
-
 
           {/*Modal*/}
           <Modal
