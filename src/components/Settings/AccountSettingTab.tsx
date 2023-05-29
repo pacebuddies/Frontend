@@ -12,6 +12,7 @@ import {
   useSetSettingsStore,
   useSettingsStore,
 } from '../../store/settingsStore';
+import ContactInfo from "./ContactInfo";
 
 const Modal = dynamic(() => import('flowbite-react').then((mod) => mod.Modal), {
   ssr: false,
@@ -74,6 +75,7 @@ const AccountSettingTab: NextPage = () => {
             </Dropdown.Item>
           </Dropdown>
         </div>
+        <ContactInfo />
         <div className="ml-2 mt-4 flex flex-row items-center justify-start space-x-5">
           <span className="small-caps text-xl font-bold text-pb-dark-gray ">
             Remove account permanently
@@ -81,6 +83,10 @@ const AccountSettingTab: NextPage = () => {
           <Button color="failure" onClick={() => setOpenModal('default')}>
             Delete account
           </Button>
+
+
+
+          {/*Modal*/}
           <Modal
             show={openModal === 'default'}
             onClose={() => setOpenModal(undefined)}
