@@ -80,8 +80,10 @@ const theme: CustomFlowbiteTheme = {
       on: 'flex justify-center bg-white text-gray-900 transition-all duration-75 ease-in group-hover:bg-opacity-0 group-hover:text-inherit w-full',
     },
     gradientDuoTone: {
-      greenToDarkGreen: 'bg-gradient-to-r from-pb-green to-pb-dark-green text-white',
-    }
+      greenToDarkGreen: 'bg-gradient-to-r from-pb-green to-pb-dark-green text-white hover:bg-gradient-to-bl',
+      redToDarkRed: 'bg-gradient-to-r from-pb-red-discard to-pb-dark-red-discard text-white hover:bg-gradient-to-bl',
+    },
+
   },
   carousel: {
     indicators: {

@@ -76,6 +76,7 @@ module.exports = {
         'pb-green': '#4CBD17',
         'pb-dark-green': '#1B4308',
         'pb-red-discard': '#BD1717',
+        'pb-dark-red-discard': '#9b0c0c',
         'pb-orange': "#EF8A17",
         'pb-strava-orange': '#FC4C02',
       },
