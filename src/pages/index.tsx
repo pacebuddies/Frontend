@@ -8,7 +8,7 @@ import type { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import logo from '../components/logo.svg';
+import logo from '../components/Images/logo.svg';
 import StravaLoginButton from '../components/StravaLoginButton';
 import StravaWatermark from '../components/StravaWatermark';
 

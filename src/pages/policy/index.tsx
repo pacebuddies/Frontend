@@ -6,7 +6,7 @@ const Policy = () => {
       <PolicyLayout />
       <div className="flex flex-col w-full md:w-[calc(100%-6rem)] px-4 md:px-20 h-full text-pb-dark-gray text-justify pt-5">
         <h1 className="text-2xl pb-2">
-          PaceBuddies.club - Privacy Policy & Terms of Service
+          pacebuddies.club - Privacy Policy & Terms of Service
         </h1>
 
         <h1 className="text-xl pb-2">PRIVACY POLICY</h1>
@@ -14,7 +14,7 @@ const Policy = () => {
         <h2 className="pb-2">Last Updated: May 28, 2023</h2>
 
         <p>
-          Welcome to PaceBuddies.club. This Privacy Policy outlines how we
+          Welcome to pacebuddies.club. This Privacy Policy outlines how we
           collect, use, and protect your information when you use our website
           and services.
         </p>
@@ -37,7 +37,7 @@ const Policy = () => {
         <p>We use this data to:</p>
 
         <ul className="list-inside list-disc">
-          <li>Create your account on PaceBuddies.club</li>
+          <li>Create your account on pacebuddies.club</li>
           <li>Match you with other athletes</li>
           <li>Enhance your user experience</li>
         </ul>
@@ -71,7 +71,7 @@ const Policy = () => {
         <h2 className="pb-2">Last Updated: May 28, 2023</h2>
 
         <p>
-          Welcome to PaceBuddies.club. Please read these Terms of Service
+          Welcome to pacebuddies.club. Please read these Terms of Service
           carefully as they govern your use of our website and services.
         </p>
 
