@@ -86,9 +86,9 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
           preferences
         </span>
 
-        <div className="flex flex-col">
-          <div>
-            <span>Preferred gender</span>
+        <div className="flex flex-col w-full">
+          <div className="flex flex-row items-center space-x-2 px-2">
+            <span className="small-caps text-xl font-bold text-pb-dark-gray ">preferred gender</span>
             <Dropdown
               label={getRecommendationsPreferences.gender}
               gradientDuoTone="greenToDarkGreen"
@@ -109,16 +109,16 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
               </Dropdown.Item>
             </Dropdown>
           </div>
-          <div>
-            <span>Recommendations on sport type</span>
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col p-2 space-x-2 border-b-2 border-b-pb-green">
+            <span  className="small-caps text-xl font-bold text-pb-dark-gray">recommendations on sport type</span>
+            <div className="flex flex-col items-start ">
               {isSuccess &&
                 data.map((sport) => {
                   const sportNumber = SportTypeMap.getNumber(sport)!;
                   const sportName = capitalizeFirstLetter(sport.toLowerCase());
                   if (isAllowedSportTypeNumber(sportNumber)) {
                     return (
-                      <div key={sport}>
+                      <div className="flex items-center justify-center" key={sport}>
                         <input
                           type="checkbox"
                           id={sport}
@@ -128,7 +128,7 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
                           onChange={() => handleSportTypeChange(sport)}
                           className="h-4 w-4 rounded border border-gray-300 bg-gray-100 accent-pb-green focus:ring-2 focus:ring-pb-green"
                         />
-                        <label className="pl-1" htmlFor={sport}>
+                        <label className="pl-1 pt-1 text-pb-dark-gray font-bold" htmlFor={sport}>
                           {sportName}
                         </label>
                       </div>
@@ -140,7 +140,7 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
         </div>
       </div>
       <div>
-        <span className="text-md  flex items-center justify-center px-2 font-bold text-pb-dark-gray ">
+        <span className="text-md  flex items-center justify-center pt-2 px-2 font-bold text-pb-dark-gray ">
           Here you can adjust your recommendation&apos;s filters to the
           preferred level for each sport type.
           <br />
