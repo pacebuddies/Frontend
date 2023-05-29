@@ -111,7 +111,11 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
       });
   }
 
-  const { data, isSuccess, isLoading } = useQuery<ContactInfo>({
+  const {
+    data: ContactData,
+    isSuccess,
+    isLoading,
+  } = useQuery<ContactInfo[]>({
     queryKey: ['contactInfo', athlete.id],
     queryFn: () => fetchContactInfo(athlete.id),
   });
@@ -178,7 +182,38 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
         </div>
         <div>
           <Accordion title={'Contact info'}>
-            <div>{data?.info ?? 'test'}</div>
+            <div className="grid grid-cols-2">
+              {isSuccess &&
+                ContactData.map((contactInfo) => (
+                  <div key={contactInfo.id} className="col-span-3">
+                    <div className="flex items-center border-b-[1px] border-pb-gray">
+                      <div className="mr-2 flex h-8 w-8 items-center justify-center"></div>
+                      <div className="mr-2 text-sm font-bold text-pb-dark-gray w-20 shrink-0">
+                        {contactInfo.label}
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="text-sm font-bold text-pb-dark-gray">
+                          User: {contactInfo.info}
+                        </div>
+
+                        <div className="text-sm font-bold text-pb-dark-gray">
+                          Description: {contactInfo.description}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            {isLoading && (
+              <div className="text-sm font-bold text-pb-dark-gray">
+                Loading...
+              </div>
+            )}
+            {!isLoading && isSuccess && ContactData.length === 0 && (
+              <div className="text-sm font-bold text-pb-dark-gray">
+                No contact info available
+              </div>
+            )}
           </Accordion>
         </div>
       </div>

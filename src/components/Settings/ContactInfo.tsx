@@ -113,7 +113,7 @@ const ContactInfoComponent: React.FC = () => {
       queryClient.invalidateQueries(['contactInfo']);
     },
     onError: (error, variables, rollback) => {
-      // @ts-ignore
+      // @ts-expect-error
       toast.error(`Failed to update contact info: ${error.message}`);
       // You can implement rollback here if needed
     },
@@ -126,7 +126,7 @@ const ContactInfoComponent: React.FC = () => {
       queryClient.invalidateQueries(['contactInfo']);
     },
     onError: (error, variables, rollback) => {
-      // @ts-ignore
+      // @ts-expect-error
       toast.error(`Failed to add contact info: ${error.message}`);
       // You can implement rollback here if needed
     },
@@ -139,7 +139,7 @@ const ContactInfoComponent: React.FC = () => {
       queryClient.invalidateQueries(['contactInfo']);
     },
     onError: (error, variables, rollback) => {
-      // @ts-ignore
+      // @ts-expect-error
       toast.error(`Failed to delete contact info: ${error.message}`);
       // You can implement rollback here if needed
     },
@@ -185,7 +185,7 @@ const ContactInfoComponent: React.FC = () => {
       <span className="small-caps text-xl font-bold text-pb-dark-gray ">
         Contact Information
       </span>
-      <div className="flex w-2/3 md:w-1/2 border-t-2 border-t-pb-green mb-1"/>
+      <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green md:w-1/2" />
       <div className="grid grid-cols-1 lg:grid-cols-2 ">
         {contactInfoList.map((contactInfo) => (
           <div key={contactInfo.id}>
@@ -244,8 +244,22 @@ const ContactInfoComponent: React.FC = () => {
               </div>
             ) : (
               <div>
-                <p>{contactInfo.label}</p>
-                <p className="truncate">{contactInfo.description}</p>
+                <p className="truncate text-pb-dark-gray">
+                  <span className="font-bold text-pb-dark-gray">Label:</span>
+                  {contactInfo.label}
+                </p>
+                <p className="truncate text-pb-dark-gray">
+                  <span className="font-bold text-pb-dark-gray">
+                    Info/link:
+                  </span>
+                  {contactInfo.info}
+                </p>
+                <p className="truncate text-pb-dark-gray">
+                  <span className="font-bold text-pb-dark-gray">
+                    Description:
+                  </span>
+                  {contactInfo.description}
+                </p>
 
                 <Button
                   outline={true}
