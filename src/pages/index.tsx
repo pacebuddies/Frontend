@@ -23,7 +23,7 @@ const Login: NextPage = () => {
         <div className="flex h-screen shrink-0 basis-1/2 flex-col flex-nowrap items-center justify-center">
           {/*Login panel*/}
           <div className="flex  h-auto w-full flex-col items-center justify-center">
-            <div className="flex h-96 w-full flex-auto flex-col items-center justify-between border-2 border-pb-green bg-white/95 px-2 pt-1 drop-shadow-2xl md:h-[24rem]">
+            <div className="flex h-[28rem] w-full flex-auto flex-col items-center justify-between border-2 border-pb-green bg-white/95 px-2 pt-1 drop-shadow-2xl md:h-[26rem]">
               <Image
                 src={logo.src}
                 alt="logo"
@@ -52,18 +52,18 @@ const Login: NextPage = () => {
                   browse your activities
                 </li>
               </ul>
-              <div className="flex">
+              <div className="flex ">
                 <input
                   id="policy"
                   type="checkbox"
                   checked={disabled}
                   onChange={() => setDisabled(!disabled)}
-                  className="h-4 w-4 rounded border border-gray-300 bg-gray-100 accent-pb-green focus:ring-2 focus:ring-pb-green"
+                  className="h-4 w-4 mt-1 mr-2 rounded border-2 border-pb-orange bg-gray-100 accent-pb-green focus:ring-2 focus:ring-pb-green"
                 />
 
-                <label htmlFor="policy" className="text-xl text-pb-green">
-                  Zaakceptuj regulamin, przeczytaj go{' '}
-                  <Link href={'/policy'} className="underline">tutaj</Link>
+                <label htmlFor="policy" className="text-xl text-pb-green small-caps font-bold leading-4 mt-1">
+                  to continue, accept our{' '}
+                  <Link href={'/policy'} className="underline">policy</Link>
                 </label>
               </div>
               <div className="flex items-center justify-center">
