@@ -113,7 +113,7 @@ const NotificationPopup = ({ show, onUnreadNotificationsChange }: IProps) => {
   }, [show]);
 
   return (
-    <div className={`relative z-50 ${!show && 'hidden'}`}>
+    <div className={`relative z-1020 ${!show && 'hidden'}`}>
       <svg
         width="18"
         height="15"

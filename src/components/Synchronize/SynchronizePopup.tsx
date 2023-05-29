@@ -49,7 +49,7 @@ const SynchronizePopup = ({ synchronize }: IProps) => {
   }, [getSynchronizationStore]);
 
   return (
-    <div className="relative">
+    <div className="relative z-1010">
       <svg
         width="18"
         height="15"
