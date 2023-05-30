@@ -1,13 +1,12 @@
+import Image from 'next/image';
 import { useState } from 'react';
 import { IActivity, UnitPreference } from '../../internalTypes/interfaces';
 import { formatSecondsToHMS } from '../../utils/formatSecoundToHMS';
 import { unitChange } from '../../utils/unitChange';
+import no_photos from '../Activity/ActivitiesIcons/no_photos.svg';
 import DataTextSpan from './PhotoOrMapComponent/DataTextSpan';
 import PhotoOrMapButton from './PhotoOrMapComponent/PhotoOrMapButton';
 import PhotoOrMapComponent from './PhotoOrMapComponent/PhotoOrMapComponent';
-import Image from "next/image";
-import no_photos from '../Activity/ActivitiesIcons/no_photos.svg';
-
 
 interface IProps {
   activity: IActivity;
@@ -15,11 +14,17 @@ interface IProps {
 }
 
 const ActivitesMap = ({ activity, unitPreference }: IProps) => {
-  const [showMap, setShowMap] = useState<boolean>(
-    activity.map.summary_polyline != '',
+  const isMap = !(
+    activity.map === null ||
+    activity.map === undefined ||
+    activity.map.summary_polyline === null ||
+    activity.map.summary_polyline === undefined ||
+    activity.map.summary_polyline === ''
   );
-  const isMap = activity.map.summary_polyline != '';
   const isPhotos = activity.photos.length > 0;
+
+  const [showMap, setShowMap] = useState<boolean>(isMap);
+
   const handlePhotoOrMapButtonClick = () => {
     if (isMap && isPhotos) {
       setShowMap((prevState) => !prevState);
@@ -34,9 +39,9 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
   return (
     <div className="mt-2 flex h-128 w-full flex-col items-center justify-center px-20">
       {/*Name*/}
-      <div className="flex w-full justify-between items-center flex-row">
+      <div className="flex w-full flex-row items-center justify-between">
         <div className="flex w-full items-start">
-          <div className="font-bold text-xl text-pb-orange italic mr-1">
+          <div className="mr-1 text-xl font-bold italic text-pb-orange">
             [{capitalizeFirstLetter(activity.sport_type.toLowerCase())}]
           </div>
           <span className="text-xl text-pb-green">
@@ -56,15 +61,15 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
         />
       </div>
       {/*Map*/}
-      {(isMap || isPhotos) ? (
+      {isMap || isPhotos ? (
         <PhotoOrMapComponent
           showMap={showMap}
           activity={activity}
-          className="h-96 w-full mt-1"
+          className="mt-1 h-96 w-full"
         />
       ) : (
-        <div className="h-96 w-full mt-1 items-center justify-center bg-pb-gray">
-          <div className="flex flex-col w-full h-full text-xl items-center justify-center italic text-pb-dark-gray text-center px-2">
+        <div className="mt-1 h-96 w-full items-center justify-center bg-pb-gray">
+          <div className="flex h-full w-full flex-col items-center justify-center px-2 text-center text-xl italic text-pb-dark-gray">
             <Image
               src={no_photos.src}
               alt={'time per activity'}
