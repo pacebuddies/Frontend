@@ -34,12 +34,14 @@ const MatchList = ({ sportType, ...props }: IProps) => {
   };
   return (
     <div {...props}>
-      {(isSuccess && data.length !== 0) && (
+      {isSuccess && data.length !== 0 && (
         <div className="mb-1 flex w-full flex-col pl-2 md:pl-10">
           <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green md:w-1/2" />
           <span className="flex text-xl text-pb-green">
             Matches for{' '}
-            {capitalizeFirstLetter(SportTypeMap.getString(sportType)?.toLowerCase())}
+            {capitalizeFirstLetter(
+              SportTypeMap.getString(sportType)?.toLowerCase(),
+            )}
           </span>
         </div>
       )}
@@ -52,7 +54,21 @@ const MatchList = ({ sportType, ...props }: IProps) => {
             className="w-full px-2 md:px-10"
           />
         ))}
-      {isLoading && <LoadingSpinner />}
+      {isLoading && (
+        <div className="flex w-full flex-col items-center justify-center">
+          <LoadingSpinner />
+        </div>
+      )}
+      {isSuccess && data.length === 0 && (
+        <div className="flex w-full flex-col items-center justify-center">
+          <span className="text-xl text-pb-dark-gray">
+            No matches for{' '}
+            {capitalizeFirstLetter(
+              SportTypeMap.getString(sportType)?.toLowerCase(),
+            )}
+          </span>
+        </div>
+      )}
     </div>
   );
 };
