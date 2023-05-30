@@ -95,7 +95,6 @@ const FilterRideTypeSportBlock = ({ title, sportType }: IProps) => {
       },
       // If the mutation fails, use the context returned from onMutate to roll back
       onError: (err, newFilter, context) => {
-        console.log(err);
         queryClient.setQueryData(
           ['filterData', sportType],
           context?.previousValue,

@@ -45,14 +45,12 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
   };
 
   const handleEscKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    console.log(event.key);
     if (event.key === 'Escape') {
       onOpenedChange(false);
     }
   };
 
   const handleFilteredSportChange = (sport: SportTypeEnum[]) => {
-    console.log(sport);
     setSelectedSports([...sport]);
     setRecommendationNumber(0);
     if (sport.length === 0) {
@@ -135,7 +133,6 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     };
   }, [onOpenedChange, nextRecommendation, previousRecommendation]);
 
-  console.log(data);
 
   const isMobile = useMediaQuery('(max-width: 1024px)');
 
@@ -189,8 +186,6 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     }
   };
 
-  console.log(recommendationNumber, data);
-
   return (
     <>
       <div className="scrollbar-hide fixed inset-0 z-1050 flex snap-x flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
@@ -202,7 +197,7 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
           <XMarkIcon className="h-6 w-6" />
         </button>
         <div className="relative flex h-[90%] max-h-screen w-full flex-col items-center justify-center lg:m-6 lg:w-384">
-          <div className="flex w-9/12 flex-row items-center justify-center rounded-t-3xl bg-pb-dark-gray">
+          <div className="flex w-9/12 flex-row items-center justify-center  bg-pb-dark-gray/10">
             <RecommendationsSportSelector
               onSportChange={handleFilteredSportChange}
             />

@@ -16,10 +16,8 @@ const DeclineButton = ({ userId, sportType, onDeclined, showed }: IProps) => {
         recommendation_athlete_id: userId,
       })
       .then((r) => {
-        console.log(r);
       })
       .catch((err) => {
-        console.log(err);
       });
     onDeclined(userId);
   };

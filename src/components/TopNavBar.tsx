@@ -36,7 +36,6 @@ const TopNavBar: NextPage = () => {
       .catch((err) => {
         setIsLoading(false);
         toast.error('Synchronize ' + err.message);
-        console.log(err);
       });
   }
 
@@ -48,7 +47,6 @@ const TopNavBar: NextPage = () => {
       })
       .catch((err) => {
         toast.error(err.message);
-        console.log(err.message);
       });
     return await signOut({ callbackUrl: '/' });
   }
@@ -125,7 +123,6 @@ const TopNavBar: NextPage = () => {
                   show={notificationPopupOpen}
                   onUnreadNotificationsChange={(num: number) => {
                     setUnreadNotifications(num);
-                    console.log(num);
                   }}
                 />
 

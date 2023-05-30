@@ -16,7 +16,6 @@ interface IProps {
 
 const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
   const number = num;
-  console.log(number);
 
   const athlete: RecommendationData | undefined = data[number];
 
@@ -30,7 +29,7 @@ const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
       {/*Top block information*/}
       <div className="flex w-full flex-row">
         <RecommendationsUserInfo
-          className="mb-4 flex w-4/5 flex-row justify-between border border-green-500 bg-white"
+          className="mb-4 flex w-4/5 flex-row justify-between border border-green-500 bg-white  shadow-lg"
           country={athlete.country}
           city={athlete.city}
           firstname={athlete.firstname}
@@ -42,7 +41,7 @@ const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
       {/*Bottom block information*/}
       <div className="flex w-full grow flex-wrap lg:flex-row lg:flex-nowrap">
         {/*Left block information*/}
-        <div className="flex w-3/5 shrink flex-col border border-green-500 bg-white p-2 lg:w-2/5 lg:justify-between lg:p-8">
+        <div className="flex w-3/5 shrink flex-col border border-green-500 bg-white p-2 lg:w-2/5 lg:justify-between lg:p-8 shadow-xl">
           <SameSportTypes
             className="flex w-full flex-col"
             sports={athlete.sport_types}
@@ -53,16 +52,18 @@ const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
           </div>
         </div>
         {/*Center block information / compatibility percent */}
-        <div className="flex w-2/5 shrink-0 grow-0 items-end justify-center bg-white text-4xl font-bold text-pb-dark-gray md:text-5xl lg:mx-4 lg:w-[calc(20%-2rem)] lg:px-8 lg:text-6xl xl:text-7xl 2xl:text-8xl">
-          <div className="flex flex-col items-center justify-center">
+        <div className="flex w-2/5 shrink-0 grow-0 items-center justify-center bg-white text-4xl font-bold text-pb-dark-gray md:text-5xl lg:mx-4 lg:w-[calc(20%-2rem)] lg:px-8 lg:text-6xl xl:text-7xl 2xl:text-8xl">
+          <div className="flex flex-col items-center justify-center drop-shadow-md">
             <span className="text-lg lg:text-2xl xl:text-3xl">
               Compatibility
             </span>
+            <span className="text-pb-orange">
             <CompatibilityNumber num={athlete.compatibility} />
+            </span>
           </div>
         </div>
         {/*Right block information / chart*/}
-        <div className="relative mt-4 min-h-[16rem] min-w-[10rem] flex-auto border border-green-500 bg-white p-8 lg:mt-0">
+        <div className="relative mt-4 min-h-[16rem] min-w-[10rem] flex-auto border border-green-500 bg-white p-8 lg:mt-0  shadow-xl">
           <RecommendationsChart
             recommended_user_name={athlete.firstname}
             recommended_user_graph_data={athlete.recommended_graph_stats}

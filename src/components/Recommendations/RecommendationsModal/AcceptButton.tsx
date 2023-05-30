@@ -17,10 +17,8 @@ const AcceptButton = ({ userId, sportType, onAccepted, showed }: IProps) => {
         recommendation_athlete_id: userId,
       })
       .then((r) => {
-        console.log(r);
       })
       .catch((err) => {
-        console.log(err);
       });
     onAccepted(userId);
   };
