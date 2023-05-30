@@ -10,7 +10,6 @@ interface IProps {
 
 const RecommendationsModal = ({ onOpenedChange }: IProps) => {
   const handleEscKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    console.log(event.key);
     if (event.key === 'Escape') {
       onOpenedChange(false);
     }

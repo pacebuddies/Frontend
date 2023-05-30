@@ -5,11 +5,10 @@ interface IProps {
 }
 
 const SameClubs = ({ clubs }: IProps) => {
-  console.log(clubs);
   return (
     <>
       <div className="flex w-full flex-row justify-between">
-        <span className="font-bold text-pb-green">Clubs</span>
+        <span className="font-bold text-pb-green text-lg">Clubs</span>
         <span className="ml-4 font-bold text-pb-dark-gray">
           {clubs.length} mutual clubs
         </span>

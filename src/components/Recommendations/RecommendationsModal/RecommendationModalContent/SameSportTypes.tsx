@@ -34,12 +34,12 @@ const SameSportTypes = ({ sports, selectedSports, ...props }: IProps) => {
   }, [sports, selectedSports]);
   return (
     <div {...props}>
-      <span className="font-bold text-pb-green">Activity types</span>
-      <div className="flex flex-wrap p-1 lg:p-2">
+      <span className="font-bold text-pb-green text-lg">Activity types</span>
+      <div className="flex flex-wrap px-2 lg:p-2">
         {parsedSports.map((sport) => (
           <span
             key={sport.sportNumber}
-            className={`px-1 lg:p-2 ${sport.selected ? 'bg-gray-200' : ''}`}
+            className={`px-2 py-1 m-1 shadow-md rounded-full lg:px-3 lg:py-2 ${sport.selected ? ' bg-pb-orange' : 'bg-gray-200'}`}
           >
             {capitalizeFirstLetter(
               SportTypeMap.getString(sport.sportNumber)?.toLowerCase(),

@@ -23,7 +23,6 @@ const Activities = () => {
     queryKey: ['activities'],
     queryFn: fetchActivities,
   });
-  console.log(data);
   return (
     <Layout>
       <div className="flex shrink-0 flex-col">

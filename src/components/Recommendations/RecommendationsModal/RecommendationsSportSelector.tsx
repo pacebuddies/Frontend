@@ -3,6 +3,7 @@ import { useState } from 'react';
 import pacebuddiesApi from '../../../instances/axiosConfigured';
 import { SportTypeEnum } from '../../../internalTypes/sportTypeEnum';
 import { SportTypeMap } from '../../../internalTypes/SportTypeMap';
+import { capitalizeFirstLetter } from '../../../utils/capitalizeFirstLetter';
 import { LoadingSpinner } from '../../LoadingSpinner';
 
 interface IProps {
@@ -40,11 +41,15 @@ const RecommendationsSportSelector = ({ onSportChange }: IProps) => {
     <button
       key={item}
       onClick={() => selectedSportHandler(item)}
-      className={`m-2 flex min-w-[3rem] shrink-0 flex-col items-center justify-center rounded-full bg-pb-green p-2 ${
-        selectedSport.includes(item) ? 'bg-pb-orange' : ''
+      className={`m-2 flex min-w-[3rem] shrink-0 flex-col items-center justify-center rounded-full  p-2 ${
+        selectedSport.includes(item)
+          ? 'bg-pb-green'
+          : 'border-2 border-white bg-white/80'
       }`}
     >
-      <span>{SportTypeMap.getString(item)?.toLowerCase()}</span>
+      <span>
+        {capitalizeFirstLetter(SportTypeMap.getString(item)?.toLowerCase())}
+      </span>
     </button>
   );
 

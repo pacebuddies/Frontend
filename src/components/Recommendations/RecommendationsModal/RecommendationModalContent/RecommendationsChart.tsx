@@ -148,7 +148,6 @@ const RecommendationsChart = ({
       ).toFixed(2),
     ),
   );
-  console.log(userData, recommendedUserData);
   const dataChart = {
     labels: [
       'Avg speed',

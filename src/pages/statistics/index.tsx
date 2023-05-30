@@ -40,7 +40,6 @@ const StatisticsPage: NextPage = () => {
       const sport = SportTypeMap.getNumber(
         sportsQuery.data![0]!,
       ) as SportTypeEnum;
-      console.log(sport, selectedSport);
       if (selectedSport != sport) {
         setSelectedSport(sport);
       }
