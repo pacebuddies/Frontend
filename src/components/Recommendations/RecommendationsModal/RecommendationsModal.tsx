@@ -98,15 +98,17 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     if (index === -1) {
       return;
     }
-    setFilteredData([...filteredData.splice(index, 1)]);
+    const newFileteredData = filteredData.filter((item, itemIndex) => itemIndex !== index);
+    setFilteredData(newFileteredData);
     const newRecommendationNumber = findNextRecommendation(
-      filteredData,
+      newFileteredData,
       recommendationNumber,
     );
     if (newRecommendationNumber === recommendationNumber) {
       setReRender(reRender + 1);
     } else {
       setRecommendationNumber(newRecommendationNumber);
+      setReRender(reRender + 1);
     }
   };
   useEffect(() => {
@@ -132,7 +134,6 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [onOpenedChange, nextRecommendation, previousRecommendation]);
-
 
   const isMobile = useMediaQuery('(max-width: 1024px)');
 
