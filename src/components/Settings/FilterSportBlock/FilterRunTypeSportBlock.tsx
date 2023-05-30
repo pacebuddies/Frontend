@@ -104,6 +104,8 @@ const FilterRunTypeSportBlock = ({ title, sportType }: IProps) => {
       // Always refetch after error or success
       onSettled: () => {
         queryClient.invalidateQueries(['filterData', sportType]);
+        queryClient.invalidateQueries(['recommendations']);
+
       },
     },
   );

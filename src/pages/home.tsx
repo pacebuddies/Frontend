@@ -10,6 +10,9 @@ import {Button} from "flowbite-react";
 import Link from "next/link";
 import WeekByDayDistanceSumChart from "../components/Charts/Distance/WeekByDayDistanceSumChart";
 import ActivitiesNumberIn4Weeks from "../components/Charts/Activities/ActivitiesNumberIn4Weeks";
+import { useSetAthleteSportsStore } from "../store/athleteSportsStore";
+import { SportTypeMap } from "../internalTypes/SportTypeMap";
+import { SportTypeEnum } from "../internalTypes/sportTypeEnum";
 
 const Home: NextPage = () => {
 
@@ -24,10 +27,29 @@ const Home: NextPage = () => {
     queryFn: fetchAthleteHandler,
   });
 
+  const fetchAthleteSportTypesHandler = (): Promise<string[]> => {
+    return pacebuddiesApi
+      .get('bridge/athlete/sportTypes')
+      .then((response) => response.data);
+  };
+
+  const athleteSportTypesQuery = useQuery<string[]>({
+    queryKey: ['athlete-sport-types'],
+    queryFn: fetchAthleteSportTypesHandler,
+  }
+  );
+
+  const setSportTypesStore = useSetAthleteSportsStore((state) => state.setAthleteSports);
+
   const setAthleteStore = useSetAthleteStore((state) => state.setAthlete);
   useEffect(() => {
     setAthleteStore({ athlete: athleteQuery.data ?? null });
-  }, [athleteQuery.data])
+    const sportTypes = athleteSportTypesQuery.data ?? [];
+    const mapedSportTypes = sportTypes.map((sportType) => {
+      return SportTypeMap.getNumber(sportType)!;
+    });
+    setSportTypesStore(mapedSportTypes);
+  }, [athleteQuery.data, athleteSportTypesQuery.data])
 
   return (
     <>

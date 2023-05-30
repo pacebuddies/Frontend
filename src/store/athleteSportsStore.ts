@@ -4,11 +4,11 @@ import { persist } from 'zustand/middleware';
 import { SportTypeEnum } from '../internalTypes/sportTypeEnum';
 
 interface AthleteSportsStates {
-  athleteSports: SportTypeEnum[];
+  athleteSports: number[];
 }
 
 interface AthleteSportsActions {
-  setAthleteSports: (athleteSports: SportTypeEnum[]) => void;
+  setAthleteSports: (athleteSports: number[]) => void;
 }
 
 interface AthleteSportsStore

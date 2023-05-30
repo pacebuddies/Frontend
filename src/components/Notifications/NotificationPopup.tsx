@@ -90,7 +90,7 @@ const NotificationPopup = ({ show, onUnreadNotificationsChange }: IProps) => {
       return null;
     },
     keepPreviousData: true,
-    // refetchInterval: 10000, // 1s
+    refetchInterval: 1000, // 1s
     refetchIntervalInBackground: true,
   });
 
@@ -152,7 +152,7 @@ const NotificationPopup = ({ show, onUnreadNotificationsChange }: IProps) => {
                   )}
                   {notificationStore.map((notification: INotification) => (
                     <NotificationSegment
-                      key={notification.id}
+                      key={notification.id+Date.now()}
                       data={notification}
                       markAsSeen={markAsSeen}
                     />

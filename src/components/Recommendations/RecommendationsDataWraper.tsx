@@ -6,6 +6,7 @@ import NoRecommendationsModal from './RecommendationsModal/NoRecommendationsModa
 import RecommendationsModal from './RecommendationsModal/RecommendationsModal';
 import RecommendationsModalLoading from './RecommendationsModal/RecommendationsModalLoading';
 import { useSetMatchRecommendationStore } from "../../store/matchRecommendationsStore";
+import { useAthleteSportsStore } from "../../store/athleteSportsStore";
 
 interface IProps {
   opened: boolean;
@@ -16,11 +17,19 @@ const RecommendationsDataWraper = ({ onOpenedChange }: IProps) => {
   const getSelectedSportTypes = useRecommendationsStore(
     (state) => state.recommendations,
   ).sports;
+  const getAthleteSportTypes = useAthleteSportsStore(state => state.athleteSports);
   const fetchRecommendations = (): Promise<RecommendationData[]> => {
+
+    //check if getSelectedSportTypes includes getAthleteSportTypes
+    console.log(getSelectedSportTypes, getAthleteSportTypes);
+    const filteredSports = getSelectedSportTypes.filter((sport) => getAthleteSportTypes.includes(sport));
+    console.log(filteredSports);
+
+
     return pacebuddiesApi
       .get('recommender/recommendations/listByFewSportTypes', {
         params: {
-          sport_type: getSelectedSportTypes,
+          sport_type: filteredSports.length==0 ? getSelectedSportTypes : filteredSports,
         },
         paramsSerializer: (params) => {
           return qs.stringify(params, { arrayFormat: 'repeat' });

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dropdown } from 'flowbite-react';
 import { NextPage } from 'next';
 import pacebuddiesApi from '../../instances/axiosConfigured';
@@ -23,7 +23,7 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
   const getRecommendationsPreferences = useRecommendationsStore(
     (state) => state.recommendations,
   );
-
+  const queryClient = useQueryClient();
   const handlePreferredGenderChange = (gender: 'Male' | 'Female' | 'All') => {
     setRecommendationsPreferences({
       recommendations: {
@@ -31,6 +31,7 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
         sports: getRecommendationsPreferences.sports,
       },
     });
+    queryClient.invalidateQueries(['recommendations']);
   };
   const fetchSports = (): Promise<string[]> => {
     return pacebuddiesApi
@@ -78,6 +79,7 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
         sports: [...newSports],
       },
     });
+    queryClient.invalidateQueries(['recommendations']);
   };
   return (
     <>
