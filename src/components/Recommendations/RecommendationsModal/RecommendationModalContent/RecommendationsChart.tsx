@@ -91,9 +91,19 @@ const RecommendationsChart = ({
           callback: (tickValue: string | number) => {
             return tickValue + '%';
           },
+          font: {
+            size: 16,
+          },
           precision: 0,
         },
+        pointLabels: {
+          font: {
+            size: 14
+          },
+          display: "auto",
+        }
       },
+
     },
     plugins: {
       tooltip: {
@@ -102,9 +112,28 @@ const RecommendationsChart = ({
             return context.dataset.label + ': ' + context.parsed.r + '%';
           },
         },
+        titleFont: {
+          size: 16,
+        },
+        bodyFont: {
+          size: 16,
+        },
       },
+        legend: {
+          labels: {
+            // This more specific font property overrides the global property
+            font: {
+              size: 14
+            }
+          }
+        },
+
+
     },
+
   };
+
+
 
   const labels: (keyof UserGraphData)[] = [
     'avg_speed',
@@ -151,7 +180,7 @@ const RecommendationsChart = ({
   const dataChart = {
     labels: [
       'Avg speed',
-      'Avg elevation gain',
+      'Avg elevation gain' ,
       'Avg distance',
       'Avg moving time',
       'Number of activities',

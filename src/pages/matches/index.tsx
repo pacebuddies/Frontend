@@ -3,6 +3,7 @@ import MatchList from '../../components/Matches/MatchList';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { SportTypeMap } from '../../internalTypes/SportTypeMap';
 import Layout from '../../Layout';
+import { isAllowedSportTypeNumber } from "../../utils/isAllowedSportType";
 
 const Matches = () => {
   const fetchSports = (): Promise<string[]> => {
@@ -18,6 +19,8 @@ const Matches = () => {
   const sportsEnum = data?.map((sport) => {
     return SportTypeMap.getNumber(sport)!;
   });
+  const fileredSportsEnum = sportsEnum?.filter(isAllowedSportTypeNumber);
+
 
   return (
     <Layout>
@@ -30,7 +33,7 @@ const Matches = () => {
         <div className="flex h-full min-h-screen w-full justify-center border-t-2 border-t-pb-green bg-pb-gray">
           <div className="flex w-full flex-col items-center bg-white md:w-2/3">
             {isSuccess &&
-              sportsEnum?.map((sport) => {
+              fileredSportsEnum?.map((sport) => {
                 return (
                   <MatchList
                     key={sport}

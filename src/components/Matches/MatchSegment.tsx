@@ -82,7 +82,6 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
       })
       .then((response) => {
         setUserUpvoted(false);
-        return toast.success('Disliked user successfully');
       })
       .catch((error) => {
         if (error.response) {
