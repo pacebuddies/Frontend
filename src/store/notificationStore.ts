@@ -30,9 +30,9 @@ export const useSetNotificationStore = create<
             set((state) => ({ notifications:[
                                     ...(state?.notifications ?? []),
                                     ...new_notifications
-                                      .filter((v, i, a) => a.findIndex(v2 => v2.id === v.id) === i)
-                                      .sort((n1, n2) => (new Date(n2.date_time)).getTime() - (new Date(n1.date_time)).getTime()),
-                                    ],
+                                        ]
+                                      .filter((v, i, a) => a.findIndex(v2 => ( v2.id === v.id )) === i)
+                                      .sort((n1, n2) => (new Date(n2.date_time)).getTime() - (new Date(n1.date_time)).getTime())
         })) // Usuwanie duplikatów i sortowanie po dacie (pain)
       },
       updateNotification: (notificationId: string) => {
