@@ -29,9 +29,7 @@ function fetchContactInfo(id: string) {
 
 const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
   const [openModal, setOpenModal] = useState<string | undefined>();
-  const [userUpvoted, setUserUpvoted] = useState<boolean>(
-    athlete.is_upvoted,
-  );
+  const [userUpvoted, setUserUpvoted] = useState<boolean>(athlete.is_upvoted);
   const [unMatched, setUnMatched] = useState<boolean>(false);
   const [report, setReport] = useState<ReportData>({
     reported_athlete_id: athlete.id,
@@ -135,7 +133,8 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
               title={`${firstname + ' ' + lastname}`}
             />
             <div className="ml-4 flex w-[calc(100%-4rem)] shrink-0 flex-col justify-center">
-              <Link href={`/profile/${athlete.id}`}
+              <Link
+                href={`/profile/${athlete.id}`}
                 className=" truncate pr-3 text-xl font-bold text-pb-green"
                 title={`${firstname + ' ' + lastname}`}
               >
@@ -164,12 +163,12 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
             <div className="flex w-20 flex-col items-center justify-center p-1 md:w-40">
               <a
                 href={`https://www.strava.com/athletes/${athlete.id}`}
-                target={'_blank'} rel="noreferrer">
-                <Button
-                color="strava"
-                className="w-full">
-                <span>View on Strava</span>
-              </Button>
+                target={'_blank'}
+                rel="noreferrer"
+              >
+                <Button color="strava" className="w-full">
+                  <span>View on Strava</span>
+                </Button>
               </a>
             </div>
 
@@ -194,7 +193,7 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
                   <div key={contactInfo.id} className="col-span-3">
                     <div className="flex items-center border-b-[1px] border-pb-gray">
                       <div className="mr-2 flex h-8 w-8 items-center justify-center"></div>
-                      <div className="mr-2 text-sm font-bold text-pb-dark-gray w-20 shrink-0">
+                      <div className="mr-2 w-20 shrink-0 text-sm font-bold text-pb-dark-gray">
                         {contactInfo.label}
                       </div>
                       <div className="flex flex-col">

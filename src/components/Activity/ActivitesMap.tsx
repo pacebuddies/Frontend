@@ -185,13 +185,13 @@ const ActivitesMap = ({ activity, unitPreference }: IProps) => {
             <div className="grid grid-cols-2 gap-2 md:w-3/4 xl:grid-cols-3 2xl:grid-cols-4">
               <DataTextSpan
                 valueName="kilojoules"
-                value={activity.kilojoules.toString()}
+                value={activity.kilojoules==null ? activity.kilojoules!.toString() : '0'}
                 valueUnit=" kj"
               />
               {/*Average Watts*/}
               <DataTextSpan
                 valueName="average watts"
-                value={activity.average_watts.toString()}
+                value={activity.average_watts==null ? activity.average_watts!.toString(): '0'}
                 valueUnit=" w"
               />
 

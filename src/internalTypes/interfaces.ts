@@ -44,8 +44,8 @@ export interface IActivity {
   timezone: string;
   total_elevation_gain: number;
   elapsed_time: number;
-  kilojoules: number;
-  average_watts: number;
+  kilojoules: number | null;
+  average_watts: number | null;
   device_watts: boolean;
   max_watts: number;
   weighted_average_watts: number;
