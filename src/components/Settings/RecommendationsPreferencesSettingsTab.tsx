@@ -111,34 +111,34 @@ const RecommendationsPreferencesSettingsTab: NextPage = () => {
               </Dropdown.Item>
             </Dropdown>
           </div>
-          <div className="flex flex-col p-2 space-x-2 border-b-2 border-b-pb-green">
-            <span  className="small-caps text-xl font-bold text-pb-dark-gray">recommendations on sport type</span>
-            <div className="flex flex-col items-start ">
-              {isSuccess &&
-                data.map((sport) => {
-                  const sportNumber = SportTypeMap.getNumber(sport)!;
-                  const sportName = capitalizeFirstLetter(sport.toLowerCase());
-                  if (isAllowedSportTypeNumber(sportNumber)) {
-                    return (
-                      <div className="flex items-center justify-center" key={sport}>
-                        <input
-                          type="checkbox"
-                          id={sport}
-                          checked={getRecommendationsPreferences.sports.includes(
-                            sportNumber,
-                          )}
-                          onChange={() => handleSportTypeChange(sport)}
-                          className="h-4 w-4 rounded border border-gray-300 bg-gray-100 accent-pb-green focus:ring-2 focus:ring-pb-green"
-                        />
-                        <label className="pl-1 pt-1 text-pb-dark-gray font-bold" htmlFor={sport}>
-                          {sportName}
-                        </label>
-                      </div>
-                    );
-                  } else return null;
-                })}
-            </div>
-          </div>
+          {/*<div className="flex flex-col p-2 space-x-2 border-b-2 border-b-pb-green">*/}
+          {/*  <span  className="small-caps text-xl font-bold text-pb-dark-gray">recommendations on sport type</span>*/}
+          {/*  <div className="flex flex-col items-start ">*/}
+          {/*    {isSuccess &&*/}
+          {/*      data.map((sport) => {*/}
+          {/*        const sportNumber = SportTypeMap.getNumber(sport)!;*/}
+          {/*        const sportName = capitalizeFirstLetter(sport.toLowerCase());*/}
+          {/*        if (isAllowedSportTypeNumber(sportNumber)) {*/}
+          {/*          return (*/}
+          {/*            <div className="flex items-center justify-center" key={sport}>*/}
+          {/*              <input*/}
+          {/*                type="checkbox"*/}
+          {/*                id={sport}*/}
+          {/*                checked={getRecommendationsPreferences.sports.includes(*/}
+          {/*                  sportNumber,*/}
+          {/*                )}*/}
+          {/*                onChange={() => handleSportTypeChange(sport)}*/}
+          {/*                className="h-4 w-4 rounded border border-gray-300 bg-gray-100 accent-pb-green focus:ring-2 focus:ring-pb-green"*/}
+          {/*              />*/}
+          {/*              <label className="pl-1 pt-1 text-pb-dark-gray font-bold" htmlFor={sport}>*/}
+          {/*                {sportName}*/}
+          {/*              </label>*/}
+          {/*            </div>*/}
+          {/*          );*/}
+          {/*        } else return null;*/}
+          {/*      })}*/}
+          {/*  </div>*/}
+          {/*</div>*/}
         </div>
       </div>
       <div>
