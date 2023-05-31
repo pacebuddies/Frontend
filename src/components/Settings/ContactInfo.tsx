@@ -197,11 +197,13 @@ const ContactInfoComponent: React.FC = () => {
                     setEditData({...editData, label: e.target.value})
                   }
                   type={'text'}
+                  placeholder={'label'}
                   className="border-[1px] border-pb-green text-pb-dark-gray"
                 />
                 <input
                   value={editData.info}
                   type={'text'}
+                  placeholder={'info/link'}
                   className="border-[1px] border-pb-green text-pb-dark-gray"
                   onChange={(e) =>
                     setEditData({...editData, info: e.target.value})
@@ -209,6 +211,7 @@ const ContactInfoComponent: React.FC = () => {
                 />
                 <textarea
                   value={editData.description}
+                  placeholder={'description...'}
                   className="border-[1px] border-pb-green text-pb-dark-gray"
                   onChange={(e) =>
                     setEditData({...editData, description: e.target.value})
