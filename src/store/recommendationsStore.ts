@@ -20,7 +20,7 @@ interface RecommendationsStore
 const initialRecommendationsStates: RecommendationsStates = {
   recommendations: {
     gender: 'All',
-    sports: [12, 30, 39, 44, 26, 0, 1, 5, 7, 9, 10, 17, 22, 24, 29, 26],
+    sports: [12, 30, 39, 44, 0, 1, 5, 7, 9, 10, 17, 22, 24, 29, 26],
   },
 };
 

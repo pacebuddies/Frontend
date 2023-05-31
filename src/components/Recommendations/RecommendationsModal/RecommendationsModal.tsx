@@ -3,6 +3,7 @@ import {
   ChevronRightIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
@@ -91,6 +92,7 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     }
     return 0;
   };
+  const queryClient = useQueryClient();
 
   const recommendationDecisionHandler = (id: string) => {
     // remove recommendation from list
@@ -98,7 +100,15 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     if (index === -1) {
       return;
     }
-    const newFileteredData = filteredData.filter((item, itemIndex) => itemIndex !== index);
+    const newFileteredData = filteredData.filter(
+      (item, itemIndex) => itemIndex !== index,
+    );
+
+    queryClient.setQueryData<RecommendationData[]>(
+      ['recommendations'],
+      newFileteredData,
+    );
+
     setFilteredData(newFileteredData);
     const newRecommendationNumber = findNextRecommendation(
       newFileteredData,
