@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { ReactNode } from 'react';
+import logo_circle from "./Images/logo_circle.svg";
 
 interface Props {
   children: ReactNode;
@@ -15,10 +16,15 @@ const PolicyLayout: React.FC = () => {
             href="/"
             className="ml-3 flex flex-wrap items-center justify-between "
           >
-            <span className="self-center whitespace-nowrap font-istok-web text-3xl text-pb-green">
+            <img
+              src={logo_circle.src}
+              alt="logo_circle"
+              className="w-12 h-12"
+            />
+            <span className=" md:pl-1 pt-2 self-center whitespace-nowrap font-istok-web text-3xl text-pb-green hidden md:block">
               Pace
             </span>
-            <span className="self-center whitespace-nowrap font-istok-web text-3xl text-white">
+            <span className=" pt-2 self-center whitespace-nowrap font-istok-web text-3xl text-pb-orange hidden md:block">
               Buddies
             </span>
           </Link>
