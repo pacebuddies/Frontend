@@ -45,6 +45,7 @@ const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {
           <SameSportTypes
             className="flex w-full flex-col"
             sports={athlete.sport_types}
+            recommended_by={athlete.by_which_sport_type_matched}
             selectedSports={selectedSports}
           />
           <div className="flex w-full flex-col lg:min-h-[50%]">

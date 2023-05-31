@@ -1,20 +1,20 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button } from 'flowbite-react';
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {Button} from 'flowbite-react';
+import React, {useState} from 'react';
+import {toast} from 'react-toastify';
 import pacebuddiesApi from '../../instances/axiosConfigured';
-import { ContactInfo } from '../../internalTypes/contactInfo';
-import { LoadingSpinner } from '../LoadingSpinner';
+import {ContactInfo} from '../../internalTypes/contactInfo';
+import {LoadingSpinner} from '../LoadingSpinner';
 
 const predefinedContacts: ContactInfo[] = [
-  { id: '1', label: 'Facebook', info: '', description: '' },
-  { id: '2', label: 'Snapchat', info: '', description: '' },
-  { id: '3', label: 'Messenger', info: '', description: '' },
-  { id: '4', label: 'Whatsapp', info: '', description: '' },
-  { id: '5', label: 'Instagram', info: '', description: '' },
-  { id: '6', label: 'Twitter', info: '', description: '' },
-  { id: '7', label: 'Discord', info: '', description: '' },
-  { id: '8', label: 'Telegram', info: '', description: '' },
+  {id: '1', label: 'Facebook', info: '', description: ''},
+  {id: '2', label: 'Snapchat', info: '', description: ''},
+  {id: '3', label: 'Messenger', info: '', description: ''},
+  {id: '4', label: 'Whatsapp', info: '', description: ''},
+  {id: '5', label: 'Instagram', info: '', description: ''},
+  {id: '6', label: 'Twitter', info: '', description: ''},
+  {id: '7', label: 'Discord', info: '', description: ''},
+  {id: '8', label: 'Telegram', info: '', description: ''},
 ];
 const fetchContactInfo = async () => {
   return pacebuddiesApi
@@ -37,13 +37,13 @@ const updateContactInfo = async (contactInfo: ContactInfo) => {
   }
 
   if (predefinedContacts.find((contact) => contact.id === contactInfo.id)) {
-    const { id, ...rest } = contactInfo;
+    const {id, ...rest} = contactInfo;
     return pacebuddiesApi
-      .post('bridge/athlete/contactinfo', { ...rest })
+      .post('bridge/athlete/contactinfo', {...rest})
       .then((res) => res.data);
   }
   return pacebuddiesApi
-    .post('bridge/athlete/contactinfo', { ...contactInfo })
+    .post('bridge/athlete/contactinfo', {...contactInfo})
     .then((res) => res.data);
 };
 
@@ -61,7 +61,7 @@ const addContactInfo = async (contactInfo: ContactInfo) => {
     );
   }
   return pacebuddiesApi
-    .post('bridge/athlete/contactinfo', { ...contactInfo })
+    .post('bridge/athlete/contactinfo', {...contactInfo})
     .then((res) => res.data);
 };
 
@@ -79,7 +79,7 @@ const deleteContactInfo = async (contactInfo: ContactInfo) => {
     );
   }
   return pacebuddiesApi
-    .delete(`bridge/athlete/contactinfo`, { data: { ...contactInfo } })
+    .delete(`bridge/athlete/contactinfo`, {data: {...contactInfo}})
     .then((res) => res.data);
 };
 
@@ -95,14 +95,14 @@ const ContactInfoComponent: React.FC = () => {
 
   const contactInfoList = fetchedContactInfoList
     ? [
-        ...fetchedContactInfoList,
-        ...predefinedContacts.filter(
-          (predefinedContact) =>
-            !fetchedContactInfoList.find(
-              (contact) => contact.label === predefinedContact.label,
-            ),
-        ),
-      ]
+      ...fetchedContactInfoList,
+      ...predefinedContacts.filter(
+        (predefinedContact) =>
+          !fetchedContactInfoList.find(
+            (contact) => contact.label === predefinedContact.label,
+          ),
+      ),
+    ]
     : predefinedContacts;
 
   const queryClient = useQueryClient();
@@ -169,32 +169,32 @@ const ContactInfoComponent: React.FC = () => {
 
   const handleAdd = async () => {
     await addMutation.mutateAsync(newData);
-    setNewData({ id: '', label: '', info: '', description: '' });
+    setNewData({id: '', label: '', info: '', description: ''});
   };
 
   if (isLoading)
     return (
       <div>
-        <LoadingSpinner />
+        <LoadingSpinner/>
       </div>
     );
   if (error) return <div>Error loading contact information</div>;
 
   return (
-    <div>
+    <div className=" mt-2 ml-2">
       <span className="small-caps text-xl font-bold text-pb-dark-gray ">
-        Contact Information
+        contact information
       </span>
-      <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green md:w-1/2" />
-      <div className="grid grid-cols-1 lg:grid-cols-2 ">
+      <div className="mb-1 flex w-2/3 border-t-2 border-t-pb-green md:w-1/2"/>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 ">
         {contactInfoList.map((contactInfo) => (
           <div key={contactInfo.id}>
             {editData?.id === contactInfo.id ? (
-              <div>
+              <div className="flex flex-col ">
                 <input
                   value={editData.label}
                   onChange={(e) =>
-                    setEditData({ ...editData, label: e.target.value })
+                    setEditData({...editData, label: e.target.value})
                   }
                   type={'text'}
                   className="border-[1px] border-pb-green text-pb-dark-gray"
@@ -204,18 +204,17 @@ const ContactInfoComponent: React.FC = () => {
                   type={'text'}
                   className="border-[1px] border-pb-green text-pb-dark-gray"
                   onChange={(e) =>
-                    setEditData({ ...editData, info: e.target.value })
+                    setEditData({...editData, info: e.target.value})
                   }
                 />
-                <input
+                <textarea
                   value={editData.description}
-                  type={'text'}
                   className="border-[1px] border-pb-green text-pb-dark-gray"
                   onChange={(e) =>
-                    setEditData({ ...editData, description: e.target.value })
+                    setEditData({...editData, description: e.target.value})
                   }
                 />
-                <div className="flex">
+                <div className="flex items-center justify-center">
                   <Button
                     outline={true}
                     gradientDuoTone={'greenToDarkGreen'}
@@ -245,52 +244,53 @@ const ContactInfoComponent: React.FC = () => {
             ) : (
               <div>
                 <p className="truncate text-pb-dark-gray">
-                  <span className="font-bold text-pb-dark-gray">Label:</span>
+                  <span className="font-bold text-pb-dark-gray">Label:{' '}</span>
                   {contactInfo.label}
                 </p>
                 <p className="truncate text-pb-dark-gray">
                   <span className="font-bold text-pb-dark-gray">
-                    Info/link:
+                    Info/link:{' '}
                   </span>
                   {contactInfo.info}
                 </p>
                 <p className="truncate text-pb-dark-gray">
                   <span className="font-bold text-pb-dark-gray">
-                    Description:
+                    Description:{' '}
                   </span>
                   {contactInfo.description}
                 </p>
-
-                <Button
-                  outline={true}
-                  gradientDuoTone={'greenToDarkGreen'}
-                  className="mt-2 shrink-0"
-                  onClick={() => handleEdit(contactInfo)}
-                >
-                  Edit
-                </Button>
+                <div className="flex w-1/2 items-end justify-end border-b-2 border-b-pb-green">
+                  <Button
+                    outline={true}
+                    gradientDuoTone={'greenToDarkGreen'}
+                    className="mt-2 shrink-0 mb-2"
+                    onClick={() => handleEdit(contactInfo)}
+                  >
+                    Edit
+                  </Button>
+                </div>
               </div>
             )}
           </div>
         ))}
       </div>
-      <span className="small-caps text-lg font-bold text-pb-dark-gray ">
-        Add new Contact Information
+      <span className="  small-caps text-lg font-bold text-pb-dark-gray ">
+        add new contact information
       </span>
-      <div className="flex w-[40%] flex-col">
+      <div className="flex  w-[40%] flex-col">
         <div>
           <input
             placeholder="Label"
             type={'text'}
             className="border-[1px] border-pb-green text-pb-dark-gray"
             value={newData.label}
-            onChange={(e) => setNewData({ ...newData, label: e.target.value })}
+            onChange={(e) => setNewData({...newData, label: e.target.value})}
           />
           <input
             type={'text'}
             placeholder="Info/Link"
             value={newData.info}
-            onChange={(e) => setNewData({ ...newData, info: e.target.value })}
+            onChange={(e) => setNewData({...newData, info: e.target.value})}
             className="border-[1px] border-pb-green text-pb-dark-gray"
           />
         </div>
@@ -298,11 +298,11 @@ const ContactInfoComponent: React.FC = () => {
           placeholder="Description"
           value={newData.description}
           onChange={(e) =>
-            setNewData({ ...newData, description: e.target.value })
+            setNewData({...newData, description: e.target.value})
           }
           className="mt-1 border-[1px] border-pb-green text-pb-dark-gray"
         />
-        <div>
+        <div className="flex items-center justify-center">
           <Button
             outline={true}
             gradientDuoTone={'greenToDarkGreen'}

@@ -12,6 +12,7 @@ export interface RecommendationData {
   sport_types: number[];
   my_graph_stats: UserGraphData;
   recommended_graph_stats: UserGraphData;
+  by_which_sport_type_matched: number;
 }
 export interface ClubsData {
   id: string;

@@ -1,13 +1,13 @@
 import { ArrowPathIcon } from '@heroicons/react/24/solid';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+import React, { useEffect } from 'react';
 import { animated, useSpring } from 'react-spring';
 import pacebuddiesApi from '../../instances/axiosConfigured';
 import { INotification } from '../../internalTypes/interfaces';
-import {
-  useNotificationStore,
-  useSetNotificationStore,
-} from '../../store/notificationStore';
 import NotificationSegment from './NotificationSegment';
 
 interface IProps {
@@ -15,51 +15,30 @@ interface IProps {
   onUnreadNotificationsChange: (unreadNotifications: number) => void;
 }
 const NotificationPopup = ({ show, onUnreadNotificationsChange }: IProps) => {
-  const setNotificationStore = useSetNotificationStore(
-    (state) => state.setNotifications,
-  );
-  const updateNotificationsStore = useSetNotificationStore(
-    (state) => state.updateNotification,
-  );
-  const clearNotificationStore = useSetNotificationStore(
-    (state) => state.clear,
-  );
-  const notificationStore =
-    useNotificationStore<'notifications'>((state) => state.notifications) ?? [];
-
   function fetchNotifications(page: number) {
     return pacebuddiesApi
       .get(`/notification?page=${page}`)
       .then((res) => {
-        setNotificationStore(res.data);
-        onUnreadNotificationsChange(
-          res.data.filter((notification: INotification) => !notification.seen)
-            .length,
-        );
         return res.data;
       })
       .catch((err) => console.error(err));
   }
 
-  const clearNotifications = (): void => {
-    pacebuddiesApi
-      .delete('notification/all')
-      .then(() => clearNotificationStore())
-      .catch((err) => console.error(err));
-    onUnreadNotificationsChange(0);
-  };
+  const markAsSeenMutation = useMutation((id: string) =>
+    pacebuddiesApi.get(`notification/${id}`).then(() => {}),
+  );
+
+  const clearNotificationsMutation = useMutation(() =>
+    pacebuddiesApi.delete('notification/all'),
+  );
 
   function markAsSeen(id: string) {
-    pacebuddiesApi
-      .get(`notification/${id}`)
-      .then(() => {
-        updateNotificationsStore(id);
-      })
-      .catch((err) => console.log(err));
-    onUnreadNotificationsChange(
-      notificationStore.filter((notification) => !notification.seen).length,
-    );
+    markAsSeenMutation.mutate(id);
   }
+
+  const clearNotifications = (): void => {
+    clearNotificationsMutation.mutate();
+  };
 
   const animation = useSpring({
     from: { height: '0rem', opacity: 0 },
@@ -69,47 +48,44 @@ const NotificationPopup = ({ show, onUnreadNotificationsChange }: IProps) => {
     },
     config: { tension: 300, friction: 40 },
   });
-
-  const [page, setPage] = useState<number>(0);
+  const queryClient = useQueryClient();
+  const pageRef = React.useRef(0); // start at page 1
   const {
     data,
     status,
+    isSuccess,
     refetch,
     isError,
     isLoading,
     isFetching,
     isFetchingNextPage,
+    fetchNextPage,
+
     hasNextPage,
   } = useInfiniteQuery<INotification[]>({
-    queryKey: ['fetchNotification', page],
-    queryFn: () => fetchNotifications(page),
+    queryKey: ['fetchNotification'],
+    queryFn: ({ pageParam = 0 }) => fetchNotifications(pageParam),
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage && lastPage.length == 5) {
-        return lastPage[lastPage.length - 1]?.date_time;
+        return pageRef.current;
       }
-      return null;
+      return;
     },
     keepPreviousData: true,
-    refetchInterval: 1000, // 1s
+    // refetchInterval: 5000, // 1s
     refetchIntervalInBackground: true,
   });
 
   const loadMore = (): void => {
-    setPage(page + 1);
+    if (hasNextPage) {
+      pageRef.current += 1;
+      fetchNextPage();
+    }
   };
-
+  console.log(data?.pages);
   useEffect(() => {
-    if (data != null) {
-      setNotificationStore(data.pages.flat());
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (show) {
-      clearNotificationStore();
-      setPage(0);
-      refetch();
-    }
+    pageRef.current = 0;
+    queryClient.invalidateQueries(['fetchNotification']);
   }, [show]);
 
   return (
@@ -144,24 +120,31 @@ const NotificationPopup = ({ show, onUnreadNotificationsChange }: IProps) => {
               )}
               {status == 'success' && (
                 <div className="scrollbar-hide mx-3 max-h-[21.25rem] overflow-scroll">
-                  {notificationStore.length == 0 && (
+                  {(data.pages[0]?.length == 0 ?? false) && (
                     <div className="flex items-center justify-center">
                       {' '}
                       There are no new notifications{' '}
                     </div>
                   )}
-                  {notificationStore.map((notification: INotification) => (
-                    <NotificationSegment
-                      key={notification.id+Date.now()}
-                      data={notification}
-                      markAsSeen={markAsSeen}
-                    />
-                  ))}
+                  {isSuccess &&
+                    data.pages.map((notifications: INotification[], i) => {
+                      return (
+                        <React.Fragment key={i}>
+                          {notifications.map((notification: INotification) => (
+                            <NotificationSegment
+                              key={notification.id}
+                              data={notification}
+                              markAsSeen={markAsSeen}
+                            />
+                          ))}
+                        </React.Fragment>
+                      );
+                    })}
                 </div>
               )}
             </span>
           </div>
-          {status == 'success' && notificationStore.length > 0 && (
+          {status == 'success' && data.pages.length > 0 && (
             <div>
               {hasNextPage && (
                 <div className="mt-2 flex flex-row items-center justify-center">
