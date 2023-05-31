@@ -7,5 +7,5 @@ export interface MatchData {
   lastname: string;
   sex: string;
   upvotes: number;
-  upvoted: boolean;
+  is_upvoted: boolean;
 }

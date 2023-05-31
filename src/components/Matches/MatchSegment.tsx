@@ -1,12 +1,12 @@
 import {
   FlagIcon,
-  HandThumbDownIcon,
   HandThumbUpIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
 import { useQuery } from '@tanstack/react-query';
 import { Button, Label, Modal, Textarea, TextInput } from 'flowbite-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import pacebuddiesApi from '../../instances/axiosConfigured';
@@ -15,7 +15,6 @@ import { MatchData } from '../../internalTypes/matchData';
 import { ReportData } from '../../internalTypes/reportData';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import Accordion from '../Accordion';
-import Link from "next/link";
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
   athlete: MatchData;
@@ -31,7 +30,7 @@ function fetchContactInfo(id: string) {
 const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
   const [openModal, setOpenModal] = useState<string | undefined>();
   const [userUpvoted, setUserUpvoted] = useState<boolean>(
-    athlete.upvoted ?? false,
+    athlete.is_upvoted,
   );
   const [unMatched, setUnMatched] = useState<boolean>(false);
   const [report, setReport] = useState<ReportData>({
@@ -120,7 +119,7 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
     queryKey: ['contactInfo', athlete.id],
     queryFn: () => fetchContactInfo(athlete.id),
   });
-  const { firstname, lastname, profile, sex, country, city, upvoted } = athlete;
+  const { firstname, lastname, profile, sex, country, city } = athlete;
   const { className } = props;
   return (
     <>
@@ -151,8 +150,8 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
             <div className="flex w-10 items-center justify-center">
               {/*Upvote user icon*/}
               {userUpvoted ? (
-                <HandThumbDownIcon
-                  className="h-12 w-12 cursor-pointer text-red-600"
+                <HandThumbUpIcon
+                  className="h-12 w-12 cursor-pointer text-pb-gray"
                   onClick={downvoteUser}
                 />
               ) : (
@@ -165,7 +164,7 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
             <div className="flex w-20 flex-col items-center justify-center p-1 md:w-40">
               <a
                 href={`https://www.strava.com/athletes/${athlete.id}`}
-                target={'_blank'}>
+                target={'_blank'} rel="noreferrer">
                 <Button
                 color="strava"
                 className="w-full">
