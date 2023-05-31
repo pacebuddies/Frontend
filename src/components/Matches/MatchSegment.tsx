@@ -15,6 +15,7 @@ import { MatchData } from '../../internalTypes/matchData';
 import { ReportData } from '../../internalTypes/reportData';
 import { SportTypeEnum } from '../../internalTypes/sportTypeEnum';
 import Accordion from '../Accordion';
+import Link from "next/link";
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
   athlete: MatchData;
@@ -134,13 +135,13 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
               className="h-24 w-24"
               title={`${firstname + ' ' + lastname}`}
             />
-            <div className="ml-4 flex w-[calc(100%-4rem)] shrink-0 flex-col">
-              <span
+            <div className="ml-4 flex w-[calc(100%-4rem)] shrink-0 flex-col justify-center">
+              <Link href={`/profile/${athlete.id}`}
                 className=" truncate pr-3 text-xl font-bold text-pb-green"
                 title={`${firstname + ' ' + lastname}`}
               >
                 {firstname} {lastname}
-              </span>
+              </Link>
               <span className="truncate pr-3 text-sm font-bold text-pb-dark-gray">
                 {sex == 'F' ? 'Female' : 'Male'}, {city}, {country}
               </span>
@@ -162,12 +163,18 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
               )}
             </div>
             <div className="flex w-20 flex-col items-center justify-center p-1 md:w-40">
-              <Button color="strava" className="w-full">
+              <a
+                href={`https://www.strava.com/athletes/${athlete.id}`}
+                target={'_blank'}>
+                <Button
+                color="strava"
+                className="w-full">
                 <span>View on Strava</span>
               </Button>
+              </a>
             </div>
 
-            <div>
+            <div className="flex flex-col justify-between">
               <XMarkIcon
                 className="h-6 w-6 cursor-pointer"
                 onClick={unmatchUser}

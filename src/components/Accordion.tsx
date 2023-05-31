@@ -31,9 +31,9 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
       >
         {title}
         {isOpen ? (
-          <ChevronDownIcon className="h-6 w-6" />
-        ) : (
           <ChevronUpIcon className="h-6 w-6" />
+        ) : (
+          <ChevronDownIcon className="h-6 w-6" />
         )}
       </button>
       <animated.div
