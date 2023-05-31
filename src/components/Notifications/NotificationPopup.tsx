@@ -82,7 +82,6 @@ const NotificationPopup = ({ show, onUnreadNotificationsChange }: IProps) => {
       fetchNextPage();
     }
   };
-  console.log(data?.pages);
   useEffect(() => {
     pageRef.current = 0;
     queryClient.invalidateQueries(['fetchNotification']);

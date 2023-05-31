@@ -43,7 +43,7 @@ const SameSportTypes = ({ recommended_by,sports, selectedSports, ...props }: IPr
             className={`m-1 rounded-full px-2 py-1 shadow-md lg:px-3 lg:py-2 ${
               sport.selected ? ' bg-pb-orange' : 'bg-gray-200'
             } ${
-              sport.sportNumber === recommended_by ? 'border-2 border-pb-orange' : ''
+              sport.sportNumber === recommended_by ? 'border-2 border-pb-green' : ''
             }`}
           >
             {capitalizeFirstLetter(

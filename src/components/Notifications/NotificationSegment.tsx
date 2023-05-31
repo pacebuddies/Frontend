@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { INotification } from '../../internalTypes/interfaces';
 import { useSetMatchRecommendationStore } from '../../store/matchRecommendationsStore';
 import RecommendationsModal from '../Recommendations/RecommendationsModal/RecommendationsModal';
+import Link from "next/link";
 
 interface IProps {
   data: INotification;
@@ -51,7 +52,7 @@ const NotificationSegment = ({ data, markAsSeen }: IProps) => {
 
   return (
     <>
-      {data.action == 'REQUEST_MATCH' ? (
+      {data.action == 'REQUEST_MATCH' && (
         <button
           className="relative my-1 flex w-full items-center justify-center border-2 border-pb-green px-2 py-2.5"
           onClick={() => {
@@ -78,7 +79,33 @@ const NotificationSegment = ({ data, markAsSeen }: IProps) => {
             </button>
           </div>
         </button>
-      ) : (
+      )}
+      {data.action == 'ACCEPT_MATCH' && (
+        <button
+          className="relative my-1 flex w-full items-center justify-center border-2 border-pb-green px-2 py-2.5"
+          onClick={() => {
+            if (!data.seen) {
+              markAsSeen(data.id);
+            }
+          }}
+        >
+          {!data.seen && (
+            <ExclamationCircleIcon className="absolute left-0.5 top-0.5 h-6 w-6 rounded-full stroke-white text-pb-orange" />
+          )}
+          {slectIcon(data.action)}
+          <div className="w-full flex-col">
+            <div className="flex justify-between text-sm">
+              <div className="text-pb-green">{data.title}</div>
+              <div>{parseDate(data.date_time)}</div>
+            </div>
+            <Link href={"/matches"} className="font-sans text-sm">{data.content}</Link>
+            <div>
+              {/* {data.action == "REQUEST_MATCH" && (<div>XD</div>)} */}
+            </div>
+          </div>
+        </button>
+      )}
+      {data.action == 'UPVOTE' && (
         <button
           className="relative my-1 flex w-full items-center justify-center border-2 border-pb-green px-2 py-2.5"
           onClick={() => {

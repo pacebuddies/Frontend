@@ -150,7 +150,7 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
   const handlers = useSwipeable({
     onSwipedLeft: () => nextRecommendation(),
     onSwipedRight: () => previousRecommendation(),
-    trackMouse: true,
+    trackMouse: false,
   });
 
   const showBuddyBadge = (num: number) => {

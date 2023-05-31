@@ -118,6 +118,6 @@ export interface INotification {
   content: string;
   date_time: string;
   seen: boolean;
-  action: string
+  action: "UPVOTE" | "REQUEST_MATCH" | "ACCEPT_MATCH"
   from_id: string
 }
