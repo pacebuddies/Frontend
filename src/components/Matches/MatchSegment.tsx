@@ -149,12 +149,12 @@ const MatchSegment = ({ sportType, athlete, ...props }: IProps) => {
               {/*Upvote user icon*/}
               {userUpvoted ? (
                 <HandThumbUpIcon
-                  className="h-12 w-12 cursor-pointer text-pb-gray"
+                  className="h-12 w-12 cursor-pointer text-pb-green"
                   onClick={downvoteUser}
                 />
               ) : (
                 <HandThumbUpIcon
-                  className="h-12 w-12 cursor-pointer text-pb-green"
+                  className="h-12 w-12 cursor-pointer text-pb-gray"
                   onClick={upvoteUser}
                 />
               )}
