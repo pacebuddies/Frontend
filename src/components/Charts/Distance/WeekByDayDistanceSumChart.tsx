@@ -173,7 +173,7 @@ const WeekByDayDistanceChart = ({ selectedSport, athleteId }: IProps) => {
           text: `Distance (${toUnit})`,
         },
         ticks: {
-          padding: -75,
+          padding: -5,
         },
       },
     },
