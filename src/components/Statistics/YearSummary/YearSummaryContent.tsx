@@ -137,7 +137,7 @@ const YearSummaryContent = ({ selectedSport }: IProps) => {
                 />
               }
               label={'Activities/Month'}
-              value={data[0]?.avg_activity_count_per_month?.toString() ?? '0'}
+              value={data[0]?.avg_activity_count_per_month?.toFixed(2) ?? '0'}
             />
             <YearSummaryElement
               icon={
