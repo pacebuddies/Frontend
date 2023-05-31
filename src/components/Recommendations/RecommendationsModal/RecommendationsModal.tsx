@@ -29,7 +29,9 @@ interface IProps {
 const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
   const [recommendationNumber, setRecommendationNumber] = useState(0);
   const [reRender, setReRender] = useState(0);
-  const [selectedSports, setSelectedSports] = useState<SportTypeEnum[]>([]);
+  const [selectedSports, setSelectedSports] = useState<SportTypeEnum>(
+   0,
+  );
   const [filteredData, setFilteredData] = useState<RecommendationData[]>(
     data ?? [],
   );
@@ -51,26 +53,13 @@ const RecommendationsModal = ({ data, onOpenedChange }: IProps) => {
     }
   };
 
-  const handleFilteredSportChange = (sport: SportTypeEnum[]) => {
-    setSelectedSports([...sport]);
+  const handleFilteredSportChange = (sport: SportTypeEnum) => {
+    setSelectedSports(sport);
     setRecommendationNumber(0);
-    if (sport.length === 0) {
-      setFilteredData([...data]);
-    } else {
-      setFilteredData([
-        ...data.filter((item) => {
-          const sport_types = item.sport_types.map(
-            (sport) => sport as SportTypeEnum,
-          );
-          for (const user_sport of sport_types) {
-            if (sport.includes(user_sport)) {
-              return item;
-            }
-          }
-          return;
-        }),
-      ]);
-    }
+
+    setFilteredData([
+      ...data.filter((item) => (sport>0 ? item.by_which_sport_type_matched === sport : true)),
+    ]);
   };
 
   // Loop through the array to find the next recommendation that is not undefined (deleted) and return the index of that recommendation

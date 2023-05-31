@@ -4,7 +4,7 @@ import { SportTypeMap } from '../../../../internalTypes/SportTypeMap';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
   sports: number[];
-  selectedSports: SportTypeEnum[];
+  selectedSports: SportTypeEnum;
   recommended_by: number;
 }
 interface ISportElement {
@@ -21,9 +21,8 @@ const SameSportTypes = ({ recommended_by,sports, selectedSports, ...props }: IPr
   };
 
   const uniqueSports = sports == null ? [] : [...new Set(sports)];
-  const parsedSelectedSports = selectedSports == null ? [] : selectedSports;
   const parsedSports = uniqueSports.map<ISportElement>((sport) => {
-    if (parsedSelectedSports.includes(sport)) {
+    if (selectedSports == sport) {
       return { sportNumber: sport, selected: true };
     }
     return { sportNumber: sport, selected: false };
@@ -37,7 +36,7 @@ const SameSportTypes = ({ recommended_by,sports, selectedSports, ...props }: IPr
     <div {...props}>
       <span className="text-lg font-bold text-pb-green">Activity types</span>
       <div className="flex flex-wrap px-2 lg:p-2">
-        {parsedSports.map((sport) => (
+        {filteredBySport.map((sport) => (
           <span
             key={sport.sportNumber}
             className={`m-1 rounded-full px-2 py-1 shadow-md lg:px-3 lg:py-2 ${

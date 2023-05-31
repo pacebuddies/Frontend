@@ -11,7 +11,7 @@ interface IProps {
   data: RecommendationData[];
   num: number;
   reRender: number;
-  selectedSports: SportTypeEnum[];
+  selectedSports: SportTypeEnum;
 }
 
 const RecommendationsModalContent = ({ data, num, selectedSports }: IProps) => {

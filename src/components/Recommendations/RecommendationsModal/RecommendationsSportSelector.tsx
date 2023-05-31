@@ -7,11 +7,11 @@ import { capitalizeFirstLetter } from '../../../utils/capitalizeFirstLetter';
 import { LoadingSpinner } from '../../LoadingSpinner';
 
 interface IProps {
-  onSportChange: (sport: SportTypeEnum[]) => void;
+  onSportChange: (sport: SportTypeEnum) => void;
 }
 
 const RecommendationsSportSelector = ({ onSportChange }: IProps) => {
-  const [selectedSport, setSelectedSport] = useState<SportTypeEnum[]>([]);
+  const [selectedSport, setSelectedSport] = useState<SportTypeEnum>(0);
 
   const fetchSports = (): Promise<string[]> => {
     return pacebuddiesApi
@@ -21,16 +21,12 @@ const RecommendationsSportSelector = ({ onSportChange }: IProps) => {
 
   const selectedSportHandler = (sport: SportTypeEnum) => {
     setSelectedSport((prevSelectedSports) => {
-      if (prevSelectedSports.includes(sport)) {
-        const newSelectedSports = prevSelectedSports.filter(
-          (item) => item !== sport,
-        );
-        onSportChange(newSelectedSports);
-        return newSelectedSports;
-      } else {
-        const newSelectedSports = [...prevSelectedSports, sport];
-        onSportChange(newSelectedSports);
-        return [...prevSelectedSports, sport];
+      if (prevSelectedSports === sport) {
+        onSportChange(0);
+        return 0;
+      }else {
+        onSportChange(sport);
+        return sport;
       }
     });
   };
@@ -42,7 +38,7 @@ const RecommendationsSportSelector = ({ onSportChange }: IProps) => {
       key={item}
       onClick={() => selectedSportHandler(item)}
       className={`m-2 flex min-w-[3rem] shrink-0 flex-col items-center justify-center rounded-full  p-2 ${
-        selectedSport.includes(item)
+        selectedSport == item
           ? 'bg-pb-green'
           : 'border-2 border-white bg-white/80'
       }`}
